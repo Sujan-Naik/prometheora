@@ -43,4 +43,4 @@ app-example
 /android
 
 /app/generated/prisma
-/.env
+/api/.env
