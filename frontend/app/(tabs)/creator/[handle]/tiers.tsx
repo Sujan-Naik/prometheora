@@ -1,0 +1,57 @@
+// app/creator/[handle]/tiers.tsx
+import { View, Text, FlatList, Button } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import {useRequireAuth} from "@/hooks/useRequireAuth";
+
+interface Tier {
+  id: number;
+  name: string;
+  price: number;
+  benefits: string;
+}
+
+export default function CreatorTiers() {
+  const { handle } = useLocalSearchParams<{ handle: string }>();
+  const [tiers, setTiers] = useState<Tier[]>([]);
+const token = useRequireAuth();
+  useEffect(() => {
+      if (!token){
+          return;
+      }
+    axios.get<Tier[]>(`http://localhost:3000/creators/${handle}/tiers`, {
+      headers: { Authorization: `Bearer ${token}` } // Replace with actual token management
+    })
+      .then(res => setTiers(res.data))
+      .catch(err => console.error(err));
+  }, [handle]);
+
+  const handleSubscribe = (tierId: number) => {
+      if (!token){
+          return;
+      }
+    axios.post<{ id: number }>('http://localhost:3000/subscriptions', { tierId }, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(() => alert('Subscribed!'))
+      .catch(err => console.error(err));
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Text>Tiers for {handle}</Text>
+      <FlatList
+        data={tiers}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => (
+          <View>
+            <Text>{item.name} - ${item.price}</Text>
+            <Text>{item.benefits}</Text>
+            <Button title="Subscribe" onPress={() => handleSubscribe(item.id)} />
+          </View>
+        )}
+      />
+    </View>
+  );
+}
