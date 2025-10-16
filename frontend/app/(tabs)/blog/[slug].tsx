@@ -3,22 +3,15 @@ import { View, Text } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import {IBlog} from "@/types/prisma";
 
-interface BlogPost {
-  id: number;
-  slug: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export default function BlogPostDetail() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
-  const [post, setPost] = useState<BlogPost | null>(null);
+  const [post, setPost] = useState<IBlog | null>(null);
   useEffect(() => {
     console.log('slug param:', slug);
-    axios.get<BlogPost>(`http://localhost:3000/blogs/${slug}`)
+    axios.get<IBlog>(`http://localhost:3000/blogs/${slug}`)
       .then(res => setPost(res.data))
       .catch(err => console.error(err));
   }, [slug]);

@@ -3,28 +3,17 @@ import { View, Text, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-
-interface Tier {
-  id: number;
-  name: string;
-}
-
-interface Subscription {
-  id: number;
-  startDate: string;
-  endDate?: string;
-  tier: Tier;
-}
+import {ISubscription} from "@/types/prisma";
 
 export default function Subscriptions() {
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [subscriptions, setSubscriptions] = useState<ISubscription[]>([]);
   const token = useRequireAuth();
 
   useEffect(() => {
     if (!token) {
       return;
     }
-    axios.get<Subscription[]>('http://localhost:3000/subscriptions', {
+    axios.get<ISubscription[]>('http://localhost:3000/subscriptions', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setSubscriptions(res.data))
@@ -39,7 +28,7 @@ export default function Subscriptions() {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View>
-            <Text>Tier: {item.tier.name}</Text>
+            <Text>Tier: {item.tier!.name}</Text>
             <Text>Start Date: {item.startDate}</Text>
           </View>
         )}

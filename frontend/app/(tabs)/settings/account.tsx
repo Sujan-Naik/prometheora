@@ -4,14 +4,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-
-interface Account {
-  email: string;
-}
-
-interface UpdateAccountResponse {
-  // Updated user object
-}
+import {IUser} from "@/types/prisma";
 
 export default function AccountSettings() {
   const [email, setEmail] = useState<string>('');
@@ -24,7 +17,7 @@ export default function AccountSettings() {
       return;
     }
     // Fetch current email if needed
-    axios.get<Account>('http://localhost:3000/user/account', {
+    axios.get<IUser>('http://localhost:3000/user/account', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setEmail(res.data.email))
@@ -35,7 +28,7 @@ export default function AccountSettings() {
     if (!token) {
       return;
     }
-    axios.patch<UpdateAccountResponse>('http://localhost:3000/user/account', { email, password }, {
+    axios.patch<IUser>('http://localhost:3000/user/account', { email, password }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => router.back())

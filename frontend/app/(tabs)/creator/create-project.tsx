@@ -5,19 +5,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import {IProject, Visibility} from "@/types/prisma";
 
-enum Visibility {
-  PUBLIC = 'PUBLIC',
-  PATRON_ONLY = 'PATRON_ONLY',
-  FOLLOWER_ONLY = 'FOLLOWER_ONLY',
-  PRIVATE = 'PRIVATE',
-}
-
-interface CreateProjectResponse {
-  id: number;
-  title: string;
-  // etc.
-}
 
 export default function CreateProject() {
   const [title, setTitle] = useState<string>('');
@@ -34,7 +23,7 @@ export default function CreateProject() {
     if (!token) {
       return;
     }
-    axios.post<CreateProjectResponse>('http://localhost:3000/projects', { title, description, repoUrl, demoUrl, media, status, visibility }, {
+    axios.post<IProject>('http://localhost:3000/projects', { title, description, repoUrl, demoUrl, media, status, visibility }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => router.back())

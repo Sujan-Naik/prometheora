@@ -4,12 +4,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-
-interface CreateTierResponse {
-  id: number;
-  name: string;
-  // etc.
-}
+import {ITier} from "@/types/prisma";
 
 export default function CreateTier() {
   const [name, setName] = useState<string>('');
@@ -22,7 +17,7 @@ export default function CreateTier() {
     if (!token) {
       return;
     }
-    axios.post<CreateTierResponse>('http://localhost:3000/tiers', { name, price: parseFloat(price), benefits }, {
+    axios.post<ITier>('http://localhost:3000/tiers', { name, price: parseFloat(price), benefits }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => router.back())

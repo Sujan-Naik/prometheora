@@ -3,22 +3,14 @@ import {View, Text, FlatList, Pressable} from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'expo-router';
-
-interface BlogIndex {
-  id: number;
-  slug: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import {IBlog} from "@/types/prisma";
 
 export default function BlogList() {
-  const [blogs, setBlogs] = useState<BlogIndex[]>([]);
+  const [blogs, setBlogs] = useState<IBlog[]>([]);
 
   useEffect(() => {
     axios
-      .get<BlogIndex[]>('http://localhost:3000/blogs')
+      .get<IBlog[]>('http://localhost:3000/blogs')
       .then(res => setBlogs(res.data))
       .catch(err => console.error(err));
   }, []);

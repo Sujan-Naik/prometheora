@@ -4,27 +4,18 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-
-interface Post {
-  id: number;
-  title: string;
-  content: string;
-  isPaid: boolean;
-  createdAt: string;
-  updatedAt: string;
-  quotedProject?: { title: string; id: number };
-}
+import {IPost} from "@/types/prisma";
 
 export default function CreatorPosts() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const token = useRequireAuth();
 
   useEffect(() => {
     if (!token) {
       return;
     }
-    axios.get<Post[]>(`http://localhost:3000/creators/${handle}/posts`, {
+    axios.get<IPost[]>(`http://localhost:3000/creators/${handle}/posts`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setPosts(res.data))

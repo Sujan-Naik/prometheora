@@ -4,25 +4,18 @@ import { useLocalSearchParams, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  visibility: string;
-  // etc.
-}
+import {IProject} from "@/types/prisma";
 
 export default function CreatorProjects() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<IProject[]>([]);
   const token = useRequireAuth();
 
   useEffect(() => {
     if (!token) {
       return;
     }
-    axios.get<Project[]>(`http://localhost:3000/projects/creator/${handle}`, {
+    axios.get<IProject[]>(`http://localhost:3000/projects/creator/${handle}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setProjects(res.data))

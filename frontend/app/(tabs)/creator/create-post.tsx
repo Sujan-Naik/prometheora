@@ -4,12 +4,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import {IPost} from "@/types/prisma";
 
-interface CreatePostResponse {
-  id: number;
-  title: string;
-  // etc.
-}
 
 export default function CreatePost() {
   const [title, setTitle] = useState<string>('');
@@ -23,7 +19,7 @@ export default function CreatePost() {
     if (!token) {
       return;
     }
-    axios.post<CreatePostResponse>('http://localhost:3000/posts', { title, content, isPaid, quotedProjectId: quotedProjectId ? parseInt(quotedProjectId) : undefined }, {
+    axios.post<IPost>('http://localhost:3000/posts', { title, content, isPaid, quotedProjectId: quotedProjectId ? parseInt(quotedProjectId) : undefined }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => router.back())

@@ -4,23 +4,12 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import {IPortfolioItem, IProject} from "@/types/prisma";
 
-interface Project {
-  id: number;
-  title: string;
-}
-
-interface PortfolioItem {
-  id: number;
-  projectId: number;
-  order: number;
-  caption?: string;
-  project: Project;
-}
 
 export default function EditPortfolio() {
-  const [projects, setProjects] = useState<Project[]>([]); // Available projects
-  const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
+  const [projects, setProjects] = useState<IProject[]>([]); // Available projects
+  const [portfolio, setPortfolio] = useState<IPortfolioItem[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
   const [caption, setCaption] = useState<string>('');
   const router = useRouter();
@@ -31,14 +20,14 @@ export default function EditPortfolio() {
       return;
     }
     // Fetch user's projects
-    axios.get<Project[]>('http://localhost:3000/projects/creator/myhandle', { // Replace 'myhandle' with actual
+    axios.get<IProject[]>('http://localhost:3000/projects/creator/myhandle', { // Replace 'myhandle' with actual
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setProjects(res.data))
       .catch(err => console.error(err));
 
     // Fetch current portfolio
-    axios.get<PortfolioItem[]>('http://localhost:3000/portfolio/myhandle', {
+    axios.get<IPortfolioItem[]>('http://localhost:3000/portfolio/myhandle', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setPortfolio(res.data))
@@ -94,7 +83,7 @@ export default function EditPortfolio() {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View>
-            <Text>{item.project.title} - {item.caption}</Text>
+            <Text>{item.project!.title} - {item.caption}</Text>
             <Button title="Remove" onPress={() => handleRemove(item.id)} />
           </View>
         )}

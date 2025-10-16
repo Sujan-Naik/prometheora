@@ -4,24 +4,19 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import {ITier} from "@/types/prisma";
 
-interface Tier {
-  id: number;
-  name: string;
-  price: number;
-  benefits: string;
-}
 
 export default function CreatorTiers() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
-  const [tiers, setTiers] = useState<Tier[]>([]);
+  const [tiers, setTiers] = useState<ITier[]>([]);
   const token = useRequireAuth();
 
   useEffect(() => {
     if (!token) {
       return;
     }
-    axios.get<Tier[]>(`http://localhost:3000/creators/${handle}/tiers`, {
+    axios.get<ITier[]>(`http://localhost:3000/creators/${handle}/tiers`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setTiers(res.data))

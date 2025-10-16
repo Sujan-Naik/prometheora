@@ -4,8 +4,9 @@ import { Text, Pressable } from 'react-native';
 import { useAdmin } from '@/hooks/useAdmin';
 
 export default function BlogLayout() {
-  const isAdmin = useAdmin();
+  const {isAdmin} = useAdmin();
 
+  console.log(isAdmin)
   return (
     <Tabs>
       <TabSlot />
@@ -16,6 +17,7 @@ export default function BlogLayout() {
 
         {isAdmin && (
           <>
+              YOU ARE AN ADMIN
             <TabTrigger name="blog-create" href="/blog/create" asChild>
               <TabButton icon="✏️">Create</TabButton>
             </TabTrigger>

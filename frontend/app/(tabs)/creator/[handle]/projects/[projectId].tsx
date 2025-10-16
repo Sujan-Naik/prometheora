@@ -4,32 +4,12 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import {IProject} from "@/types/prisma";
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  repoUrl?: string;
-  demoUrl?: string;
-  media?: string;
-  status?: string;
-  visibility: string;
-  devlogs: Devlog[];
-  followers: any[]; // For checking if followed
-}
-
-interface Devlog {
-  id: number;
-  title: string;
-  content: string;
-  version?: string;
-  buildLink?: string;
-  createdAt: string;
-}
 
 export default function ProjectDetail() {
   const { handle, projectId } = useLocalSearchParams<{ handle: string; projectId: string }>();
-  const [project, setProject] = useState<Project | null>(null);
+  const [project, setProject] = useState<IProject | null>(null);
   const [isFollowed, setIsFollowed] = useState<boolean>(false);
   const token = useRequireAuth();
 
@@ -37,12 +17,12 @@ export default function ProjectDetail() {
     if (!token) {
       return;
     }
-    axios.get<Project>(`http://localhost:3000/projects/${projectId}`, {
+    axios.get<IProject>(`http://localhost:3000/projects/${projectId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
         setProject(res.data);
-        setIsFollowed(res.data.followers.length > 0);
+        setIsFollowed(res!.data!.followers!.length > 0);
       })
       .catch(err => console.error(err));
   }, [projectId, token]);

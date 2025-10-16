@@ -4,28 +4,19 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import {IPortfolioItem} from "@/types/prisma";
 
-interface PortfolioItem {
-  id: number;
-  order: number;
-  caption?: string;
-  project: {
-    id: number;
-    title: string;
-    description: string;
-  };
-}
 
 export default function CreatorPortfolio() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
-  const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
+  const [portfolio, setPortfolio] = useState<IPortfolioItem[]>([]);
   const token = useRequireAuth();
 
   useEffect(() => {
     if (!token) {
       return;
     }
-    axios.get<PortfolioItem[]>(`http://localhost:3000/portfolio/${handle}`, {
+    axios.get<IPortfolioItem[]>(`http://localhost:3000/portfolio/${handle}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setPortfolio(res.data))
@@ -40,9 +31,9 @@ export default function CreatorPortfolio() {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View>
-            <Text>{item.project.title}</Text>
+            <Text>{item.project!.title}</Text>
             <Text>{item.caption}</Text>
-            <Text>{item.project.description}</Text>
+            <Text>{item.project!.description}</Text>
           </View>
         )}
       />

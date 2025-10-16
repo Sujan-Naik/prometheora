@@ -3,33 +3,18 @@ import { View, Text, FlatList, Button } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import {IPayment} from "@/types/prisma";
 
-interface Subscription {
-  id: number;
-  // etc.
-}
-
-interface Payment {
-  id: number;
-  amount: number;
-  date: string;
-  subscription: Subscription;
-}
-
-interface RecordPaymentResponse {
-  id: number;
-  // etc.
-}
 
 export default function Payments() {
-  const [payments, setPayments] = useState<Payment[]>([]);
+  const [payments, setPayments] = useState<IPayment[]>([]);
   const token = useRequireAuth();
 
   useEffect(() => {
     if (!token) {
       return;
     }
-    axios.get<Payment[]>('http://localhost:3000/payments', {
+    axios.get<IPayment[]>('http://localhost:3000/payments', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setPayments(res.data))
@@ -41,7 +26,7 @@ export default function Payments() {
     if (!token) {
       return;
     }
-    axios.post<RecordPaymentResponse>('http://localhost:3000/payments', { subscriptionId, amount }, {
+    axios.post<IPayment>('http://localhost:3000/payments', { subscriptionId, amount }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => alert('Payment recorded!'))

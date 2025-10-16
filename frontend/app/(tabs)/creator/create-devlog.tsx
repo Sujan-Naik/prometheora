@@ -4,12 +4,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import {IDevlog} from "@/types/prisma";
 
-interface CreateDevlogResponse {
-  id: number;
-  title: string;
-  // etc.
-}
 
 export default function CreateDevlog() {
   const [projectId, setProjectId] = useState<string>('');
@@ -24,7 +20,7 @@ export default function CreateDevlog() {
     if (!token) {
       return;
     }
-    axios.post<CreateDevlogResponse>('http://localhost:3000/devlogs', { projectId: parseInt(projectId), title, content, version, buildLink }, {
+    axios.post<IDevlog>('http://localhost:3000/devlogs', { projectId: parseInt(projectId), title, content, version, buildLink }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => router.back())
