@@ -1,47 +1,47 @@
-// app/creator/[handle]/posts.tsx
+// app/patron/followed-projects.tsx
 import { View, Text, FlatList } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 
-interface Post {
+interface Devlog {
   id: number;
   title: string;
   content: string;
-  isPaid: boolean;
+  version?: string;
+  buildLink?: string;
   createdAt: string;
-  updatedAt: string;
-  quotedProject?: { title: string; id: number };
+  project: { title: string };
 }
 
-export default function CreatorPosts() {
-  const { handle } = useLocalSearchParams<{ handle: string }>();
-  const [posts, setPosts] = useState<Post[]>([]);
+export default function FollowedProjectsFeed() {
+  const [feed, setFeed] = useState<Devlog[]>([]);
   const token = useRequireAuth();
 
+  console.log('followed projects')
   useEffect(() => {
     if (!token) {
       return;
     }
-    axios.get<Post[]>(`http://localhost:3000/creators/${handle}/posts`, {
+    axios.get<Devlog[]>('http://localhost:3000/projects/followed/feed', {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(res => setPosts(res.data))
+      .then(res => setFeed(res.data))
       .catch(err => console.error(err));
-  }, [handle, token]);
+  }, [token]);
 
   return (
     <View style={{ flex: 1 }}>
-      <Text>Posts for {handle}</Text>
+      <Text>Followed Projects Feed</Text>
       <FlatList
-        data={posts}
+        data={feed}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View>
-            <Text>{item.title}</Text>
+            <Text>{item.project.title}: {item.title} ({item.version})</Text>
             <Text>{item.content}</Text>
-            {item.quotedProject && <Text>Quoted: {item.quotedProject.title}</Text>}
+            {item.buildLink && <Text>Build: {item.buildLink}</Text>}
+            <Text>{item.createdAt}</Text>
           </View>
         )}
       />

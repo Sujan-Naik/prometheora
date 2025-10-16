@@ -3,7 +3,7 @@ import { View, TextInput, Button, Text } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
-import {useRequireAuth} from "@/hooks/useRequireAuth";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 interface Profile {
   bio: string;
@@ -18,10 +18,14 @@ export default function ProfileSettings() {
   const [bio, setBio] = useState<string>('');
   const [media, setMedia] = useState<string>('');
   const router = useRouter();
-const token = useRequireAuth();
+  const token = useRequireAuth();
+
   useEffect(() => {
+    if (!token) {
+      return;
+    }
     // Fetch current profile if needed
-    axios.get<Profile>('http://localhost:3000/user/profile', { // Assume endpoint to get current
+    axios.get<Profile>('http://localhost:3000/user/profile', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -29,9 +33,12 @@ const token = useRequireAuth();
         setMedia(res.data.media);
       })
       .catch(err => console.error(err));
-  }, []);
+  }, [token]);
 
   const handleUpdate = () => {
+    if (!token) {
+      return;
+    }
     axios.patch<UpdateProfileResponse>('http://localhost:3000/user/profile', { bio, media }, {
       headers: { Authorization: `Bearer ${token}` }
     })

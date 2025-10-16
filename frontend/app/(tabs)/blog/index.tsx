@@ -1,10 +1,10 @@
 // app/blog/index.tsx
-import { View, Text, FlatList } from 'react-native';
+import {View, Text, FlatList, Pressable} from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'expo-router';
 
-interface Blog {
+interface BlogIndex {
   id: number;
   slug: string;
   title: string;
@@ -14,23 +14,26 @@ interface Blog {
 }
 
 export default function BlogList() {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [blogs, setBlogs] = useState<BlogIndex[]>([]);
 
   useEffect(() => {
-    axios.get<Blog[]>('http://localhost:3000/blogs')
+    axios
+      .get<BlogIndex[]>('http://localhost:3000/blogs')
       .then(res => setBlogs(res.data))
       .catch(err => console.error(err));
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
-      <Text>Blog List</Text>
+    <View style={{ flex: 1, padding: 20 }}>
+      <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Blog List</Text>
       <FlatList
         data={blogs}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <Link href={`/blog/${item.slug}`}>
-            <Text>{item.title}</Text>
+              <Pressable>
+            <Text style={{ fontSize: 18, marginVertical: 8 }}>{item.title}</Text>
+                  </Pressable>
           </Link>
         )}
       />

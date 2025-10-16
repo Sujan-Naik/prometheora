@@ -1,47 +1,48 @@
-// app/creator/[handle]/posts.tsx
+// app/creator/[handle]/portfolio.tsx
 import { View, Text, FlatList } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 
-interface Post {
+interface PortfolioItem {
   id: number;
-  title: string;
-  content: string;
-  isPaid: boolean;
-  createdAt: string;
-  updatedAt: string;
-  quotedProject?: { title: string; id: number };
+  order: number;
+  caption?: string;
+  project: {
+    id: number;
+    title: string;
+    description: string;
+  };
 }
 
-export default function CreatorPosts() {
+export default function CreatorPortfolio() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
   const token = useRequireAuth();
 
   useEffect(() => {
     if (!token) {
       return;
     }
-    axios.get<Post[]>(`http://localhost:3000/creators/${handle}/posts`, {
+    axios.get<PortfolioItem[]>(`http://localhost:3000/portfolio/${handle}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(res => setPosts(res.data))
+      .then(res => setPortfolio(res.data))
       .catch(err => console.error(err));
   }, [handle, token]);
 
   return (
     <View style={{ flex: 1 }}>
-      <Text>Posts for {handle}</Text>
+      <Text>Portfolio for {handle}</Text>
       <FlatList
-        data={posts}
+        data={portfolio}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View>
-            <Text>{item.title}</Text>
-            <Text>{item.content}</Text>
-            {item.quotedProject && <Text>Quoted: {item.quotedProject.title}</Text>}
+            <Text>{item.project.title}</Text>
+            <Text>{item.caption}</Text>
+            <Text>{item.project.description}</Text>
           </View>
         )}
       />

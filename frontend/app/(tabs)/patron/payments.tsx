@@ -2,7 +2,7 @@
 import { View, Text, FlatList, Button } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {useRequireAuth} from "@/hooks/useRequireAuth";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 interface Subscription {
   id: number;
@@ -23,23 +23,24 @@ interface RecordPaymentResponse {
 
 export default function Payments() {
   const [payments, setPayments] = useState<Payment[]>([]);
-const token = useRequireAuth();
+  const token = useRequireAuth();
+
   useEffect(() => {
-      if (!token){
-          return;
-      }
+    if (!token) {
+      return;
+    }
     axios.get<Payment[]>('http://localhost:3000/payments', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setPayments(res.data))
       .catch(err => console.error(err));
-  }, []);
+  }, [token]);
 
   // Optional: Function to record a payment, but might be triggered elsewhere (e.g., after subscribe)
   const handleRecordPayment = (subscriptionId: number, amount: number) => {
-      if (!token){
-          return;
-      }
+    if (!token) {
+      return;
+    }
     axios.post<RecordPaymentResponse>('http://localhost:3000/payments', { subscriptionId, amount }, {
       headers: { Authorization: `Bearer ${token}` }
     })

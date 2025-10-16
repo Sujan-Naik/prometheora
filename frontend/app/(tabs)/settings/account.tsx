@@ -3,7 +3,7 @@ import { View, TextInput, Button, Text } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
-import {useRequireAuth} from "@/hooks/useRequireAuth";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 interface Account {
   email: string;
@@ -17,20 +17,24 @@ export default function AccountSettings() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const router = useRouter();
-const token = useRequireAuth();
+  const token = useRequireAuth();
+
   useEffect(() => {
-    // Fetch current email if needed
-    if (!token){
+    if (!token) {
       return;
     }
+    // Fetch current email if needed
     axios.get<Account>('http://localhost:3000/user/account', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setEmail(res.data.email))
       .catch(err => console.error(err));
-  }, []);
+  }, [token]);
 
   const handleUpdate = () => {
+    if (!token) {
+      return;
+    }
     axios.patch<UpdateAccountResponse>('http://localhost:3000/user/account', { email, password }, {
       headers: { Authorization: `Bearer ${token}` }
     })

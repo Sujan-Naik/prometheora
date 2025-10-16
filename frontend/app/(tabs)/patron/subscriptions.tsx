@@ -2,7 +2,7 @@
 import { View, Text, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {useRequireAuth} from "@/hooks/useRequireAuth";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 interface Tier {
   id: number;
@@ -18,18 +18,18 @@ interface Subscription {
 
 export default function Subscriptions() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-        const token = useRequireAuth();
+  const token = useRequireAuth();
 
   useEffect(() => {
-      if (!token){
-          return;
-      }
+    if (!token) {
+      return;
+    }
     axios.get<Subscription[]>('http://localhost:3000/subscriptions', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setSubscriptions(res.data))
       .catch(err => console.error(err));
-  }, []);
+  }, [token]);
 
   return (
     <View style={{ flex: 1 }}>

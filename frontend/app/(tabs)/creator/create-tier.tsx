@@ -3,7 +3,7 @@ import { View, TextInput, Button, Text } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
-import {useRequireAuth} from "@/hooks/useRequireAuth";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 interface CreateTierResponse {
   id: number;
@@ -16,11 +16,12 @@ export default function CreateTier() {
   const [price, setPrice] = useState<string>('');
   const [benefits, setBenefits] = useState<string>('');
   const router = useRouter();
-const token = useRequireAuth();
+  const token = useRequireAuth();
+
   const handleCreate = () => {
-      if (!token){
-          return;
-      }
+    if (!token) {
+      return;
+    }
     axios.post<CreateTierResponse>('http://localhost:3000/tiers', { name, price: parseFloat(price), benefits }, {
       headers: { Authorization: `Bearer ${token}` }
     })

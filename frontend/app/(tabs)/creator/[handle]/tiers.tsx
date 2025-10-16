@@ -3,7 +3,7 @@ import { View, Text, FlatList, Button } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {useRequireAuth} from "@/hooks/useRequireAuth";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 interface Tier {
   id: number;
@@ -15,22 +15,23 @@ interface Tier {
 export default function CreatorTiers() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
   const [tiers, setTiers] = useState<Tier[]>([]);
-const token = useRequireAuth();
+  const token = useRequireAuth();
+
   useEffect(() => {
-      if (!token){
-          return;
-      }
+    if (!token) {
+      return;
+    }
     axios.get<Tier[]>(`http://localhost:3000/creators/${handle}/tiers`, {
-      headers: { Authorization: `Bearer ${token}` } // Replace with actual token management
+      headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setTiers(res.data))
       .catch(err => console.error(err));
-  }, [handle]);
+  }, [handle, token]);
 
   const handleSubscribe = (tierId: number) => {
-      if (!token){
-          return;
-      }
+    if (!token) {
+      return;
+    }
     axios.post<{ id: number }>('http://localhost:3000/subscriptions', { tierId }, {
       headers: { Authorization: `Bearer ${token}` }
     })

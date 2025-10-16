@@ -1,0 +1,84 @@
+/* global.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- Base App --- */
+body {
+  @apply bg-white text-gray-900;
+}
+
+/* --- Tab Layout Styling --- */
+.tab-list {
+  @apply flex-row bg-white border-t border-gray-200;
+}
+.tab-list-web {
+  @apply web:justify-start web:px-4;
+}
+.tab-list-native {
+  @apply native:justify-around native:py-2;
+}
+
+.tab-button {
+  @apply web:flex-row web:gap-2 web:px-6 web:py-3
+         native:flex-1 native:flex-col native:items-center native:py-2;
+}
+.tab-button-focused {
+  @apply web:border-b-2 web:border-blue-500;
+}
+
+.tab-icon {
+  @apply text-lg web:text-base;
+}
+
+.tab-label {
+  @apply text-xs web:text-base text-gray-600;
+}
+.tab-label-focused {
+  @apply text-blue-500 font-semibold;
+}
+
+.container {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.button,
+.profile-button {
+  padding: 15px;
+  border-radius: 8px;
+  align-items: center;
+  margin-vertical: 10px;
+}
+
+.button {
+  background-color: #007aff;
+}
+
+.profile-button {
+  background-color: #34c759;
+}
+
+.button-text,
+.profile-button-text {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}

@@ -1,21 +1,22 @@
-// app/creator/create-post.tsx
+// app/creator/create-devlog.tsx
 import { View, TextInput, Button, Text } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 
-interface CreatePostResponse {
+interface CreateDevlogResponse {
   id: number;
   title: string;
   // etc.
 }
 
-export default function CreatePost() {
+export default function CreateDevlog() {
+  const [projectId, setProjectId] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
-  const [isPaid, setIsPaid] = useState<boolean>(false);
-  const [quotedProjectId, setQuotedProjectId] = useState<string>('');
+  const [version, setVersion] = useState<string>('');
+  const [buildLink, setBuildLink] = useState<string>('');
   const router = useRouter();
   const token = useRequireAuth();
 
@@ -23,7 +24,7 @@ export default function CreatePost() {
     if (!token) {
       return;
     }
-    axios.post<CreatePostResponse>('http://localhost:3000/posts', { title, content, isPaid, quotedProjectId: quotedProjectId ? parseInt(quotedProjectId) : undefined }, {
+    axios.post<CreateDevlogResponse>('http://localhost:3000/devlogs', { projectId: parseInt(projectId), title, content, version, buildLink }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => router.back())
@@ -32,11 +33,12 @@ export default function CreatePost() {
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
-      <Text>Create Post</Text>
+      <Text>Create Devlog</Text>
+      <TextInput placeholder="Project ID" value={projectId} onChangeText={setProjectId} keyboardType="numeric" />
       <TextInput placeholder="Title" value={title} onChangeText={setTitle} />
       <TextInput placeholder="Content" value={content} onChangeText={setContent} multiline />
-      <TextInput placeholder="Quoted Project ID (optional)" value={quotedProjectId} onChangeText={setQuotedProjectId} keyboardType="numeric" />
-      <Button title={isPaid ? 'Paid' : 'Free'} onPress={() => setIsPaid(!isPaid)} />
+      <TextInput placeholder="Version" value={version} onChangeText={setVersion} />
+      <TextInput placeholder="Build Link" value={buildLink} onChangeText={setBuildLink} />
       <Button title="Submit" onPress={handleCreate} />
     </View>
   );

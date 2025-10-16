@@ -1,8 +1,9 @@
+// app/index.tsx
 import { View, Text, Button, FlatList, ActivityIndicator } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
-import { useAuthStatus } from '@/hooks/useAuthStatus'; // adjust path as needed
+import { useAuthStatus } from '@/hooks/useAuthStatus';
 
 interface Post {
   id: number;
@@ -17,10 +18,10 @@ export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
   const router = useRouter();
   const { isAuthenticated } = useAuthStatus();
-
+    console.log(isAuthenticated)
   useEffect(() => {
     axios
-      .get<Post[]>('http://localhost:3000/posts') // use your backend port
+      .get<Post[]>('http://localhost:3000/posts')
       .then(res => setPosts(res.data))
       .catch(console.error);
   }, []);
@@ -36,27 +37,25 @@ export default function Home() {
   return (
     <View style={{ flex: 1, padding: 20 }}>
       <Text style={{ fontSize: 20, marginBottom: 10 }}>Discover Feed</Text>
-
       <FlatList
         data={posts}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => <Text>{item.title}</Text>}
         ListEmptyComponent={<Text>No posts yet.</Text>}
       />
-
       <View style={{ marginTop: 30 }}>
         {isAuthenticated ? (
           <>
-            <Button title="Creator" onPress={() => router.push('/creator/create-post')} />
-            <Button title="Settings" onPress={() => router.push('/settings/profile')} />
+            <Button title="Blog" onPress={() => router.push('/(tabs)/blog')} />
+            <Button title="Creator" onPress={() => router.push('/(tabs)/creator')} />
+            <Button title="Settings" onPress={() => router.push('/(tabs)/settings')} />
           </>
         ) : (
           <>
-            <Button title="Go to Login" onPress={() => router.push('/auth/login')} />
-            <Button title="Go to Signup" onPress={() => router.push('/auth/signup')} />
+            <Button title="Login" onPress={() => router.push('/auth/login')} />
+            <Button title="Signup" onPress={() => router.push('/auth/signup')} />
           </>
         )}
-        <Button title="Go to Blog" onPress={() => router.push('/blog/index')} />
       </View>
     </View>
   );
