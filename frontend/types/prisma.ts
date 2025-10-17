@@ -2,7 +2,7 @@
 export enum Role {
   CREATOR = "CREATOR",
   PATRON = "PATRON",
-    ADMIN = "ADMIN"
+  ADMIN = "ADMIN",
 }
 
 export enum Visibility {
@@ -16,25 +16,27 @@ export enum Visibility {
 export interface IUser {
   id: number
   email: string
+  passwordHash: string
   handle?: string | null
   bio?: string | null
-  media?: string | null // JSON string or parsed [] in frontend
   createdAt: string
   updatedAt: string
-  userRoles?: IUserRole[]
   posts?: IPost[]
   tiers?: ITier[]
-  projects?: IProject[]
   subscriptions?: ISubscription[]
   payments?: IPayment[]
+  userRoles?: IUserRole[]
+  projects?: IProject[]
   followedProjects?: IProjectFollower[]
   portfolioItems?: IPortfolioItem[]
+  media?: IMedia[] // uploaded files via Firebase
 }
 
 export interface IUserRole {
   id: number
   role: Role
   userId: number
+  user?: IUser
 }
 
 // ---- PROJECTS ----
@@ -44,7 +46,6 @@ export interface IProject {
   description: string
   repoUrl?: string | null
   demoUrl?: string | null
-  media?: string | null
   status?: string | null
   visibility: Visibility
   creatorId: number
@@ -55,6 +56,7 @@ export interface IProject {
   followers?: IProjectFollower[]
   portfolioItems?: IPortfolioItem[]
   quotedInPosts?: IPost[]
+  media?: IMedia[]
 }
 
 export interface IDevlog {
@@ -99,6 +101,7 @@ export interface IPost {
   quotedProject?: IProject | null
   createdAt: string
   updatedAt: string
+  media?: IMedia[]
 }
 
 // ---- MONETIZATION ----
@@ -141,4 +144,20 @@ export interface IBlog {
   content: string
   createdAt: string
   updatedAt: string
+}
+
+// ---- MEDIA ----
+export interface IMedia {
+  id: number
+  url: string
+  type?: string | null
+  caption?: string | null
+  order?: number | null
+  createdAt: string
+  userId?: number | null
+  projectId?: number | null
+  postId?: number | null
+  user?: IUser
+  project?: IProject
+  post?: IPost
 }

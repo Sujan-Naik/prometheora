@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IPost} from "@/types/prisma";
+import PostCard from "@/components/PostCard";
 
 export default function CreatorPosts() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
@@ -29,11 +30,7 @@ export default function CreatorPosts() {
         data={posts}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.title}</Text>
-            <Text>{item.content}</Text>
-            {item.quotedProject && <Text>Quoted: {item.quotedProject.title}</Text>}
-          </View>
+          <PostCard post={item}/>
         )}
       />
     </View>

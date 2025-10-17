@@ -1,5 +1,6 @@
 import { Tabs, TabSlot, TabList, TabTrigger, TabTriggerSlotProps } from 'expo-router/ui';
 import { Text, Pressable } from 'react-native';
+import {TabButton} from "@/components/TabButton";
 
 export default function SettingsLayout() {
   return (
@@ -26,13 +27,3 @@ export default function SettingsLayout() {
   );
 }
 
-type TabButtonProps = TabTriggerSlotProps & { icon: string; children: string; };
-
-function TabButton({ icon, children, isFocused, ...props }: TabButtonProps) {
-  return (
-    <Pressable {...props} className={`tab-button ${isFocused ? 'tab-button-focused' : ''}`}>
-      <Text className="tab-icon">{icon}</Text>
-      <Text className={`tab-label ${isFocused ? 'tab-label-focused' : ''}`}>{children}</Text>
-    </Pressable>
-  );
-}

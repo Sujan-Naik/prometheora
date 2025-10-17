@@ -3,6 +3,7 @@ import { Pressable, Text } from 'react-native';
 import axios from 'axios';
 import { Tabs, TabSlot, TabList, TabTrigger, TabTriggerSlotProps } from 'expo-router/ui';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import {TabButton} from "@/components/TabButton";
 
 // Combined Creator Layout with "View Your Profile" integration
 export default function CreatorLayout() {
@@ -59,16 +60,5 @@ export default function CreatorLayout() {
         {/*)}*/}
       </TabList>
     </Tabs>
-  );
-}
-
-type TabButtonProps = TabTriggerSlotProps & { icon: string; children: string };
-
-function TabButton({ icon, children, isFocused, ...props }: TabButtonProps) {
-  return (
-    <Pressable {...props} className={`tab-button ${isFocused ? 'tab-button-focused' : ''}`}>
-      <Text className="tab-icon">{icon}</Text>
-      <Text className={`tab-label ${isFocused ? 'tab-label-focused' : ''}`}>{children}</Text>
-    </Pressable>
   );
 }

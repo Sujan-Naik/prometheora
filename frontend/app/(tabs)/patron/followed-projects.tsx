@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IDevlog} from "@/types/prisma";
+import ProjectCard from "@/components/ProjectCard";
+import DevlogCard from "@/components/DevlogCard";
 
 export default function FollowedProjectsFeed() {
   const [feed, setFeed] = useState<IDevlog[]>([]);
@@ -27,12 +29,7 @@ export default function FollowedProjectsFeed() {
         data={feed}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.project!.title}: {item.title} ({item.version})</Text>
-            <Text>{item.content}</Text>
-            {item.buildLink && <Text>Build: {item.buildLink}</Text>}
-            <Text>{item.createdAt}</Text>
-          </View>
+          <DevlogCard devlog={item} />
         )}
       />
     </View>

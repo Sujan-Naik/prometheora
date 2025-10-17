@@ -1,45 +1,49 @@
 // app/settings/profile.tsx
-import { View, TextInput, Button, Text, Alert } from 'react-native';
+import { View, TextInput, Text, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { IUser } from '@/types/prisma';
+import PickMedia from '@/components/PickMedia';
+import DisplayMedia from '@/components/DisplayMedia';
+import { MediaRecord, fetchMedia, deleteMedia } from '@/utils/mediaUtils';
 
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
-  const [media, setMedia] = useState('');
+  const [media, setMedia] = useState<MediaRecord[]>([]);
+  const [userId, setUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
-
   const router = useRouter();
   const token = useRequireAuth();
 
   useEffect(() => {
     if (!token) return;
-
     const fetchProfile = async () => {
       try {
-        const { data } = await axios.get<IUser>('http://localhost:3000/user/profile', {
+        const { data } = await axios.get<IUser>(`${process.env.EXPO_PUBLIC_API_URL}/user/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBio(data.bio || '');
-        setMedia(data.media || '');
+        setUserId(data.id);
+
+        // Fetch user's media
+        const userMedia = await fetchMedia({ userId: data.id });
+        setMedia(userMedia);
       } catch (err) {
         console.error('Failed to fetch profile:', err);
       }
     };
-
     fetchProfile();
   }, [token]);
 
   const handleUpdate = async () => {
     if (!token) return;
     setLoading(true);
-
     try {
       await axios.patch<IUser>(
-        'http://localhost:3000/user/profile',
-        { bio, media },
+        `${process.env.EXPO_PUBLIC_API_URL}/user/profile`,
+        { bio },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       Alert.alert('Success', 'Profile updated successfully!');
@@ -52,26 +56,84 @@ export default function ProfileSettings() {
     }
   };
 
+  const handleMediaUploaded = (newMedia: MediaRecord) => {
+    setMedia([newMedia, ...media]);
+  };
+
+  const handleDeleteMedia = async (mediaId: number) => {
+    try {
+      await deleteMedia(mediaId);
+      setMedia(media.filter(m => m.id !== mediaId));
+    } catch (err) {
+      Alert.alert('Error', 'Failed to delete media');
+    }
+  };
+
   return (
-    <View style={{ flex: 1, padding: 20, gap: 10 }}>
-      <Text style={{ fontSize: 18, marginBottom: 10 }}>Update Profile</Text>
+    <ScrollView className="container">
+      <Text className="title">Update Profile</Text>
 
-      <TextInput
-        placeholder="Bio"
-        value={bio}
-        onChangeText={setBio}
-        multiline
-        style={{ borderWidth: 1, borderColor: '#ccc', padding: 10, borderRadius: 8 }}
-      />
+      <View className="section">
+        <Text className="section-title">Bio</Text>
+        <TextInput
+          placeholder="Tell people about yourself..."
+          value={bio}
+          onChangeText={setBio}
+          multiline
+          style={{
+            borderWidth: 1,
+            borderColor: '#ccc',
+            padding: 10,
+            borderRadius: 8,
+            minHeight: 100,
+            textAlignVertical: 'top'
+          }}
+        />
+      </View>
 
-      <TextInput
-        placeholder="Media (JSON)"
-        value={media}
-        onChangeText={setMedia}
-        style={{ borderWidth: 1, borderColor: '#ccc', padding: 10, borderRadius: 8 }}
-      />
+      <View className="section">
+        <Text className="section-title">Media</Text>
+        {userId && (
+          <PickMedia
+            userId={userId}
+            onMediaUploaded={handleMediaUploaded}
+            buttonText="Add Photo/Video"
+          />
+        )}
 
-      <Button title={loading ? 'Updating...' : 'Update'} onPress={handleUpdate} disabled={loading} />
-    </View>
+        {media.map((item) => (
+          <View key={item.id} style={{ marginBottom: 16 }}>
+            <DisplayMedia
+              media={item}
+              showCaption={true}
+            />
+            <TouchableOpacity
+              onPress={() => handleDeleteMedia(item.id)}
+              style={{
+                backgroundColor: '#ff3b30',
+                padding: 10,
+                borderRadius: 8,
+                marginTop: 8,
+              }}
+            >
+              <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '600' }}>
+                Delete
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </View>
+
+      <TouchableOpacity
+        className="button"
+        onPress={handleUpdate}
+        disabled={loading}
+        style={{ opacity: loading ? 0.6 : 1 }}
+      >
+        <Text className="button-text">
+          {loading ? 'Updating...' : 'Update Profile'}
+        </Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 }

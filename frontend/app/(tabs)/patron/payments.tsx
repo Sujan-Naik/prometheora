@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IPayment} from "@/types/prisma";
+import PaymentCard from "@/components/PaymentCard";
 
 
 export default function Payments() {
@@ -40,10 +41,7 @@ export default function Payments() {
         data={payments}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View>
-            <Text>Amount: ${item.amount}</Text>
-            <Text>Date: {item.date}</Text>
-          </View>
+          <PaymentCard payment={item}/>
         )}
       />
       {/* If needed, add buttons to record payments for specific subs */}

@@ -1,10 +1,11 @@
 // app/creator/[handle]/tiers.tsx
-import { View, Text, FlatList, Button } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {ITier} from "@/types/prisma";
+import TierCard from "@/components/TierCard";
 
 
 export default function CreatorTiers() {
@@ -41,11 +42,7 @@ export default function CreatorTiers() {
         data={tiers}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.name} - ${item.price}</Text>
-            <Text>{item.benefits}</Text>
-            <Button title="Subscribe" onPress={() => handleSubscribe(item.id)} />
-          </View>
+            <TierCard tier={item} onSubscribe={() => handleSubscribe(item.id)} />
         )}
       />
     </View>
