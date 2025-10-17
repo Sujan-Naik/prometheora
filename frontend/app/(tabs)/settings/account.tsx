@@ -17,7 +17,7 @@ export default function AccountSettings() {
   useEffect(() => {
     if (!token) return;
 
-    axios.get<IUser>('http://localhost:3000/user/account', {
+    axios.get<IUser>('EXPO_PUBLIC_API_URL/user/account', {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
@@ -30,7 +30,7 @@ export default function AccountSettings() {
   const handleUpdate = () => {
     if (!token) return;
 
-    axios.patch<IUser>('http://localhost:3000/user/account', { email, password }, {
+    axios.patch<IUser>('EXPO_PUBLIC_API_URL/user/account', { email, password }, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {

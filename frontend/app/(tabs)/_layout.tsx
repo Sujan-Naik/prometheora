@@ -8,6 +8,9 @@ export default function TabsLayout() {
       <TabSlot />
 
       <TabList className="tab-list tab-list-web tab-list-native">
+        <TabTrigger name="home" href="/" asChild>
+          <TabButton icon="📝">Home</TabButton>
+        </TabTrigger>
         <TabTrigger name="blog" href="/(tabs)/blog" asChild>
           <TabButton icon="📝">Blog</TabButton>
         </TabTrigger>

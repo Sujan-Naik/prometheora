@@ -16,7 +16,7 @@ export default function CreatorProfile() {
     if (!token) {
       return;
     }
-    axios.get<IUser>(`http://localhost:3000/creators/${handle}`, {
+    axios.get<IUser>(`EXPO_PUBLIC_API_URL/creators/${handle}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setProfile(res.data))

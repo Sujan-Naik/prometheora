@@ -34,7 +34,7 @@ export default function Signup() {
 
 
   const handleSignup = () => {
-    axios.post<SignupResponse>('http://localhost:3000/auth/signup', { email, password, handle, roles })
+    axios.post<SignupResponse>('EXPO_PUBLIC_API_URL/auth/signup', { email, password, handle, roles })
       .then(res => router.push('/auth/login'))
       .catch(err => console.error(err));
   };

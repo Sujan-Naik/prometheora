@@ -15,7 +15,7 @@ export default function Payments() {
     if (!token) {
       return;
     }
-    axios.get<IPayment[]>('http://localhost:3000/payments', {
+    axios.get<IPayment[]>('EXPO_PUBLIC_API_URL/payments', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setPayments(res.data))
@@ -27,7 +27,7 @@ export default function Payments() {
     if (!token) {
       return;
     }
-    axios.post<IPayment>('http://localhost:3000/payments', { subscriptionId, amount }, {
+    axios.post<IPayment>('EXPO_PUBLIC_API_URL/payments', { subscriptionId, amount }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => alert('Payment recorded!'))

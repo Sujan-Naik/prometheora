@@ -17,7 +17,7 @@ export default function CreatorTiers() {
     if (!token) {
       return;
     }
-    axios.get<ITier[]>(`http://localhost:3000/creators/${handle}/tiers`, {
+    axios.get<ITier[]>(`EXPO_PUBLIC_API_URL/creators/${handle}/tiers`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setTiers(res.data))
@@ -28,7 +28,7 @@ export default function CreatorTiers() {
     if (!token) {
       return;
     }
-    axios.post<{ id: number }>('http://localhost:3000/subscriptions', { tierId }, {
+    axios.post<{ id: number }>('EXPO_PUBLIC_API_URL/subscriptions', { tierId }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => alert('Subscribed!'))

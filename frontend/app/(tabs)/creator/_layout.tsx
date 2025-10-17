@@ -13,7 +13,7 @@ export default function CreatorLayout() {
   useEffect(() => {
     if (!token) return;
     axios
-      .get('http://localhost:3000/user/me', {
+      .get('EXPO_PUBLIC_API_URL/user/me', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(res => setHandle(res.data.handle))

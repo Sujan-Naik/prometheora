@@ -20,7 +20,7 @@ export default function CreateDevlog() {
     if (!token) {
       return;
     }
-    axios.post<IDevlog>('http://localhost:3000/devlogs', { projectId: parseInt(projectId), title, content, version, buildLink }, {
+    axios.post<IDevlog>('EXPO_PUBLIC_API_URL/devlogs', { projectId: parseInt(projectId), title, content, version, buildLink }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => router.back())

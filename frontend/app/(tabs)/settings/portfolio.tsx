@@ -20,14 +20,14 @@ export default function EditPortfolio() {
       return;
     }
     // Fetch user's projects
-    axios.get<IProject[]>('http://localhost:3000/projects/creator/myhandle', { // Replace 'myhandle' with actual
+    axios.get<IProject[]>('EXPO_PUBLIC_API_URL/projects/creator/myhandle', { // Replace 'myhandle' with actual
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setProjects(res.data))
       .catch(err => console.error(err));
 
     // Fetch current portfolio
-    axios.get<IPortfolioItem[]>('http://localhost:3000/portfolio/myhandle', {
+    axios.get<IPortfolioItem[]>('EXPO_PUBLIC_API_URL/portfolio/myhandle', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setPortfolio(res.data))
@@ -36,7 +36,7 @@ export default function EditPortfolio() {
 
   const handleAdd = () => {
     if (!token || !selectedProjectId) return;
-    axios.post('http://localhost:3000/portfolio', { projectId: selectedProjectId, caption }, {
+    axios.post('EXPO_PUBLIC_API_URL/portfolio', { projectId: selectedProjectId, caption }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setPortfolio([...portfolio, res.data]))
@@ -46,7 +46,7 @@ export default function EditPortfolio() {
   const handleUpdateOrder = () => {
     if (!token) return;
     const items = portfolio.map((item, index) => ({ id: item.id, order: index + 1 }));
-    axios.patch('http://localhost:3000/portfolio/order', { items }, {
+    axios.patch('EXPO_PUBLIC_API_URL/portfolio/order', { items }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => alert('Order updated'))
@@ -55,7 +55,7 @@ export default function EditPortfolio() {
 
   const handleRemove = (itemId: number) => {
     if (!token) return;
-    axios.delete(`http://localhost:3000/portfolio/${itemId}`, {
+    axios.delete(`EXPO_PUBLIC_API_URL/portfolio/${itemId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => setPortfolio(portfolio.filter(item => item.id !== itemId)))
