@@ -1,0 +1,49 @@
+// app/(tabs)/blog/_layout.tsx
+import { Stack } from 'expo-router';
+import { Text } from 'react-native';
+import { useAdmin } from '@/hooks/useAdmin';
+
+export default function BlogLayout() {
+  const { isAdmin } = useAdmin();
+
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#007AFF',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      <Stack.Screen
+        name="index"
+        options={{
+          title: 'Blog Posts',
+          headerRight: isAdmin ? () => (
+            <Text style={{ color: '#fff', marginRight: 10 }}>✏️ Admin</Text>
+          ) : undefined
+        }}
+      />
+      <Stack.Screen
+        name="[slug]"
+        options={{
+          title: 'Blog Post',
+          headerBackTitle: 'Back'
+        }}
+      />
+      {isAdmin && (
+        <Stack.Screen
+          name="create"
+          options={{
+            title: 'Create Blog Post',
+            presentation: 'modal'
+          }}
+        />
+      )}
+    </Stack>
+  );
+}

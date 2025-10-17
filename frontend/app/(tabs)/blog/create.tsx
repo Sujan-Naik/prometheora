@@ -1,40 +1,114 @@
-// app/blog/create.tsx
-import { View, TextInput, Button, Text } from 'react-native';
+// app/(tabs)/blog/create.tsx
+import { View, TextInput, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
-import {useRequireAuth} from "@/hooks/useRequireAuth";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { useAdmin } from "@/hooks/useAdmin";
+import '../../../global.css';
 
 interface CreateBlogResponse {
   id: number;
   title: string;
-  // etc.
+  slug: string;
 }
 
 export default function CreateBlog() {
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
-  const [slug, setSlug] = useState<string>('');
+  const [title, setTitle] = useState('');
+  const [slug, setSlug] = useState('');
+  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-const token = useRequireAuth();
-  const handleCreate = () => {
-      if (!token){
-          return;
-      }
-    axios.post<CreateBlogResponse>('http://localhost:3000/blogs', { title, content, slug }, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(() => router.back())
-      .catch(err => console.error(err));
+  const token = useRequireAuth();
+  const { isAdmin } = useAdmin();
+
+  // Auto-generate slug from title
+  const handleTitleChange = (text: string) => {
+    setTitle(text);
+    if (!slug) {
+      setSlug(text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
+    }
   };
 
+  const handleCreate = async () => {
+    if (!token) return;
+
+    if (!title || !slug || !content) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await axios.post<CreateBlogResponse>(
+        `${process.env.EXPO_PUBLIC_API_URL}/blogs`,
+        { title, content, slug },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      Alert.alert('Success', 'Blog post created!');
+      router.back();
+    } catch (err) {
+      console.error('Failed to create blog:', err);
+      Alert.alert('Error', 'Failed to create blog post');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!isAdmin) {
+    return (
+      <View className="error-container">
+        <Text className="not-found-text">
+          You are not authorized to create blogs.
+        </Text>
+      </View>
+    );
+  }
+
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text>Create Blog</Text>
-      <TextInput placeholder="Title" value={title} onChangeText={setTitle} />
-      <TextInput placeholder="Slug" value={slug} onChangeText={setSlug} />
-      <TextInput placeholder="Content" value={content} onChangeText={setContent} multiline />
-      <Button title="Submit" onPress={handleCreate} />
-    </View>
+    <ScrollView className="container">
+      <Text className="title">Create Blog Post</Text>
+
+      <View className="input-container">
+        <Text className="input-label">Title</Text>
+        <TextInput
+          placeholder="Enter blog title"
+          value={title}
+          onChangeText={handleTitleChange}
+          className="input"
+        />
+      </View>
+
+      <View className="input-container">
+        <Text className="input-label">Slug (URL)</Text>
+        <TextInput
+          placeholder="blog-post-url"
+          value={slug}
+          onChangeText={setSlug}
+          className="input"
+        />
+      </View>
+
+      <View className="input-container">
+        <Text className="input-label">Content</Text>
+        <TextInput
+          placeholder="Write your blog content..."
+          value={content}
+          onChangeText={setContent}
+          multiline
+          className="input-multiline input-tall"
+        />
+      </View>
+
+      <TouchableOpacity
+        onPress={handleCreate}
+        disabled={loading}
+        className={loading ? 'button button-disabled' : 'button'}
+      >
+        <Text className="button-text">
+          {loading ? 'Creating...' : 'Publish Blog Post'}
+        </Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 }

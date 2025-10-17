@@ -1,37 +1,34 @@
 // app/creator/[handle]/tiers.tsx
-import { View, Text, FlatList, Button } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {useRequireAuth} from "@/hooks/useRequireAuth";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import {ITier} from "@/types/prisma";
+import TierCard from "@/components/TierCard";
 
-interface Tier {
-  id: number;
-  name: string;
-  price: number;
-  benefits: string;
-}
 
 export default function CreatorTiers() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
-  const [tiers, setTiers] = useState<Tier[]>([]);
-const token = useRequireAuth();
+  const [tiers, setTiers] = useState<ITier[]>([]);
+  const token = useRequireAuth();
+
   useEffect(() => {
-      if (!token){
-          return;
-      }
-    axios.get<Tier[]>(`http://localhost:3000/creators/${handle}/tiers`, {
-      headers: { Authorization: `Bearer ${token}` } // Replace with actual token management
+    if (!token) {
+      return;
+    }
+    axios.get<ITier[]>(`EXPO_PUBLIC_API_URL/creators/${handle}/tiers`, {
+      headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setTiers(res.data))
       .catch(err => console.error(err));
-  }, [handle]);
+  }, [handle, token]);
 
   const handleSubscribe = (tierId: number) => {
-      if (!token){
-          return;
-      }
-    axios.post<{ id: number }>('http://localhost:3000/subscriptions', { tierId }, {
+    if (!token) {
+      return;
+    }
+    axios.post<{ id: number }>('EXPO_PUBLIC_API_URL/subscriptions', { tierId }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => alert('Subscribed!'))
@@ -45,11 +42,7 @@ const token = useRequireAuth();
         data={tiers}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.name} - ${item.price}</Text>
-            <Text>{item.benefits}</Text>
-            <Button title="Subscribe" onPress={() => handleSubscribe(item.id)} />
-          </View>
+            <TierCard tier={item} onSubscribe={() => handleSubscribe(item.id)} />
         )}
       />
     </View>

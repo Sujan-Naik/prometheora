@@ -2,45 +2,32 @@
 import { View, Text, FlatList, Button } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {useRequireAuth} from "@/hooks/useRequireAuth";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import {IPayment} from "@/types/prisma";
+import PaymentCard from "@/components/PaymentCard";
 
-interface Subscription {
-  id: number;
-  // etc.
-}
-
-interface Payment {
-  id: number;
-  amount: number;
-  date: string;
-  subscription: Subscription;
-}
-
-interface RecordPaymentResponse {
-  id: number;
-  // etc.
-}
 
 export default function Payments() {
-  const [payments, setPayments] = useState<Payment[]>([]);
-const token = useRequireAuth();
+  const [payments, setPayments] = useState<IPayment[]>([]);
+  const token = useRequireAuth();
+
   useEffect(() => {
-      if (!token){
-          return;
-      }
-    axios.get<Payment[]>('http://localhost:3000/payments', {
+    if (!token) {
+      return;
+    }
+    axios.get<IPayment[]>('EXPO_PUBLIC_API_URL/payments', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setPayments(res.data))
       .catch(err => console.error(err));
-  }, []);
+  }, [token]);
 
   // Optional: Function to record a payment, but might be triggered elsewhere (e.g., after subscribe)
   const handleRecordPayment = (subscriptionId: number, amount: number) => {
-      if (!token){
-          return;
-      }
-    axios.post<RecordPaymentResponse>('http://localhost:3000/payments', { subscriptionId, amount }, {
+    if (!token) {
+      return;
+    }
+    axios.post<IPayment>('EXPO_PUBLIC_API_URL/payments', { subscriptionId, amount }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => alert('Payment recorded!'))
@@ -54,10 +41,7 @@ const token = useRequireAuth();
         data={payments}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View>
-            <Text>Amount: ${item.amount}</Text>
-            <Text>Date: {item.date}</Text>
-          </View>
+          <PaymentCard payment={item}/>
         )}
       />
       {/* If needed, add buttons to record payments for specific subs */}

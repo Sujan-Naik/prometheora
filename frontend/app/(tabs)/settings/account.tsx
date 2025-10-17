@@ -3,46 +3,60 @@ import { View, TextInput, Button, Text } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
-import {useRequireAuth} from "@/hooks/useRequireAuth";
-
-interface Account {
-  email: string;
-}
-
-interface UpdateAccountResponse {
-  // Updated user object
-}
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { IUser } from "@/types/prisma";
+import UserCard from "@/components/UserCard";
 
 export default function AccountSettings() {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [user, setUser] = useState<IUser | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
-const token = useRequireAuth();
+  const token = useRequireAuth();
+
   useEffect(() => {
-    // Fetch current email if needed
-    if (!token){
-      return;
-    }
-    axios.get<Account>('http://localhost:3000/user/account', {
+    if (!token) return;
+
+    axios.get<IUser>('EXPO_PUBLIC_API_URL/user/account', {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(res => setEmail(res.data.email))
-      .catch(err => console.error(err));
-  }, []);
+    .then(res => {
+      setUser(res.data);
+      setEmail(res.data.email);
+    })
+    .catch(err => console.error(err));
+  }, [token]);
 
   const handleUpdate = () => {
-    axios.patch<UpdateAccountResponse>('http://localhost:3000/user/account', { email, password }, {
+    if (!token) return;
+
+    axios.patch<IUser>('EXPO_PUBLIC_API_URL/user/account', { email, password }, {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(() => router.back())
-      .catch(err => console.error(err));
+    .then(res => {
+      setUser(res.data); // update local user data
+      router.back();
+    })
+    .catch(err => console.error(err));
   };
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
+      {user && <UserCard user={user} />}
+
       <Text>Update Account</Text>
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} />
-      <TextInput placeholder="New Password" value={password} onChangeText={setPassword} secureTextEntry />
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+      />
+      <TextInput
+        placeholder="New Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
       <Button title="Update" onPress={handleUpdate} />
     </View>
   );

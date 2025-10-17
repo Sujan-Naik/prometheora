@@ -1,0 +1,168 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CREATOR
+  PATRON
+  ADMIN
+}
+
+enum Visibility {
+  PUBLIC
+  PATRON_ONLY
+  FOLLOWER_ONLY
+  PRIVATE
+}
+
+model User {
+  id               Int            @id @default(autoincrement())
+  email            String         @unique
+  passwordHash     String
+  handle           String?        @unique
+  bio              String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  posts            Post[]
+  tiers            Tier[]
+  subscriptions    Subscription[] @relation("Patron")
+  payments         Payment[]
+  userRoles        UserRole[]
+  projects         Project[]
+  followedProjects ProjectFollower[]
+  portfolioItems   PortfolioItem[]
+  media            Media[]        @relation("UserMedia")
+}
+
+model UserRole {
+  id     Int  @id @default(autoincrement())
+  role   Role
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model Project {
+  id             Int              @id @default(autoincrement())
+  title          String
+  description    String
+  repoUrl        String?
+  demoUrl        String?
+  status         String?
+  visibility     Visibility       @default(PATRON_ONLY)
+  creatorId      Int
+  creator        User             @relation(fields: [creatorId], references: [id])
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  devlogs        Devlog[]
+  followers      ProjectFollower[]
+  portfolioItems PortfolioItem[]
+  quotedInPosts  Post[]
+  media          Media[]          @relation("ProjectMedia")
+}
+
+model Devlog {
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String
+  version    String?
+  buildLink  String?
+  projectId  Int
+  project    Project  @relation(fields: [projectId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model ProjectFollower {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  projectId Int
+  user      User    @relation(fields: [userId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id])
+}
+
+model PortfolioItem {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  projectId Int
+  order     Int
+  caption   String?
+  user      User    @relation(fields: [userId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id])
+}
+
+model Post {
+  id              Int       @id @default(autoincrement())
+  title           String
+  content         String
+  isPaid          Boolean   @default(false)
+  quotedProjectId Int?
+  creatorId       Int
+  creator         User      @relation(fields: [creatorId], references: [id])
+  quotedProject   Project?  @relation(fields: [quotedProjectId], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  media           Media[]   @relation("PostMedia")
+}
+
+model Tier {
+  id              Int           @id @default(autoincrement())
+  name            String
+  price           Float
+  benefits        String
+  creatorId       Int
+  creator         User          @relation(fields: [creatorId], references: [id])
+  subscriptions   Subscription[]
+}
+
+model Subscription {
+  id             Int          @id @default(autoincrement())
+  patronId       Int
+  tierId         Int
+  startDate      DateTime     @default(now())
+  endDate        DateTime?
+  patron         User         @relation("Patron", fields: [patronId], references: [id])
+  tier           Tier         @relation(fields: [tierId], references: [id])
+  payments       Payment[]
+}
+
+model Payment {
+  id             Int            @id @default(autoincrement())
+  amount         Float
+  date           DateTime       @default(now())
+  subscriptionId Int
+  userId         Int
+  subscription   Subscription   @relation(fields: [subscriptionId], references: [id])
+  user           User           @relation(fields: [userId], references: [id])
+}
+
+model Blog {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Media {
+  id          Int       @id @default(autoincrement())
+  url         String    // Firebase Storage URL
+  type        String?   // e.g. 'image', 'video', 'audio'
+  caption     String?
+  order       Int?
+  createdAt   DateTime  @default(now())
+
+  // Foreign keys for flexible linking
+  userId      Int?
+  projectId   Int?
+  postId      Int?
+
+  user        User?     @relation("UserMedia", fields: [userId], references: [id])
+  project     Project?  @relation("ProjectMedia", fields: [projectId], references: [id])
+  post        Post?     @relation("PostMedia", fields: [postId], references: [id])
+}

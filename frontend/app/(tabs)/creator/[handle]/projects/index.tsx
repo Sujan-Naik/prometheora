@@ -1,0 +1,38 @@
+// app/creator/[handle]/projects/index.tsx
+import { View, Text, FlatList } from 'react-native';
+import { useLocalSearchParams, Link } from 'expo-router';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import {IProject} from "@/types/prisma";
+import ProjectCard from "@/components/ProjectCard";
+
+export default function CreatorProjects() {
+  const { handle } = useLocalSearchParams<{ handle: string }>();
+  const [projects, setProjects] = useState<IProject[]>([]);
+  const token = useRequireAuth();
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+    axios.get<IProject[]>(`EXPO_PUBLIC_API_URL/projects/creator/${handle}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => setProjects(res.data))
+      .catch(err => console.error(err));
+  }, [handle, token]);
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Text>Projects for {handle}</Text>
+      <FlatList
+        data={projects}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => (
+            <ProjectCard project={item}/>
+        )}
+      />
+    </View>
+  );
+}

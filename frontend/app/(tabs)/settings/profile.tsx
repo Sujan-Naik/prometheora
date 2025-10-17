@@ -1,50 +1,139 @@
 // app/settings/profile.tsx
-import { View, TextInput, Button, Text } from 'react-native';
+import { View, TextInput, Text, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
-import {useRequireAuth} from "@/hooks/useRequireAuth";
-
-interface Profile {
-  bio: string;
-  media: string;
-}
-
-interface UpdateProfileResponse {
-  // Updated user object
-}
+import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { IUser } from '@/types/prisma';
+import PickMedia from '@/components/PickMedia';
+import DisplayMedia from '@/components/DisplayMedia';
+import { MediaRecord, fetchMedia, deleteMedia } from '@/utils/mediaUtils';
 
 export default function ProfileSettings() {
-  const [bio, setBio] = useState<string>('');
-  const [media, setMedia] = useState<string>('');
+  const [bio, setBio] = useState('');
+  const [media, setMedia] = useState<MediaRecord[]>([]);
+  const [userId, setUserId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-const token = useRequireAuth();
-  useEffect(() => {
-    // Fetch current profile if needed
-    axios.get<Profile>('http://localhost:3000/user/profile', { // Assume endpoint to get current
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => {
-        setBio(res.data.bio);
-        setMedia(res.data.media);
-      })
-      .catch(err => console.error(err));
-  }, []);
+  const token = useRequireAuth();
 
-  const handleUpdate = () => {
-    axios.patch<UpdateProfileResponse>('http://localhost:3000/user/profile', { bio, media }, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(() => router.back())
-      .catch(err => console.error(err));
+  useEffect(() => {
+    if (!token) return;
+    const fetchProfile = async () => {
+      try {
+        const { data } = await axios.get<IUser>(`${process.env.EXPO_PUBLIC_API_URL}/user/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setBio(data.bio || '');
+        setUserId(data.id);
+
+        // Fetch user's media
+        const userMedia = await fetchMedia({ userId: data.id });
+        setMedia(userMedia);
+      } catch (err) {
+        console.error('Failed to fetch profile:', err);
+      }
+    };
+    fetchProfile();
+  }, [token]);
+
+  const handleUpdate = async () => {
+    if (!token) return;
+    setLoading(true);
+    try {
+      await axios.patch<IUser>(
+        `${process.env.EXPO_PUBLIC_API_URL}/user/profile`,
+        { bio },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      Alert.alert('Success', 'Profile updated successfully!');
+      router.back();
+    } catch (err) {
+      console.error('Profile update failed:', err);
+      Alert.alert('Error', 'Unable to update profile.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleMediaUploaded = (newMedia: MediaRecord) => {
+    setMedia([newMedia, ...media]);
+  };
+
+  const handleDeleteMedia = async (mediaId: number) => {
+    try {
+      await deleteMedia(mediaId);
+      setMedia(media.filter(m => m.id !== mediaId));
+    } catch (err) {
+      Alert.alert('Error', 'Failed to delete media');
+    }
   };
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text>Update Profile</Text>
-      <TextInput placeholder="Bio" value={bio} onChangeText={setBio} multiline />
-      <TextInput placeholder="Media (JSON)" value={media} onChangeText={setMedia} />
-      <Button title="Update" onPress={handleUpdate} />
-    </View>
+    <ScrollView className="container">
+      <Text className="title">Update Profile</Text>
+
+      <View className="section">
+        <Text className="section-title">Bio</Text>
+        <TextInput
+          placeholder="Tell people about yourself..."
+          value={bio}
+          onChangeText={setBio}
+          multiline
+          style={{
+            borderWidth: 1,
+            borderColor: '#ccc',
+            padding: 10,
+            borderRadius: 8,
+            minHeight: 100,
+            textAlignVertical: 'top'
+          }}
+        />
+      </View>
+
+      <View className="section">
+        <Text className="section-title">Media</Text>
+        {userId && (
+          <PickMedia
+            userId={userId}
+            onMediaUploaded={handleMediaUploaded}
+            buttonText="Add Photo/Video"
+          />
+        )}
+
+        {media.map((item) => (
+          <View key={item.id} style={{ marginBottom: 16 }}>
+            <DisplayMedia
+              media={item}
+              showCaption={true}
+            />
+            <TouchableOpacity
+              onPress={() => handleDeleteMedia(item.id)}
+              style={{
+                backgroundColor: '#ff3b30',
+                padding: 10,
+                borderRadius: 8,
+                marginTop: 8,
+              }}
+            >
+              <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '600' }}>
+                Delete
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </View>
+
+      <TouchableOpacity
+        className="button"
+        onPress={handleUpdate}
+        disabled={loading}
+        style={{ opacity: loading ? 0.6 : 1 }}
+      >
+        <Text className="button-text">
+          {loading ? 'Updating...' : 'Update Profile'}
+        </Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 }
