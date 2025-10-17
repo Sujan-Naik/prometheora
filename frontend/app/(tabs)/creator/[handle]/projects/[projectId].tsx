@@ -1,10 +1,12 @@
-// app/creator/[handle]/projects/[projectId].tsx
-import { View, Text, FlatList, Button } from 'react-native';
+// app/(tabs)/creator/[handle]/projects/[projectId].tsx
+import {View, Text, FlatList, Button, ScrollView} from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IProject} from "@/types/prisma";
+import ProjectCard from "@/components/ProjectCard";
+import DevlogCard from "@/components/DevlogCard";
 
 
 export default function ProjectDetail() {
@@ -40,27 +42,20 @@ export default function ProjectDetail() {
   };
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
       {project && (
         <>
-          <Text>{project.title}</Text>
-          <Text>{project.description}</Text>
-          {/* Render other fields */}
-          <Button title={isFollowed ? 'Unfollow' : 'Follow'} onPress={handleFollow} />
+          <ProjectCard project={project} />
           <Text>Devlogs:</Text>
           <FlatList
             data={project.devlogs}
             keyExtractor={item => item.id.toString()}
             renderItem={({ item }) => (
-              <View>
-                <Text>{item.title} ({item.version})</Text>
-                <Text>{item.content}</Text>
-                {item.buildLink && <Text>Build: {item.buildLink}</Text>}
-              </View>
+              <DevlogCard devlog={item}/>
             )}
           />
         </>
       )}
-    </View>
+    </ScrollView>
   );
 }

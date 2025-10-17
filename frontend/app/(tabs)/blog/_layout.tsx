@@ -1,43 +1,49 @@
-// app/blog/_layout.tsx
-import { Tabs, TabSlot, TabList, TabTrigger, TabTriggerSlotProps } from 'expo-router/ui';
-import { Text, Pressable } from 'react-native';
+// app/(tabs)/blog/_layout.tsx
+import { Stack } from 'expo-router';
+import { Text } from 'react-native';
 import { useAdmin } from '@/hooks/useAdmin';
 
 export default function BlogLayout() {
-  const {isAdmin} = useAdmin();
+  const { isAdmin } = useAdmin();
 
-  console.log(isAdmin)
   return (
-    <Tabs>
-      <TabSlot />
-      <TabList className="tab-list tab-list-web tab-list-native">
-        <TabTrigger name="blog-home" href="/blog" asChild>
-          <TabButton icon="📰">All Posts</TabButton>
-        </TabTrigger>
-
-        {isAdmin && (
-          <>
-              YOU ARE AN ADMIN
-            <TabTrigger name="blog-create" href="/blog/create" asChild>
-              <TabButton icon="✏️">Create</TabButton>
-            </TabTrigger>
-            <TabTrigger name="blog-drafts" href="/blog/drafts" asChild>
-              <TabButton icon="📄">Drafts</TabButton>
-            </TabTrigger>
-          </>
-        )}
-      </TabList>
-    </Tabs>
-  );
-}
-
-type TabButtonProps = TabTriggerSlotProps & { icon: string; children: string };
-
-function TabButton({ icon, children, isFocused, ...props }: TabButtonProps) {
-  return (
-    <Pressable {...props} className={`tab-button ${isFocused ? 'tab-button-focused' : ''}`}>
-      <Text className="tab-icon">{icon}</Text>
-      <Text className={`tab-label ${isFocused ? 'tab-label-focused' : ''}`}>{children}</Text>
-    </Pressable>
+    <Stack
+      screenOptions={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#007AFF',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      <Stack.Screen
+        name="index"
+        options={{
+          title: 'Blog Posts',
+          headerRight: isAdmin ? () => (
+            <Text style={{ color: '#fff', marginRight: 10 }}>✏️ Admin</Text>
+          ) : undefined
+        }}
+      />
+      <Stack.Screen
+        name="[slug]"
+        options={{
+          title: 'Blog Post',
+          headerBackTitle: 'Back'
+        }}
+      />
+      {isAdmin && (
+        <Stack.Screen
+          name="create"
+          options={{
+            title: 'Create Blog Post',
+            presentation: 'modal'
+          }}
+        />
+      )}
+    </Stack>
   );
 }

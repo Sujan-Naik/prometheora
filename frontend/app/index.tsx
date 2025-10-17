@@ -4,24 +4,17 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useAuthStatus } from '@/hooks/useAuthStatus';
-
-interface Post {
-  id: number;
-  title: string;
-  content: string;
-  isPaid: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import PostCard from "@/components/PostCard";
+import {IPost} from "@/types/prisma";
 
 export default function Home() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const router = useRouter();
   const { isAuthenticated } = useAuthStatus();
     console.log(isAuthenticated)
   useEffect(() => {
     axios
-      .get<Post[]>('http://localhost:3000/posts')
+      .get<IPost[]>('http://localhost:3000/posts')
       .then(res => setPosts(res.data))
       .catch(console.error);
   }, []);
@@ -40,7 +33,7 @@ export default function Home() {
       <FlatList
         data={posts}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => <Text>{item.title}</Text>}
+        renderItem={({ item }) => <PostCard post={item}/>}
         ListEmptyComponent={<Text>No posts yet.</Text>}
       />
       <View style={{ marginTop: 30 }}>

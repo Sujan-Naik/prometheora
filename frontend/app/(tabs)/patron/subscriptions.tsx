@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {ISubscription} from "@/types/prisma";
+import SubscriptionCard from "@/components/SubscriptionCard";
 
 export default function Subscriptions() {
   const [subscriptions, setSubscriptions] = useState<ISubscription[]>([]);
@@ -27,10 +28,7 @@ export default function Subscriptions() {
         data={subscriptions}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View>
-            <Text>Tier: {item.tier!.name}</Text>
-            <Text>Start Date: {item.startDate}</Text>
-          </View>
+          <SubscriptionCard subscription={item}/>
         )}
       />
     </View>

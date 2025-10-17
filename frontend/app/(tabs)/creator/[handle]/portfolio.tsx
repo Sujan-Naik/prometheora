@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IPortfolioItem} from "@/types/prisma";
+import ProjectCard from "@/components/ProjectCard";
 
 
 export default function CreatorPortfolio() {
@@ -30,11 +31,7 @@ export default function CreatorPortfolio() {
         data={portfolio}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.project!.title}</Text>
-            <Text>{item.caption}</Text>
-            <Text>{item.project!.description}</Text>
-          </View>
+          <ProjectCard project={item.project!} />
         )}
       />
     </View>

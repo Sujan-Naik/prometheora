@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IProject} from "@/types/prisma";
+import ProjectCard from "@/components/ProjectCard";
 
 export default function CreatorProjects() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
@@ -29,9 +30,7 @@ export default function CreatorProjects() {
         data={projects}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <Link href={`/creator/${handle}/projects/${item.id}`}>
-            <Text>{item.title} ({item.visibility})</Text>
-          </Link>
+            <ProjectCard project={item}/>
         )}
       />
     </View>
