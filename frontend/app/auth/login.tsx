@@ -25,7 +25,7 @@ export default function Login() {
   }, [isAuthenticated]);
 
   const handleLogin = () => {
-    axios.post<LoginResponse>('EXPO_PUBLIC_API_URL/auth/login', { email, password })
+    axios.post<LoginResponse>(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, { email, password })
       .then(async res => {
         await AsyncStorage.setItem('token', res.data.access_token);
         router.push('/');

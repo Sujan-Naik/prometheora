@@ -19,7 +19,7 @@ export default function ProjectDetail() {
     if (!token) {
       return;
     }
-    axios.get<IProject>(`EXPO_PUBLIC_API_URL/projects/${projectId}`, {
+    axios.get<IProject>(`${process.env.EXPO_PUBLIC_API_URL}/projects/${projectId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -34,7 +34,7 @@ export default function ProjectDetail() {
       return;
     }
     const method = isFollowed ? 'delete' : 'post';
-    axios[method](`EXPO_PUBLIC_API_URL/projects/${projectId}/follow`, {}, {
+    axios[method](`${process.env.EXPO_PUBLIC_API_URL}/projects/${projectId}/follow`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => setIsFollowed(!isFollowed))

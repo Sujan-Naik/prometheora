@@ -16,7 +16,7 @@ export default function CreatorPosts() {
     if (!token) {
       return;
     }
-    axios.get<IPost[]>(`EXPO_PUBLIC_API_URL/creators/${handle}/posts`, {
+    axios.get<IPost[]>(`${process.env.EXPO_PUBLIC_API_URL}/creators/${handle}/posts`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setPosts(res.data))

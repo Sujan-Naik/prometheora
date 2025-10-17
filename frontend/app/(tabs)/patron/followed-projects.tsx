@@ -15,7 +15,7 @@ export default function FollowedProjectsFeed() {
     if (!token) {
       return;
     }
-    axios.get<IDevlog[]>('EXPO_PUBLIC_API_URL/projects/followed/feed', {
+    axios.get<IDevlog[]>(`${process.env.EXPO_PUBLIC_API_URL}/projects/followed/feed`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setFeed(res.data))

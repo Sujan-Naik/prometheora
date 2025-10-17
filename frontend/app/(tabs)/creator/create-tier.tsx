@@ -17,7 +17,7 @@ export default function CreateTier() {
     if (!token) {
       return;
     }
-    axios.post<ITier>('EXPO_PUBLIC_API_URL/tiers', { name, price: parseFloat(price), benefits }, {
+    axios.post<ITier>(`${process.env.EXPO_PUBLIC_API_URL}/tiers`, { name, price: parseFloat(price), benefits }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => router.back())

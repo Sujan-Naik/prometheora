@@ -14,7 +14,7 @@ export default function Subscriptions() {
     if (!token) {
       return;
     }
-    axios.get<ISubscription[]>('EXPO_PUBLIC_API_URL/subscriptions', {
+    axios.get<ISubscription[]>(`${process.env.EXPO_PUBLIC_API_URL}/subscriptions`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setSubscriptions(res.data))

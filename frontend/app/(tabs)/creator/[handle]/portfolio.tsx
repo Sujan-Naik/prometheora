@@ -17,7 +17,7 @@ export default function CreatorPortfolio() {
     if (!token) {
       return;
     }
-    axios.get<IPortfolioItem[]>(`EXPO_PUBLIC_API_URL/portfolio/${handle}`, {
+    axios.get<IPortfolioItem[]>(`${process.env.EXPO_PUBLIC_API_URL}/portfolio/${handle}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setPortfolio(res.data))
