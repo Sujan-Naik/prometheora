@@ -1,6 +1,6 @@
 // app/profile/index.tsx
 import {FlatList, ScrollView, Text} from "react-native";
-import { useUser } from "./UserContext";
+import { useUser } from "../../../hooks/UserContext";
 import UserCard from "@/components/UserCard";
 import ProjectCard from "@/components/ProjectCard";
 

@@ -1,6 +1,7 @@
 // app/(tabs)/settings.tsx
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import { useRouter } from 'expo-router';
+import LogoutButton from "@/components/Logout";
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -30,6 +31,7 @@ export default function SettingsScreen() {
       >
         <Text className="text-base">Portfolio</Text>
       </TouchableOpacity>
+        <LogoutButton/>
     </ScrollView>
   );
 }

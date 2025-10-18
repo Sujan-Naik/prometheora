@@ -1,11 +1,11 @@
 // app/index.tsx
-import {View, Text, FlatList, ActivityIndicator, RefreshControl, TouchableOpacity, ScrollView} from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useAuthStatus } from '@/hooks/useAuthStatus';
-import PostCard from "@/components/PostCard";
-import { IPost } from "@/types/prisma";
+import PostCard from '@/components/PostCard';
+import { IPost } from '@/types/prisma';
 import '@/global.css';
 
 export default function Home() {
@@ -34,25 +34,20 @@ export default function Home() {
     fetchPosts();
   }, []);
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    fetchPosts();
-  };
-
   // Auth status loading
   if (isAuthenticated === null) {
     return (
-        <ScrollView style={{ height: "100vh" as any }} className="container">
+      <ScrollView style={{ height: '100vh' as any }} className="container">
         <ActivityIndicator size="large" color="var(--primary)" />
         <Text className="loading-text">Loading...</Text>
-        </ScrollView>
+      </ScrollView>
     );
   }
 
   // Not authenticated - Landing page
   if (!isAuthenticated) {
     return (
-    <ScrollView style={{ height: "100vh" as any }} className="container">
+      <ScrollView style={{ height: '100vh' as any }} className="container">
         <View className="flex-1 items-center justify-center p-5">
           <Text className="text-5xl mb-2">🎨</Text>
           <Text className="text-3xl font-bold text-[var(--text-primary)] text-center mb-2">
@@ -79,9 +74,11 @@ export default function Home() {
 
         {/* Public Posts Preview */}
         <View className="p-5 bg-[var(--secondary)]">
-          <Text className="text-xl font-bold mb-3 text-[var(--text-primary)]">
-            Recent Posts
-          </Text>
+          <View style={{ paddingHorizontal: 8 }}>
+            <Text className="text-xl font-bold mb-3 text-[var(--text-primary)]">
+              Recent Posts
+            </Text>
+          </View>
           {loading ? (
             <ActivityIndicator size="small" color="var(--primary)" />
           ) : error ? (
@@ -99,21 +96,17 @@ export default function Home() {
             </>
           )}
         </View>
-    </ScrollView>
+      </ScrollView>
     );
   }
 
   // Authenticated - Feed view
   return (
-    <ScrollView style={{ height: "100vh" as any }} className="container">
+    <ScrollView style={{ height: '100vh' as any }} className="container">
       {/* Header */}
       <View className="p-5 pt-15 bg-[var(--primary)] rounded-b-2xl">
-        <Text className="text-2xl font-bold text-white mb-1">
-          Discover
-        </Text>
-        <Text className="text-sm text-white/80">
-          Latest posts from creators you follow
-        </Text>
+        <Text className="text-2xl font-bold text-white mb-1">Discover</Text>
+        <Text className="text-sm text-white/80">Latest posts from creators you follow</Text>
       </View>
 
       {/* Navigation Quick Access */}
@@ -160,44 +153,16 @@ export default function Home() {
       ) : error ? (
         <View className="container items-center justify-center">
           <Text className="error-text">{error}</Text>
-          <TouchableOpacity
-            onPress={fetchPosts}
-            className="button mt-4"
-          >
+          <TouchableOpacity onPress={fetchPosts} className="button mt-4">
             <Text className="button-text">Retry</Text>
           </TouchableOpacity>
         </View>
       ) : (
-        <FlatList
-          data={posts}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => <PostCard post={item} />}
-          contentContainerStyle={{ padding: 16 }}
-          ListEmptyComponent={
-            <View className="p-10 items-center">
-              <Text className="text-5xl mb-3">📭</Text>
-              <Text className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-                No posts yet
-              </Text>
-              <Text className="text-sm text-[var(--text-secondary)] text-center">
-                Follow some creators to see their posts here
-              </Text>
-              <TouchableOpacity
-                onPress={() => router.push('/(tabs)/creator')}
-                className="button mt-4"
-              >
-                <Text className="button-text">Discover Creators</Text>
-              </TouchableOpacity>
-            </View>
-          }
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor="var(--primary)"
-            />
-          }
-        />
+        <View style={{ padding: 16 }}>
+          {posts.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </View>
       )}
     </ScrollView>
   );

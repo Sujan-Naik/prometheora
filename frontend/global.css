@@ -18,7 +18,7 @@
   .container {
     @apply p-5 bg-[var(--background)] items-center pb-32;
     width: 100%;
-    max-width: 100vw;
+    max-width: 100%;
     overflow-x: hidden;
     box-sizing: border-box;
   }
