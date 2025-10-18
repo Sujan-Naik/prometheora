@@ -3,7 +3,8 @@ name: Build and Release Android APK
 on:
   push:
     tags:
-      - 'v*'  # Triggers on version tags like v1.0.0
+      - 'v*'    # Triggers on v1.0.0
+      - '[0-9]+.*'  # Triggers on 0.0.2, 1.0.0, etc.
   workflow_dispatch:  # Allows manual trigger from GitHub Actions tab
 
 jobs:
