@@ -30,11 +30,10 @@ export default function CreatorLayout() {
 
   return (
     <Tabs>
-      <TabSlot />
-      <View style={{ paddingBottom: insets.bottom }}>
-      <TabSlot />
-
-      <TabList className="tab-list tab-list-web tab-list-native">
+      <TabList
+        className="tab-list tab-list-web tab-list-native"
+        style={{ paddingBottom: insets.bottom }}
+      >
         <TabTrigger name="creator-home" href="/(tabs)/creator" asChild>
           <TabButton icon="🎨">Overview</TabButton>
         </TabTrigger>
@@ -65,7 +64,6 @@ export default function CreatorLayout() {
           </TabTrigger>
         {/*)}*/}
       </TabList>
-      </View>
     </Tabs>
   );
 }

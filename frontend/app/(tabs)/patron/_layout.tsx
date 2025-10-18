@@ -9,8 +9,10 @@ export default function PatronLayout() {
   return (
     <Tabs>
       <TabSlot />
-      <View style={{ paddingBottom: insets.bottom }}>
-      <TabList className="tab-list tab-list-web tab-list-native">
+      <TabList
+        className="tab-list tab-list-web tab-list-native"
+        style={{ paddingBottom: insets.bottom }}
+      >
         <TabTrigger name="patron-home" href="/(tabs)/patron" asChild>
           <TabButton icon="🎁">Overview</TabButton>
         </TabTrigger>
@@ -27,7 +29,6 @@ export default function PatronLayout() {
           <TabButton icon="💰">Payments</TabButton>
         </TabTrigger>
       </TabList>
-      </View>
     </Tabs>
   );
 }
