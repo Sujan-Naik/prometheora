@@ -1,14 +1,18 @@
 import { Tabs, TabSlot, TabList, TabTrigger, TabTriggerSlotProps } from 'expo-router/ui';
 import { useLocalSearchParams } from 'expo-router';
-import { Text, Pressable } from 'react-native';
+import {Text, Pressable, View} from 'react-native';
 import {TabButton} from "@/components/TabButton";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function HandleLayout() {
   const { handle } = useLocalSearchParams(); // gets the dynamic route param
 
+   const insets = useSafeAreaInsets();
+
   return (
     <Tabs>
       <TabSlot />
+      <View style={{ paddingBottom: insets.bottom }}>
       <TabList className="tab-list tab-list-web tab-list-native">
         <TabTrigger name="index" href={`/(tabs)/creator/${handle}`} asChild>
           <TabButton icon="👤">Profile</TabButton>
@@ -34,6 +38,7 @@ export default function HandleLayout() {
           <TabButton icon="📁">Projects</TabButton>
         </TabTrigger>
       </TabList>
+      </View>
     </Tabs>
   );
 }

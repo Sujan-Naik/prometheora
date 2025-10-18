@@ -1,10 +1,15 @@
 import { Tabs, TabSlot, TabList, TabTrigger, TabTriggerSlotProps } from 'expo-router/ui';
-import { Text, Pressable } from 'react-native';
+import {Text, Pressable, View} from 'react-native';
 import {TabButton} from "@/components/TabButton";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function TabsLayout() {
+   const insets = useSafeAreaInsets();
+
   return (
     <Tabs>
+      <TabSlot />
+      <View style={{ paddingBottom: insets.bottom }}>
       <TabSlot />
 
       <TabList className="tab-list tab-list-web tab-list-native">
@@ -27,6 +32,7 @@ export default function TabsLayout() {
           <TabButton icon="⚙️">Settings</TabButton>
         </TabTrigger>
       </TabList>
+      </View>
     </Tabs>
   );
 }

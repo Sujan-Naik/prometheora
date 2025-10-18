@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Pressable, Text } from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 import axios from 'axios';
 import { Tabs, TabSlot, TabList, TabTrigger, TabTriggerSlotProps } from 'expo-router/ui';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import {TabButton} from "@/components/TabButton";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 // Combined Creator Layout with "View Your Profile" integration
 export default function CreatorLayout() {
@@ -21,11 +22,16 @@ export default function CreatorLayout() {
   }, [token]);
 
   console.log(handle)
+  const insets = useSafeAreaInsets();
+
   if (!handle){
     return (<div> Loading...</div>)
   }
+
   return (
     <Tabs>
+      <TabSlot />
+      <View style={{ paddingBottom: insets.bottom }}>
       <TabSlot />
 
       <TabList className="tab-list tab-list-web tab-list-native">
@@ -59,6 +65,7 @@ export default function CreatorLayout() {
           </TabTrigger>
         {/*)}*/}
       </TabList>
+      </View>
     </Tabs>
   );
 }

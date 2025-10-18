@@ -8,3 +8,8 @@ cd android
 ./gradlew assembleRelease
 
 File is in android/app/build/outputs/apk/release/app-release.apk
+
+
+## Releasing on github
+git tag <tag>
+git push origin <tag>
