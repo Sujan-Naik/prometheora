@@ -13,22 +13,22 @@ export default function HandleLayout() {
       <TabList
         className="tab-list tab-list-web tab-list-native"
       >
-        <TabTrigger name="index" href={`/(tabs)/creator/${handle}`} asChild>
+        <TabTrigger name="index" href={`/(tabs)/profile/${handle}`} asChild>
           <TabButton icon="👤">Profile</TabButton>
         </TabTrigger>
-        <TabTrigger name="about" href={`/(tabs)/creator/${handle}/about`} asChild>
+        <TabTrigger name="about" href={`/(tabs)/profile/${handle}/about`} asChild>
           <TabButton icon="ℹ️">About</TabButton>
         </TabTrigger>
-        <TabTrigger name="posts" href={`/(tabs)/creator/${handle}/posts`} asChild>
+        <TabTrigger name="posts" href={`/(tabs)/profile/${handle}/posts`} asChild>
           <TabButton icon="📰">Posts</TabButton>
         </TabTrigger>
-        <TabTrigger name="tiers" href={`/(tabs)/creator/${handle}/tiers`} asChild>
+        <TabTrigger name="tiers" href={`/(tabs)/profile/${handle}/tiers`} asChild>
           <TabButton icon="⭐">Tiers</TabButton>
         </TabTrigger>
-        <TabTrigger name="portfolio" href={`/(tabs)/creator/${handle}/portfolio`} asChild>
+        <TabTrigger name="portfolio" href={`/(tabs)/profile/${handle}/portfolio`} asChild>
           <TabButton icon="🖼️">Portfolio</TabButton>
         </TabTrigger>
-        <TabTrigger name="projects" href={`/(tabs)/creator/${handle}/projects`} asChild>
+        <TabTrigger name="projects" href={`/(tabs)/profile/${handle}/projects`} asChild>
           <TabButton icon="📁">Projects</TabButton>
         </TabTrigger>
       </TabList>

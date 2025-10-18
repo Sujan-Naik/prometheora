@@ -16,7 +16,7 @@ export default function CreatorProjects() {
     if (!token) {
       return;
     }
-    axios.get<IProject[]>(`${process.env.EXPO_PUBLIC_API_URL}/projects/creator/${handle}`, {
+    axios.get<IProject[]>(`${process.env.EXPO_PUBLIC_API_URL}/projects/profile/${handle}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setProjects(res.data))

@@ -23,13 +23,13 @@ export default function CreatorLayout() {
   console.log(handle);
   const insets = useSafeAreaInsets();
 
-  if (!handle) {
-    return (
-      <View className="flex-1 items-center justify-center">
-        <Text className="loading-text">Loading...</Text>
-      </View>
-    );
-  }
+  // if (!handle) {
+  //   return (
+  //     <View className="flex-1 items-center justify-center">
+  //       <Text className="loading-text">Loading...</Text>
+  //     </View>
+  //   );
+  // }
 
   return (
     <Tabs>
@@ -38,7 +38,7 @@ export default function CreatorLayout() {
         className="tab-list tab-list-web tab-list-native"
       >
         <TabTrigger name="creator-home" href="/(tabs)/creator" asChild>
-          <TabButton icon="🎨">Overview</TabButton>
+          <TabButton icon="🎨">Create</TabButton>
         </TabTrigger>
 
         <TabTrigger name="creator-create-post" href="/(tabs)/creator/create-post" asChild>
@@ -57,15 +57,15 @@ export default function CreatorLayout() {
           <TabButton icon="⭐">Tier</TabButton>
         </TabTrigger>
 
-        {handle && (
-          <TabTrigger
-            name="creator-profile"
-            href={`/(tabs)/creator/${handle}`}
-            asChild
-          >
-            <TabButton icon="👤">Profile</TabButton>
-          </TabTrigger>
-        )}
+        {/*{handle && (*/}
+        {/*  <TabTrigger*/}
+        {/*    name="creator-profile"*/}
+        {/*    href={`/(tabs)/profile/${handle}`}*/}
+        {/*    asChild*/}
+        {/*  >*/}
+        {/*    <TabButton icon="👤">Profile</TabButton>*/}
+        {/*  </TabTrigger>*/}
+        {/*)}*/}
       </TabList>
     </Tabs>
   );

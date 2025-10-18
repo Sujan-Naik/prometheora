@@ -24,6 +24,9 @@ export default function TabsLayout() {
         <TabTrigger name="creator" href="/creator" asChild>
           <TabButton icon="✨">Creator</TabButton>
         </TabTrigger>
+        <TabTrigger name="profile" href="/profile" asChild>
+          <TabButton icon="👤">Profile</TabButton>
+        </TabTrigger>
         <TabTrigger name="settings" href="/settings" asChild>
           <TabButton icon="⚙️">Settings</TabButton>
         </TabTrigger>

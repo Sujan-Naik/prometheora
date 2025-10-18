@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IUser} from "@/types/prisma";
+import UserCard from "@/components/UserCard";
 
 export default function CreatorProfile() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
@@ -25,8 +26,8 @@ export default function CreatorProfile() {
   return (
         <ScrollView style={{ height: "100vh" as any }} className="container">
 
-      <Text className="title">Creator Profile: {handle}</Text>
-      {profile?.bio && <Text className="text-base text-[var(--text-primary)]">{profile.bio.replace(/<[^>]+>/g, '')}</Text>}
+      <Text className="title">{handle}s profile</Text>
+          {profile && <UserCard user={profile}/>}
         </ScrollView>
   );
 }

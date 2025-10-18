@@ -44,7 +44,7 @@ export default function CreatorScreen() {
       </View>
 
       {handle && (
-        <TouchableOpacity className="button" onPress={() => router.push(`/(tabs)/creator/${handle}`)}>
+        <TouchableOpacity className="button" onPress={() => router.push(`/(tabs)/profile/${handle}`)}>
           <Text className="button-text">View Your Profile</Text>
         </TouchableOpacity>
       )}

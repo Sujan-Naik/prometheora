@@ -1,31 +1,34 @@
-// app/creator/create-post.tsx
 import { View, TextInput, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
-import { useRequireAuth } from "@/hooks/useRequireAuth";
-import { IPost } from "@/types/prisma";
+import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { IPost } from '@/types/prisma';
 import PickMedia from '@/components/PickMedia';
 import DisplayMedia from '@/components/DisplayMedia';
 import { MediaRecord } from '@/utils/mediaUtils';
 
 export default function CreatePost() {
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
-  const [isPaid, setIsPaid] = useState<boolean>(false);
-  const [quotedProjectId, setQuotedProjectId] = useState<string>('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [isPaid, setIsPaid] = useState(false);
+  const [quotedProjectId, setQuotedProjectId] = useState('');
   const [media, setMedia] = useState<MediaRecord[]>([]);
   const router = useRouter();
   const token = useRequireAuth();
 
+  // when new media upload completes
   const handleMediaUploaded = (newMedia: MediaRecord) => {
-    setMedia([...media, newMedia]);
+    setMedia(prev => [...prev, newMedia]);
+  };
+
+  // when media gets deleted inside PickMedia
+  const handleMediaDeleted = (id: number) => {
+    setMedia(prev => prev.filter(m => m.id !== id));
   };
 
   const handleCreate = async () => {
-    if (!token) {
-      return;
-    }
+    if (!token) return;
 
     try {
       const response = await axios.post<IPost>(
@@ -34,22 +37,20 @@ export default function CreatePost() {
           title,
           content,
           isPaid,
-          quotedProjectId: quotedProjectId ? parseInt(quotedProjectId) : undefined
+          quotedProjectId: quotedProjectId ? parseInt(quotedProjectId) : undefined,
         },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       const postId = response.data.id;
 
-      // Link all uploaded media to the post
+      // link uploaded media to new post
       if (media.length > 0) {
         await Promise.all(
           media.map((m, index) =>
             axios.put(
               `${process.env.EXPO_PUBLIC_API_URL}/media/${m.id}`,
-              { order: index },
+              { order: index, postId },
               { headers: { Authorization: `Bearer ${token}` } }
             )
           )
@@ -65,8 +66,7 @@ export default function CreatePost() {
   };
 
   return (
-        <ScrollView style={{ height: "100vh" as any }} className="container">
-
+    <ScrollView style={{ height: '100vh' as any }} className="container">
       <Text className="title">Create Post</Text>
 
       <View className="mb-4">
@@ -76,7 +76,6 @@ export default function CreatePost() {
           onChangeText={setTitle}
           className="input"
         />
-
         <TextInput
           placeholder="What's on your mind?"
           value={content}
@@ -84,7 +83,6 @@ export default function CreatePost() {
           multiline
           className="input h-36"
         />
-
         <TextInput
           placeholder="Quoted Project ID (optional)"
           value={quotedProjectId}
@@ -95,9 +93,15 @@ export default function CreatePost() {
 
         <TouchableOpacity
           onPress={() => setIsPaid(!isPaid)}
-          className={`p-4 rounded-lg mb-2 ${isPaid ? 'bg-[var(--success)]' : 'bg-[var(--border)]'} items-center`}
+          className={`p-4 rounded-lg mb-2 ${
+            isPaid ? 'bg-[var(--success)]' : 'bg-[var(--border)]'
+          } items-center`}
         >
-          <Text className={`font-semibold text-lg ${isPaid ? 'text-white' : 'text-[var(--text-secondary)]'}`}>
+          <Text
+            className={`font-semibold text-lg ${
+              isPaid ? 'text-white' : 'text-[var(--text-secondary)]'
+            }`}
+          >
             {isPaid ? '💰 Paid Post' : '🆓 Free Post'}
           </Text>
         </TouchableOpacity>
@@ -105,24 +109,19 @@ export default function CreatePost() {
 
       <View className="mb-4">
         <Text className="section-title">Media</Text>
+
         <PickMedia
           onMediaUploaded={handleMediaUploaded}
+          onMediaDeleted={handleMediaDeleted}   // 👈 connect delete
           buttonText="Add Photo/Video"
         />
 
         {media.map((item) => (
-          <DisplayMedia
-            key={item.id}
-            media={item}
-            showCaption={false}
-          />
+          <DisplayMedia key={item.id} media={item} showCaption={false} />
         ))}
       </View>
 
-      <TouchableOpacity
-        className="button"
-        onPress={handleCreate}
-      >
+      <TouchableOpacity className="button" onPress={handleCreate}>
         <Text className="button-text">Publish Post</Text>
       </TouchableOpacity>
     </ScrollView>

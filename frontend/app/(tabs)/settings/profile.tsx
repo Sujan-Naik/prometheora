@@ -1,4 +1,3 @@
-// app/settings/profile.tsx
 import { View, TextInput, Text, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -21,13 +20,13 @@ export default function ProfileSettings() {
     if (!token) return;
     const fetchProfile = async () => {
       try {
-        const { data } = await axios.get<IUser>(`${process.env.EXPO_PUBLIC_API_URL}/user/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const { data } = await axios.get<IUser>(
+          `${process.env.EXPO_PUBLIC_API_URL}/user/profile`,
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
         setBio(data.bio || '');
         setUserId(data.id);
 
-        // Fetch user's media
         const userMedia = await fetchMedia({ userId: data.id });
         setMedia(userMedia);
       } catch (err) {
@@ -44,7 +43,7 @@ export default function ProfileSettings() {
       await axios.patch<IUser>(
         `${process.env.EXPO_PUBLIC_API_URL}/user/profile`,
         { bio },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       Alert.alert('Success', 'Profile updated successfully!');
       router.back();
@@ -57,14 +56,18 @@ export default function ProfileSettings() {
   };
 
   const handleMediaUploaded = (newMedia: MediaRecord) => {
-    setMedia([newMedia, ...media]);
+    setMedia(prev => [newMedia, ...prev]);
+  };
+
+  const handleMediaDeleted = (id: number) => {
+    setMedia(prev => prev.filter(m => m.id !== id));
   };
 
   const handleDeleteMedia = async (mediaId: number) => {
     try {
       await deleteMedia(mediaId);
-      setMedia(media.filter(m => m.id !== mediaId));
-    } catch (err) {
+      setMedia(prev => prev.filter(m => m.id !== mediaId));
+    } catch {
       Alert.alert('Error', 'Failed to delete media');
     }
   };
@@ -90,16 +93,14 @@ export default function ProfileSettings() {
           <PickMedia
             userId={userId}
             onMediaUploaded={handleMediaUploaded}
+            onMediaDeleted={handleMediaDeleted}   // new callback
             buttonText="Add Photo/Video"
           />
         )}
 
-        {media.map((item) => (
+        {media.map(item => (
           <View key={item.id} className="mb-4">
-            <DisplayMedia
-              media={item}
-              showCaption={true}
-            />
+            <DisplayMedia media={item} showCaption />
             <TouchableOpacity
               onPress={() => handleDeleteMedia(item.id)}
               className="button bg-[var(--error)] mt-2"
@@ -110,11 +111,7 @@ export default function ProfileSettings() {
         ))}
       </View>
 
-      <TouchableOpacity
-        className="button"
-        onPress={handleUpdate}
-        disabled={loading}
-      >
+      <TouchableOpacity className="button" onPress={handleUpdate} disabled={loading}>
         <Text className="button-text">
           {loading ? 'Updating...' : 'Update Profile'}
         </Text>

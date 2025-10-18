@@ -84,7 +84,7 @@ export default function UserCard({ user, showBio = true, onPress }: UserCardProp
 
   if (user.handle) {
     return (
-      <Link href={`/(tabs)/creator/${user.handle}`} asChild>
+      <Link href={`/(tabs)/profile/${user.handle}`} asChild>
         <TouchableOpacity activeOpacity={0.7}>
           {content}
         </TouchableOpacity>
