@@ -1,5 +1,5 @@
 // app/settings/account.tsx
-import { View, TextInput, Button, Text } from 'react-native';
+import {View, TextInput, Button, Text, ScrollView} from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
@@ -41,23 +41,25 @@ export default function AccountSettings() {
   };
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
+      <ScrollView style={{ height: "100vh" as any }} className="container">
       {user && <UserCard user={user} />}
 
-      <Text>Update Account</Text>
+      <Text className="title">Update Account</Text>
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
+        className="input"
       />
       <TextInput
         placeholder="New Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+        className="input"
       />
       <Button title="Update" onPress={handleUpdate} />
-    </View>
+      </ScrollView>
   );
 }

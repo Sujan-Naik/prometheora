@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import axios from 'axios';
 import { Tabs, TabSlot, TabList, TabTrigger } from 'expo-router/ui';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
@@ -25,8 +25,8 @@ export default function CreatorLayout() {
 
   if (!handle) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Loading...</Text>
+      <View className="flex-1 items-center justify-center">
+        <Text className="loading-text">Loading...</Text>
       </View>
     );
   }
@@ -36,7 +36,6 @@ export default function CreatorLayout() {
       <TabSlot />
       <TabList
         className="tab-list tab-list-web tab-list-native"
-        style={{ paddingBottom: insets.bottom }}
       >
         <TabTrigger name="creator-home" href="/(tabs)/creator" asChild>
           <TabButton icon="🎨">Overview</TabButton>

@@ -1,56 +1,35 @@
 // app/(tabs)/settings.tsx
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import { useRouter } from 'expo-router';
 
 export default function SettingsScreen() {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
+
+    <ScrollView style={{ height: "100vh" as any }} className="container">
+      <Text className="title">Settings</Text>
 
       <TouchableOpacity
-        style={styles.option}
+        className="p-4 border-b border-[var(--border)]"
         onPress={() => router.push('/settings/profile')}
       >
-        <Text style={styles.optionText}>Profile</Text>
+        <Text className="text-base">Profile</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.option}
+        className="p-4 border-b border-[var(--border)]"
         onPress={() => router.push('/settings/account')}
       >
-        <Text style={styles.optionText}>Account</Text>
+        <Text className="text-base">Account</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.option}
+        className="p-4 border-b border-[var(--border)]"
         onPress={() => router.push('/settings/portfolio')}
       >
-        <Text style={styles.optionText}>Portfolio</Text>
+        <Text className="text-base">Portfolio</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  option: {
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  optionText: {
-    fontSize: 16,
-  },
-});

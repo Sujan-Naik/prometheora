@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IDevlog} from "@/types/prisma";
-import ProjectCard from "@/components/ProjectCard";
 import DevlogCard from "@/components/DevlogCard";
 
 export default function FollowedProjectsFeed() {
@@ -23,8 +22,8 @@ export default function FollowedProjectsFeed() {
   }, [token]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <Text>Followed Projects Feed</Text>
+    <View className="flex-1">
+      <Text className="title">Followed Projects Feed</Text>
       <FlatList
         data={feed}
         keyExtractor={item => item.id.toString()}

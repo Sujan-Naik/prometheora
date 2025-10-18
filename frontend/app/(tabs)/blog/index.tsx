@@ -23,9 +23,9 @@ export default function BlogList() {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <Link href={`/(tabs)/blog/${item.slug}`} asChild>
-            <Pressable className="blog-item">
-              <Text className="blog-item-title">{item.title}</Text>
-              <Text className="date-text-small">
+            <Pressable className="p-4 border-b border-[var(--border)]">
+              <Text className="text-lg font-semibold text-[var(--text-primary)]">{item.title}</Text>
+              <Text className="text-sm text-[var(--text-secondary)]">
                 {new Date(item.createdAt).toLocaleDateString()}
               </Text>
             </Pressable>

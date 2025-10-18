@@ -1,5 +1,4 @@
 import { Tabs, TabSlot, TabList, TabTrigger } from 'expo-router/ui';
-import { Text, Pressable, View } from 'react-native';
 import { TabButton } from "@/components/TabButton";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 

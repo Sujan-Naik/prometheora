@@ -24,8 +24,8 @@ export default function CreatorPosts() {
   }, [handle, token]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <Text>Posts for {handle}</Text>
+    <View className="flex-1">
+      <Text className="title">Posts for {handle}</Text>
       <FlatList
         data={posts}
         keyExtractor={item => item.id.toString()}

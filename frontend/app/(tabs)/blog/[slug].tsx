@@ -40,8 +40,8 @@ export default function BlogPostDetail() {
 
   if (loading) {
     return (
-      <View className="loading-container">
-        <ActivityIndicator size="large" color="#007AFF" />
+      <View className="container items-center justify-center">
+        <ActivityIndicator size="large" color="var(--primary)" />
         <Text className="loading-text">Loading...</Text>
       </View>
     );
@@ -49,7 +49,7 @@ export default function BlogPostDetail() {
 
   if (error) {
     return (
-      <View className="error-container">
+      <View className="container items-center justify-center">
         <Text className="error-text">{error}</Text>
       </View>
     );
@@ -57,23 +57,23 @@ export default function BlogPostDetail() {
 
   if (!post) {
     return (
-      <View className="loading-container">
-        <Text className="not-found-text">Blog post not found</Text>
+      <View className="container items-center justify-center">
+        <Text className="text-xl text-[var(--text-primary)]">Blog post not found</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView className="container">
-      <Text className="blog-title">{post.title}</Text>
-      <Text className="date-text">
+    <ScrollView className="container" style={{ height: '100vh' as any }}>
+      <Text className="text-2xl font-bold text-[var(--text-primary)] mb-2">{post.title}</Text>
+      <Text className="text-sm text-[var(--text-secondary)] mb-4">
         {new Date(post.createdAt).toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'long',
           day: 'numeric'
         })}
       </Text>
-      <Text className="blog-content">{post.content}</Text>
+      <Text className="text-base text-[var(--text-primary)]">{post.content}</Text>
     </ScrollView>
   );
 }

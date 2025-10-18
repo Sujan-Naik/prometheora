@@ -22,8 +22,8 @@ export default function Subscriptions() {
   }, [token]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <Text>My Subscriptions</Text>
+    <View className="flex-1">
+      <Text className="title">My Subscriptions</Text>
       <FlatList
         data={subscriptions}
         keyExtractor={item => item.id.toString()}

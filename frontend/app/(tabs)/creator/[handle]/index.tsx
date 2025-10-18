@@ -1,11 +1,10 @@
 // app/creator/[handle]/index.tsx
-import { View, Text } from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IUser} from "@/types/prisma";
-
 
 export default function CreatorProfile() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
@@ -24,9 +23,10 @@ export default function CreatorProfile() {
   }, [handle, token]);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Creator Profile: {handle}</Text>
-      {profile?.bio && <Text>{profile.bio.replace(/<[^>]+>/g, '')}</Text>}
-    </View>
+        <ScrollView style={{ height: "100vh" as any }} className="container">
+
+      <Text className="title">Creator Profile: {handle}</Text>
+      {profile?.bio && <Text className="text-base text-[var(--text-primary)]">{profile.bio.replace(/<[^>]+>/g, '')}</Text>}
+        </ScrollView>
   );
 }

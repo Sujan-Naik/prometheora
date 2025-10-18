@@ -1,4 +1,4 @@
-import { View, TextInput, Button, Text, Alert, ActivityIndicator } from 'react-native';
+import { View, TextInput, Button, Text, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useAuthStatus } from "@/hooks/useAuthStatus";
@@ -72,9 +72,10 @@ export default function Signup() {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
-      <Text>Signup</Text>
-      {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
+        <ScrollView style={{ height: "100vh" as any }} className="container">
+
+      <Text className="title">Signup</Text>
+      {error ? <Text className="error-text">{error}</Text> : null}
       <TextInput
         placeholder="Email"
         value={email}
@@ -82,6 +83,7 @@ export default function Signup() {
         autoCapitalize="none"
         keyboardType="email-address"
         editable={!loading}
+        className="input"
       />
       <TextInput
         placeholder="Password"
@@ -89,6 +91,7 @@ export default function Signup() {
         onChangeText={setPassword}
         secureTextEntry
         editable={!loading}
+        className="input"
       />
       <TextInput
         placeholder="Handle (optional)"
@@ -96,12 +99,13 @@ export default function Signup() {
         onChangeText={setHandle}
         autoCapitalize="none"
         editable={!loading}
+        className="input"
       />
       {loading ? (
         <ActivityIndicator />
       ) : (
         <Button title="Signup" onPress={handleSignup} />
       )}
-    </View>
+        </ScrollView>
   );
 }

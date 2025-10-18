@@ -1,6 +1,6 @@
 // app/creator/[handle]/projects/index.tsx
 import { View, Text, FlatList } from 'react-native';
-import { useLocalSearchParams, Link } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
@@ -24,13 +24,13 @@ export default function CreatorProjects() {
   }, [handle, token]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <Text>Projects for {handle}</Text>
+    <View className="flex-1">
+      <Text className="title">Projects for {handle}</Text>
       <FlatList
         data={projects}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-            <ProjectCard project={item}/>
+          <ProjectCard project={item}/>
         )}
       />
     </View>

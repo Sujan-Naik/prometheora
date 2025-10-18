@@ -1,23 +1,21 @@
 import { TabButton } from '@/components/TabButton';
-import { Tabs, TabSlot, TabList, TabTrigger, TabTriggerSlotProps } from 'expo-router/ui';
-import {Text, Pressable, View} from 'react-native';
-import {useSafeAreaInsets} from "react-native-safe-area-context";
+import { Tabs, TabSlot, TabList, TabTrigger } from 'expo-router/ui';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function PatronLayout() {
-   const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs>
       <TabSlot />
       <TabList
         className="tab-list tab-list-web tab-list-native"
-        style={{ paddingBottom: insets.bottom }}
       >
         <TabTrigger name="patron-home" href="/(tabs)/patron" asChild>
           <TabButton icon="🎁">Overview</TabButton>
         </TabTrigger>
 
-          <TabTrigger name="patron-followed" href="/(tabs)/patron/followed-projects" asChild>
+        <TabTrigger name="patron-followed" href="/(tabs)/patron/followed-projects" asChild>
           <TabButton icon="📦">Followed</TabButton>
         </TabTrigger>
 
@@ -32,6 +30,3 @@ export default function PatronLayout() {
     </Tabs>
   );
 }
-
-
-

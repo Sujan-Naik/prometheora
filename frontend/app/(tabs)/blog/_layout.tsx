@@ -11,7 +11,7 @@ export default function BlogLayout() {
       screenOptions={{
         headerShown: true,
         headerStyle: {
-          backgroundColor: '#007AFF',
+          backgroundColor: 'var(--primary)',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -24,7 +24,7 @@ export default function BlogLayout() {
         options={{
           title: 'Blog Posts',
           headerRight: isAdmin ? () => (
-            <Text style={{ color: '#fff', marginRight: 10 }}>✏️ Admin</Text>
+            <Text className="text-white mr-2.5">✏️ Admin</Text>
           ) : undefined
         }}
       />

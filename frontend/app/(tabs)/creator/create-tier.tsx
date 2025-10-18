@@ -1,5 +1,5 @@
 // app/creator/create-tier.tsx
-import { View, TextInput, Button, Text } from 'react-native';
+import {View, TextInput, Button, Text, ScrollView} from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
@@ -25,12 +25,13 @@ export default function CreateTier() {
   };
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text>Create Tier</Text>
-      <TextInput placeholder="Name" value={name} onChangeText={setName} />
-      <TextInput placeholder="Price" value={price} onChangeText={setPrice} keyboardType="numeric" />
-      <TextInput placeholder="Benefits" value={benefits} onChangeText={setBenefits} multiline />
+        <ScrollView style={{ height: "100vh" as any }} className="container">
+
+      <Text className="title">Create Tier</Text>
+      <TextInput placeholder="Name" value={name} onChangeText={setName} className="input" />
+      <TextInput placeholder="Price" value={price} onChangeText={setPrice} keyboardType="numeric" className="input" />
+      <TextInput placeholder="Benefits" value={benefits} onChangeText={setBenefits} multiline className="input h-40" />
       <Button title="Submit" onPress={handleCreate} />
-    </View>
+        </ScrollView>
   );
 }

@@ -1,4 +1,4 @@
-import { View, TextInput, Button, Text, Alert, ActivityIndicator } from 'react-native';
+import { View, TextInput, Button, Text, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -66,9 +66,10 @@ export default function Login() {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
-      <Text>Login</Text>
-      {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
+        <ScrollView style={{ height: "100vh" as any }} className="container">
+
+      <Text className="title">Login</Text>
+      {error ? <Text className="error-text">{error}</Text> : null}
       <TextInput
         placeholder="Email"
         value={email}
@@ -76,6 +77,7 @@ export default function Login() {
         autoCapitalize="none"
         keyboardType="email-address"
         editable={!loading}
+        className="input"
       />
       <TextInput
         placeholder="Password"
@@ -83,12 +85,13 @@ export default function Login() {
         onChangeText={setPassword}
         secureTextEntry
         editable={!loading}
+        className="input"
       />
       {loading ? (
         <ActivityIndicator />
       ) : (
         <Button title="Login" onPress={handleLogin} />
       )}
-    </View>
+        </ScrollView>
   );
 }

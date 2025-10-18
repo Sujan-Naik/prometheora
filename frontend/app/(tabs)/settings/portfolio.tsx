@@ -1,11 +1,10 @@
 // app/settings/portfolio.tsx
-import { View, Text, FlatList, TextInput, Button } from 'react-native';
+import {View, Text, FlatList, TextInput, Button, ScrollView} from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IPortfolioItem, IProject} from "@/types/prisma";
-
 
 export default function EditPortfolio() {
   const [projects, setProjects] = useState<IProject[]>([]); // Available projects
@@ -65,9 +64,9 @@ export default function EditPortfolio() {
   // Add drag-and-drop for ordering if using a library like react-native-draggable-flatlist
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text>Edit Portfolio</Text>
-      <Text>Select Project to Add:</Text>
+      <ScrollView style={{ height: "100vh" as any }} className="container">
+      <Text className="title">Edit Portfolio</Text>
+      <Text className="section-title">Select Project to Add:</Text>
       <FlatList
         data={projects}
         keyExtractor={item => item.id.toString()}
@@ -75,20 +74,20 @@ export default function EditPortfolio() {
           <Button title={item.title} onPress={() => setSelectedProjectId(item.id)} />
         )}
       />
-      <TextInput placeholder="Caption" value={caption} onChangeText={setCaption} />
+      <TextInput placeholder="Caption" value={caption} onChangeText={setCaption} className="input" />
       <Button title="Add to Portfolio" onPress={handleAdd} />
-      <Text>Current Portfolio:</Text>
+      <Text className="section-title">Current Portfolio:</Text>
       <FlatList
         data={portfolio}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.project!.title} - {item.caption}</Text>
+          <View className="mb-4">
+            <Text className="text-base">{item.project!.title} - {item.caption}</Text>
             <Button title="Remove" onPress={() => handleRemove(item.id)} />
           </View>
         )}
       />
       <Button title="Update Order" onPress={handleUpdateOrder} />
-    </View>
+      </ScrollView>
   );
 }

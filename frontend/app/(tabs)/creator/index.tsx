@@ -20,10 +20,10 @@ export default function CreatorScreen() {
   }, [token]);
 
   return (
-    <ScrollView className="container">
+    <ScrollView className="container" style={{ height: '100vh' as any }}>
       <Text className="title">Creator Dashboard</Text>
 
-      <View className="section">
+      <View className="mb-4">
         <Text className="section-title">Create Content</Text>
 
         <TouchableOpacity className="button" onPress={() => router.push('/creator/create-post')}>
@@ -41,12 +41,11 @@ export default function CreatorScreen() {
         <TouchableOpacity className="button" onPress={() => router.push('/creator/create-tier')}>
           <Text className="button-text">Create Tier</Text>
         </TouchableOpacity>
-
       </View>
 
       {handle && (
-        <TouchableOpacity className="profile-button" onPress={() => router.push(`/(tabs)/creator/${handle}`)}>
-          <Text className="profile-button-text">View Your Profile</Text>
+        <TouchableOpacity className="button" onPress={() => router.push(`/(tabs)/creator/${handle}`)}>
+          <Text className="button-text">View Your Profile</Text>
         </TouchableOpacity>
       )}
     </ScrollView>

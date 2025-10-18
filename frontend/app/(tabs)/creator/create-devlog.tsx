@@ -1,11 +1,10 @@
 // app/creator/create-devlog.tsx
-import { View, TextInput, Button, Text } from 'react-native';
+import {View, TextInput, Button, Text, ScrollView} from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IDevlog} from "@/types/prisma";
-
 
 export default function CreateDevlog() {
   const [projectId, setProjectId] = useState<string>('');
@@ -28,14 +27,15 @@ export default function CreateDevlog() {
   };
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <Text>Create Devlog</Text>
-      <TextInput placeholder="Project ID" value={projectId} onChangeText={setProjectId} keyboardType="numeric" />
-      <TextInput placeholder="Title" value={title} onChangeText={setTitle} />
-      <TextInput placeholder="Content" value={content} onChangeText={setContent} multiline />
-      <TextInput placeholder="Version" value={version} onChangeText={setVersion} />
-      <TextInput placeholder="Build Link" value={buildLink} onChangeText={setBuildLink} />
+        <ScrollView style={{ height: "100vh" as any }} className="container">
+
+      <Text className="title">Create Devlog</Text>
+      <TextInput placeholder="Project ID" value={projectId} onChangeText={setProjectId} keyboardType="numeric" className="input" />
+      <TextInput placeholder="Title" value={title} onChangeText={setTitle} className="input" />
+      <TextInput placeholder="Content" value={content} onChangeText={setContent} multiline className="input h-40" />
+      <TextInput placeholder="Version" value={version} onChangeText={setVersion} className="input" />
+      <TextInput placeholder="Build Link" value={buildLink} onChangeText={setBuildLink} className="input" />
       <Button title="Submit" onPress={handleCreate} />
-    </View>
+        </ScrollView>
   );
 }

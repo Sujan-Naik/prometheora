@@ -70,28 +70,21 @@ export default function ProfileSettings() {
   };
 
   return (
-    <ScrollView className="container">
+    <ScrollView className="container" style={{ height: '100vh' as any }}>
       <Text className="title">Update Profile</Text>
 
-      <View className="section">
+      <View className="mb-4">
         <Text className="section-title">Bio</Text>
         <TextInput
           placeholder="Tell people about yourself..."
           value={bio}
           onChangeText={setBio}
           multiline
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            minHeight: 100,
-            textAlignVertical: 'top'
-          }}
+          className="input h-24"
         />
       </View>
 
-      <View className="section">
+      <View className="mb-4">
         <Text className="section-title">Media</Text>
         {userId && (
           <PickMedia
@@ -102,23 +95,16 @@ export default function ProfileSettings() {
         )}
 
         {media.map((item) => (
-          <View key={item.id} style={{ marginBottom: 16 }}>
+          <View key={item.id} className="mb-4">
             <DisplayMedia
               media={item}
               showCaption={true}
             />
             <TouchableOpacity
               onPress={() => handleDeleteMedia(item.id)}
-              style={{
-                backgroundColor: '#ff3b30',
-                padding: 10,
-                borderRadius: 8,
-                marginTop: 8,
-              }}
+              className="button bg-[var(--error)] mt-2"
             >
-              <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '600' }}>
-                Delete
-              </Text>
+              <Text className="button-text">Delete</Text>
             </TouchableOpacity>
           </View>
         ))}
@@ -128,7 +114,6 @@ export default function ProfileSettings() {
         className="button"
         onPress={handleUpdate}
         disabled={loading}
-        style={{ opacity: loading ? 0.6 : 1 }}
       >
         <Text className="button-text">
           {loading ? 'Updating...' : 'Update Profile'}

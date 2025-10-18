@@ -7,7 +7,6 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {ITier} from "@/types/prisma";
 import TierCard from "@/components/TierCard";
 
-
 export default function CreatorTiers() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
   const [tiers, setTiers] = useState<ITier[]>([]);
@@ -36,13 +35,13 @@ export default function CreatorTiers() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <Text>Tiers for {handle}</Text>
+    <View className="flex-1">
+      <Text className="title">Tiers for {handle}</Text>
       <FlatList
         data={tiers}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
-            <TierCard tier={item} onSubscribe={() => handleSubscribe(item.id)} />
+          <TierCard tier={item} onSubscribe={() => handleSubscribe(item.id)} />
         )}
       />
     </View>

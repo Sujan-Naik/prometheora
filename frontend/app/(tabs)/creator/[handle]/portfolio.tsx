@@ -7,7 +7,6 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IPortfolioItem} from "@/types/prisma";
 import ProjectCard from "@/components/ProjectCard";
 
-
 export default function CreatorPortfolio() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
   const [portfolio, setPortfolio] = useState<IPortfolioItem[]>([]);
@@ -25,8 +24,8 @@ export default function CreatorPortfolio() {
   }, [handle, token]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <Text>Portfolio for {handle}</Text>
+    <View className="flex-1">
+      <Text className="title">Portfolio for {handle}</Text>
       <FlatList
         data={portfolio}
         keyExtractor={item => item.id.toString()}

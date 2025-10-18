@@ -29,15 +29,15 @@ export default function CreatorAbout() {
   }, [handle, token]);
 
   return (
-    <ScrollView className="container">
+    <ScrollView className="container" style={{ height: '100vh' as any }}>
       <Text className="title">About {handle}</Text>
-      <View className="section">
+      <View className="mb-4">
         <Text className="section-title">Bio</Text>
-        <Text>{about.bio || 'No bio available'}</Text>
+        <Text className="text-base">{about.bio || 'No bio available'}</Text>
       </View>
 
       {about.media && about.media.length > 0 && (
-        <View className="section">
+        <View className="mb-4">
           <Text className="section-title">Media</Text>
           {about.media.map((item) => (
             <DisplayMedia

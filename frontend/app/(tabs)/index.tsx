@@ -1,5 +1,5 @@
 // app/index.tsx
-import { View, Text, FlatList, ActivityIndicator, RefreshControl, TouchableOpacity } from 'react-native';
+import {View, Text, FlatList, ActivityIndicator, RefreshControl, TouchableOpacity, ScrollView} from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
@@ -42,193 +42,129 @@ export default function Home() {
   // Auth status loading
   if (isAuthenticated === null) {
     return (
-      <View className="loading-container">
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ScrollView style={{ height: "100vh" as any }} className="container">
+        <ActivityIndicator size="large" color="var(--primary)" />
         <Text className="loading-text">Loading...</Text>
-      </View>
+        </ScrollView>
     );
   }
 
   // Not authenticated - Landing page
   if (!isAuthenticated) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-          <Text style={{ fontSize: 48, marginBottom: 8 }}>🎨</Text>
-          <Text style={{ fontSize: 32, fontWeight: '700', color: '#000', textAlign: 'center', marginBottom: 8 }}>
+    <ScrollView style={{ height: "100vh" as any }} className="container">
+        <View className="flex-1 items-center justify-center p-5">
+          <Text className="text-5xl mb-2">🎨</Text>
+          <Text className="text-3xl font-bold text-[var(--text-primary)] text-center mb-2">
             Creator Hub
           </Text>
-          <Text style={{ fontSize: 16, color: '#666', textAlign: 'center', marginBottom: 40 }}>
+          <Text className="text-base text-[var(--text-secondary)] text-center mb-10">
             Support creators, follow projects, and discover amazing content
           </Text>
 
           <TouchableOpacity
             onPress={() => router.push('/auth/signup')}
-            style={{
-              backgroundColor: '#007aff',
-              paddingHorizontal: 40,
-              paddingVertical: 16,
-              borderRadius: 12,
-              width: '100%',
-              maxWidth: 300,
-              marginBottom: 12,
-            }}
+            className="button w-full max-w-[300px] mb-3"
           >
-            <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600', textAlign: 'center' }}>
-              Get Started
-            </Text>
+            <Text className="button-text">Get Started</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => router.push('/auth/login')}
-            style={{
-              backgroundColor: '#fff',
-              borderWidth: 2,
-              borderColor: '#007aff',
-              paddingHorizontal: 40,
-              paddingVertical: 16,
-              borderRadius: 12,
-              width: '100%',
-              maxWidth: 300,
-            }}
+            className="button border-2 border-[var(--primary)] bg-transparent w-full max-w-[300px]"
           >
-            <Text style={{ color: '#007aff', fontSize: 18, fontWeight: '600', textAlign: 'center' }}>
-              Sign In
-            </Text>
+            <Text className="button-text text-[var(--primary)]">Sign In</Text>
           </TouchableOpacity>
         </View>
 
         {/* Public Posts Preview */}
-        <View style={{ padding: 20, backgroundColor: '#f5f5f5' }}>
-          <Text style={{ fontSize: 20, fontWeight: '700', marginBottom: 12, color: '#000' }}>
+        <View className="p-5 bg-[var(--secondary)]">
+          <Text className="text-xl font-bold mb-3 text-[var(--text-primary)]">
             Recent Posts
           </Text>
           {loading ? (
-            <ActivityIndicator size="small" color="#007AFF" />
+            <ActivityIndicator size="small" color="var(--primary)" />
           ) : error ? (
-            <Text style={{ color: '#666', textAlign: 'center' }}>{error}</Text>
+            <Text className="text-[var(--text-secondary)] text-center">{error}</Text>
           ) : posts.length === 0 ? (
-            <Text style={{ color: '#666', textAlign: 'center' }}>No posts yet.</Text>
+            <Text className="text-[var(--text-secondary)] text-center">No posts yet.</Text>
           ) : (
             <>
               {posts.slice(0, 3).map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}
-              <Text style={{ color: '#666', textAlign: 'center', marginTop: 12 }}>
+              <Text className="text-[var(--text-secondary)] text-center mt-3">
                 Sign in to see more
               </Text>
             </>
           )}
         </View>
-      </View>
+    </ScrollView>
     );
   }
 
   // Authenticated - Feed view
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <ScrollView style={{ height: "100vh" as any }} className="container">
       {/* Header */}
-      <View style={{
-        padding: 20,
-        paddingTop: 60,
-        backgroundColor: '#007aff',
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-      }}>
-        <Text style={{ fontSize: 28, fontWeight: '700', color: '#fff', marginBottom: 4 }}>
+      <View className="p-5 pt-15 bg-[var(--primary)] rounded-b-2xl">
+        <Text className="text-2xl font-bold text-white mb-1">
           Discover
         </Text>
-        <Text style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>
+        <Text className="text-sm text-white/80">
           Latest posts from creators you follow
         </Text>
       </View>
 
       {/* Navigation Quick Access */}
-      <View style={{
-        flexDirection: 'row',
-        padding: 16,
-        gap: 8,
-        backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: '#e0e0e0',
-      }}>
+      <View className="flex-row p-4 gap-2 bg-[var(--background)] border-b border-[var(--border)]">
         <TouchableOpacity
           onPress={() => router.push('/(tabs)/blog')}
-          style={{
-            flex: 1,
-            backgroundColor: '#f5f5f5',
-            padding: 12,
-            borderRadius: 8,
-            alignItems: 'center',
-          }}
+          className="flex-1 bg-[var(--secondary)] p-3 rounded-lg items-center"
         >
-          <Text style={{ fontSize: 20, marginBottom: 4 }}>📰</Text>
-          <Text style={{ fontSize: 12, color: '#666', fontWeight: '600' }}>Blog</Text>
+          <Text className="text-xl mb-1">📰</Text>
+          <Text className="text-xs text-[var(--text-secondary)] font-semibold">Blog</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => router.push('/(tabs)/creator')}
-          style={{
-            flex: 1,
-            backgroundColor: '#f5f5f5',
-            padding: 12,
-            borderRadius: 8,
-            alignItems: 'center',
-          }}
+          className="flex-1 bg-[var(--secondary)] p-3 rounded-lg items-center"
         >
-          <Text style={{ fontSize: 20, marginBottom: 4 }}>🎨</Text>
-          <Text style={{ fontSize: 12, color: '#666', fontWeight: '600' }}>Creators</Text>
+          <Text className="text-xl mb-1">🎨</Text>
+          <Text className="text-xs text-[var(--text-secondary)] font-semibold">Creators</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => router.push('/(tabs)/patron')}
-          style={{
-            flex: 1,
-            backgroundColor: '#f5f5f5',
-            padding: 12,
-            borderRadius: 8,
-            alignItems: 'center',
-          }}
+          className="flex-1 bg-[var(--secondary)] p-3 rounded-lg items-center"
         >
-          <Text style={{ fontSize: 20, marginBottom: 4 }}>💎</Text>
-          <Text style={{ fontSize: 12, color: '#666', fontWeight: '600' }}>Patronage</Text>
+          <Text className="text-xl mb-1">💎</Text>
+          <Text className="text-xs text-[var(--text-secondary)] font-semibold">Patronage</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => router.push('/(tabs)/settings')}
-          style={{
-            flex: 1,
-            backgroundColor: '#f5f5f5',
-            padding: 12,
-            borderRadius: 8,
-            alignItems: 'center',
-          }}
+          className="flex-1 bg-[var(--secondary)] p-3 rounded-lg items-center"
         >
-          <Text style={{ fontSize: 20, marginBottom: 4 }}>⚙️</Text>
-          <Text style={{ fontSize: 12, color: '#666', fontWeight: '600' }}>Settings</Text>
+          <Text className="text-xl mb-1">⚙️</Text>
+          <Text className="text-xs text-[var(--text-secondary)] font-semibold">Settings</Text>
         </TouchableOpacity>
       </View>
 
       {/* Posts Feed */}
       {loading && posts.length === 0 ? (
-        <View className="loading-container">
-          <ActivityIndicator size="large" color="#007AFF" />
+        <View className="container items-center justify-center">
+          <ActivityIndicator size="large" color="var(--primary)" />
           <Text className="loading-text">Loading posts...</Text>
         </View>
       ) : error ? (
-        <View className="error-container">
+        <View className="container items-center justify-center">
           <Text className="error-text">{error}</Text>
           <TouchableOpacity
             onPress={fetchPosts}
-            style={{
-              marginTop: 16,
-              backgroundColor: '#007aff',
-              paddingHorizontal: 24,
-              paddingVertical: 12,
-              borderRadius: 8,
-            }}
+            className="button mt-4"
           >
-            <Text style={{ color: '#fff', fontWeight: '600' }}>Retry</Text>
+            <Text className="button-text">Retry</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -238,25 +174,19 @@ export default function Home() {
           renderItem={({ item }) => <PostCard post={item} />}
           contentContainerStyle={{ padding: 16 }}
           ListEmptyComponent={
-            <View style={{ padding: 40, alignItems: 'center' }}>
-              <Text style={{ fontSize: 48, marginBottom: 12 }}>📭</Text>
-              <Text style={{ fontSize: 18, fontWeight: '600', color: '#000', marginBottom: 8 }}>
+            <View className="p-10 items-center">
+              <Text className="text-5xl mb-3">📭</Text>
+              <Text className="text-lg font-semibold text-[var(--text-primary)] mb-2">
                 No posts yet
               </Text>
-              <Text style={{ fontSize: 14, color: '#666', textAlign: 'center' }}>
+              <Text className="text-sm text-[var(--text-secondary)] text-center">
                 Follow some creators to see their posts here
               </Text>
               <TouchableOpacity
                 onPress={() => router.push('/(tabs)/creator')}
-                style={{
-                  marginTop: 16,
-                  backgroundColor: '#007aff',
-                  paddingHorizontal: 24,
-                  paddingVertical: 12,
-                  borderRadius: 8,
-                }}
+                className="button mt-4"
               >
-                <Text style={{ color: '#fff', fontWeight: '600' }}>Discover Creators</Text>
+                <Text className="button-text">Discover Creators</Text>
               </TouchableOpacity>
             </View>
           }
@@ -264,11 +194,11 @@ export default function Home() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              tintColor="#007AFF"
+              tintColor="var(--primary)"
             />
           }
         />
       )}
-    </View>
+    </ScrollView>
   );
 }

@@ -1,11 +1,10 @@
 // app/patron/payments.tsx
-import { View, Text, FlatList, Button } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IPayment} from "@/types/prisma";
 import PaymentCard from "@/components/PaymentCard";
-
 
 export default function Payments() {
   const [payments, setPayments] = useState<IPayment[]>([]);
@@ -27,7 +26,7 @@ export default function Payments() {
     if (!token) {
       return;
     }
-    axios.post<IPayment>(`${process.env.EXPO_PUBLIC_API_URL}/payments`, { subscriptionId, amount }, {
+    axios.post<{ id: number }>(`${process.env.EXPO_PUBLIC_API_URL}/payments`, { subscriptionId, amount }, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(() => alert('Payment recorded!'))
@@ -35,8 +34,8 @@ export default function Payments() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <Text>My Payments</Text>
+    <View className="flex-1">
+      <Text className="title">My Payments</Text>
       <FlatList
         data={payments}
         keyExtractor={item => item.id.toString()}

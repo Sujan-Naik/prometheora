@@ -67,7 +67,7 @@ export default function PostCard({ post, onPress }: PostCardProps) {
           <Text style={{ fontSize: 12, color: '#999', marginBottom: 4 }}>
             📦 Quoted Project
           </Text>
-            <Button title={post.quotedProject.title} onPress={() => router.push(`/(tabs)/creator/${post.creator?.handle!}/projects/${post!.quotedProject!.id}`)} />
+            <Button title={post.quotedProject.title} onPress={() => router.push(`/creator/${post.creator?.handle!}/projects/${post.quotedProject!.id}`)} />
 
         </View>
       )}

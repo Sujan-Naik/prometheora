@@ -1,178 +1,130 @@
-/* global.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* --- Base App --- */
-body {
-  @apply bg-white text-gray-900;
+:root {
+  --primary: #007aff;
+  --secondary: #f5f5f5;
+  --text-primary: #000;
+  --text-secondary: #666;
+  --error: #ff3b30;
+  --success: #34c759;
+  --background: #fff;
+  --border: #e0e0e0;
+  --accent: #007aff;
 }
 
-/* --- Tab Layout Styling --- */
-.tab-list {
-  @apply flex-row bg-white border-t border-gray-200;
-}
-.tab-list-web {
-  @apply web:justify-start web:px-4;
-}
-.tab-list-native {
-  @apply native:justify-around native:py-2;
-}
-.tab-button {
-  @apply web:flex-row web:gap-2 web:px-6 web:py-3
-         native:flex-1 native:flex-col native:items-center native:py-2;
-}
-.tab-button-focused {
-  @apply web:border-b-2 web:border-blue-500;
-}
-.tab-icon {
-  @apply text-lg web:text-base;
-}
-.tab-label {
-  @apply text-xs web:text-base text-gray-600;
-}
-.tab-label-focused {
-  @apply text-blue-500 font-semibold;
-}
+@layer components {
+  .container {
+    @apply p-5 bg-[var(--background)] items-center pb-32;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
 
-/* --- Common Layout --- */
-.container {
-  flex: 1;
-  padding: 20px;
-  background-color: #fff;
-}
+  .container * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 
-/* --- Typography --- */
-.title {
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-.section-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-.blog-title {
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-.blog-item-title {
-  font-size: 18px;
-  color: #007aff;
-}
-.blog-content {
-  font-size: 16px;
-  line-height: 24px;
-}
-.date-text {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 20px;
-}
-.date-text-small {
-  font-size: 12px;
-  color: #666;
-  margin-top: 4px;
-}
+  .title {
+    @apply text-3xl font-bold text-[var(--text-primary)] mb-6 text-center;
+  }
 
-/* --- Sections --- */
-.section {
-  margin-bottom: 24px;
-}
+  .section-title {
+    @apply text-xl font-semibold text-[var(--text-primary)] mb-3 text-center;
+  }
 
-/* --- Buttons --- */
-.button,
-.profile-button {
-  padding: 15px;
-  border-radius: 8px;
-  align-items: center;
-  margin-vertical: 10px;
-}
-.button {
-  background-color: #007aff;
-}
-.button-disabled {
-  background-color: #ccc;
-}
-.profile-button {
-  background-color: #34c759;
-}
-.button-text,
-.profile-button-text {
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-}
-.delete-button {
-  background-color: #ff3b30;
-  padding: 10px;
-  border-radius: 8px;
-  margin-top: 8px;
-}
-.delete-button-text {
-  color: #fff;
-  text-align: center;
-  font-weight: 600;
-}
+  .button {
+    @apply bg-[var(--primary)] py-4 px-6 rounded-xl items-center mb-4 shadow-md;
+  }
 
-/* --- Form Inputs --- */
-.input {
-  border-width: 1px;
-  border-color: #ccc;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 16px;
-}
-.input-multiline {
-  border-width: 1px;
-  border-color: #ccc;
-  padding: 10px;
-  border-radius: 8px;
-  min-height: 100px;
-  text-align: start;
-  font-size: 16px;
-}
-.input-tall {
-  height: 300px;
-}
-.input-label {
-  margin-bottom: 5px;
-  font-weight: 600;
-}
-.input-container {
-  margin-bottom: 15px;
-}
+  .button-text {
+    @apply text-white text-lg font-bold;
+  }
 
-/* --- Blog Specific --- */
-.blog-item {
-  padding-vertical: 12px;
-  border-bottom-width: 1px;
-  border-bottom-color: #e0e0e0;
-}
+  .input {
+    @apply border border-[var(--border)] p-3 rounded-lg mb-3 bg-[var(--background)] w-full;
+  }
 
-/* --- Loading & Error States --- */
-.loading-container {
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-}
-.loading-text {
-  margin-top: 10px;
-}
-.error-container {
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-.error-text {
-  font-size: 18px;
-  color: red;
-  text-align: center;
-}
-.not-found-text {
-  font-size: 18px;
-  text-align: center;
+  .error-text {
+    @apply text-[var(--error)] mb-3 text-center;
+  }
+
+  .loading-text {
+    @apply text-[var(--text-secondary)] mt-2 text-center;
+  }
+
+  /* Tab Layout - Basic structure only, styling in components */
+  .tab-list {
+    @apply flex-row justify-around bg-[var(--background)] border-t border-[var(--border)] pb-5;
+  }
+
+  .tab-list-web {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .tab-list-native {
+    /* Native positioning handled by React Navigation */
+  }
+
+  .blog-item {
+    @apply p-5 border-b border-[var(--border)] bg-white rounded-lg mb-3 shadow-sm w-full;
+  }
+
+  .blog-title {
+    @apply text-3xl font-bold mb-3 text-center;
+  }
+
+  .blog-content {
+    @apply text-lg leading-7;
+  }
+
+  .date-text {
+    @apply text-base text-[var(--text-secondary)] mb-5 text-center;
+  }
+
+  .profile-button {
+    @apply bg-[var(--primary)] py-4 px-6 rounded-xl items-center mb-4 shadow-md w-full;
+  }
+
+  .profile-button-text {
+    @apply text-white text-lg font-bold;
+  }
+
+  .loading-container {
+    @apply flex-1 items-center justify-center;
+  }
+
+  .error-container {
+    @apply flex-1 items-center justify-center;
+  }
+
+  .not-found-text {
+    @apply text-2xl text-[var(--text-primary)] text-center;
+  }
+
+  .input-container {
+    @apply mb-5 w-full;
+  }
+
+  .input-label {
+    @apply text-xl font-semibold text-[var(--text-primary)] mb-3 text-left;
+  }
+
+  .input-multiline {
+    @apply h-40;
+  }
+
+  .input-tall {
+    @apply h-40;
+  }
+
+  .button-disabled {
+    @apply opacity-60;
+  }
 }

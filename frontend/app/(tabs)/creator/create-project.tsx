@@ -18,7 +18,6 @@ export default function CreateProject() {
   const [status, setStatus] = useState<string>('');
   const [visibility, setVisibility] = useState<Visibility>(Visibility.PATRON_ONLY);
   const [media, setMedia] = useState<MediaRecord[]>([]);
-  const [tempProjectId, setTempProjectId] = useState<number | null>(null);
   const router = useRouter();
   const token = useRequireAuth();
 
@@ -71,21 +70,15 @@ export default function CreateProject() {
   };
 
   return (
-    <ScrollView className="container">
+    <ScrollView className="container" style={{ height: '100vh' as any }}>
       <Text className="title">Create Project</Text>
 
-      <View className="section">
+      <View className="mb-4">
         <TextInput
           placeholder="Project Title"
           value={title}
           onChangeText={setTitle}
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            marginBottom: 10
-          }}
+          className="input"
         />
 
         <TextInput
@@ -93,58 +86,32 @@ export default function CreateProject() {
           value={description}
           onChangeText={setDescription}
           multiline
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            minHeight: 100,
-            textAlignVertical: 'top',
-            marginBottom: 10
-          }}
+          className="input h-24"
         />
 
         <TextInput
           placeholder="Repository URL (optional)"
           value={repoUrl}
           onChangeText={setRepoUrl}
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            marginBottom: 10
-          }}
+          className="input"
         />
 
         <TextInput
           placeholder="Demo URL (optional)"
           value={demoUrl}
           onChangeText={setDemoUrl}
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            marginBottom: 10
-          }}
+          className="input"
         />
 
         <TextInput
           placeholder="Status (e.g., In Progress, Completed)"
           value={status}
           onChangeText={setStatus}
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            marginBottom: 10
-          }}
+          className="input"
         />
 
-        <Text style={{ marginBottom: 5, fontWeight: '600' }}>Visibility</Text>
-        <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 8, marginBottom: 10 }}>
+        <Text className="font-semibold mb-1">Visibility</Text>
+        <View className="border border-[var(--border)] rounded-lg">
           <Picker
             selectedValue={visibility}
             onValueChange={(itemValue) => setVisibility(itemValue as Visibility)}
@@ -157,7 +124,7 @@ export default function CreateProject() {
         </View>
       </View>
 
-      <View className="section">
+      <View className="mb-4">
         <Text className="section-title">Media</Text>
         <PickMedia
           onMediaUploaded={handleMediaUploaded}

@@ -1,5 +1,5 @@
 // app/(tabs)/creator/[handle]/projects/[projectId].tsx
-import {View, Text, FlatList, Button, ScrollView} from 'react-native';
+import {View, Text, FlatList, ScrollView} from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -7,7 +7,6 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import {IProject} from "@/types/prisma";
 import ProjectCard from "@/components/ProjectCard";
 import DevlogCard from "@/components/DevlogCard";
-
 
 export default function ProjectDetail() {
   const { handle, projectId } = useLocalSearchParams<{ handle: string; projectId: string }>();
@@ -24,7 +23,9 @@ export default function ProjectDetail() {
     })
       .then(res => {
         setProject(res.data);
-        setIsFollowed(res!.data!.followers!.length > 0);
+        if (res.data.followers) {
+          setIsFollowed(res.data.followers.length > 0);
+        }
       })
       .catch(err => console.error(err));
   }, [projectId, token]);
@@ -42,11 +43,11 @@ export default function ProjectDetail() {
   };
 
   return (
-      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
+    <ScrollView className="container" style={{ height: '100vh' as any }}>
       {project && (
         <>
           <ProjectCard project={project} />
-          <Text>Devlogs:</Text>
+          <Text className="section-title">Devlogs:</Text>
           <FlatList
             data={project.devlogs}
             keyExtractor={item => item.id.toString()}

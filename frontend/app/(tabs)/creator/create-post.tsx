@@ -65,30 +65,16 @@ export default function CreatePost() {
   };
 
   return (
-     <ScrollView
-    style={{ flex: 1 }}
-    contentContainerStyle={{
-      padding: 16,
-      paddingBottom: 100,
-      minHeight: '100%',  // Ensures content takes at least full height
-    }}
-    keyboardShouldPersistTaps="handled"
-    showsVerticalScrollIndicator={true}  // Makes scrollbar visible for testing
-  >
+        <ScrollView style={{ height: "100vh" as any }} className="container">
+
       <Text className="title">Create Post</Text>
 
-      <View className="section">
+      <View className="mb-4">
         <TextInput
           placeholder="Post Title"
           value={title}
           onChangeText={setTitle}
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            marginBottom: 10
-          }}
+          className="input"
         />
 
         <TextInput
@@ -96,15 +82,7 @@ export default function CreatePost() {
           value={content}
           onChangeText={setContent}
           multiline
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            minHeight: 150,
-            textAlignVertical: 'top',
-            marginBottom: 10
-          }}
+          className="input h-36"
         />
 
         <TextInput
@@ -112,36 +90,20 @@ export default function CreatePost() {
           value={quotedProjectId}
           onChangeText={setQuotedProjectId}
           keyboardType="numeric"
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            marginBottom: 10
-          }}
+          className="input"
         />
 
         <TouchableOpacity
           onPress={() => setIsPaid(!isPaid)}
-          style={{
-            padding: 15,
-            borderRadius: 8,
-            backgroundColor: isPaid ? '#34c759' : '#e0e0e0',
-            marginBottom: 10,
-            alignItems: 'center'
-          }}
+          className={`p-4 rounded-lg mb-2 ${isPaid ? 'bg-[var(--success)]' : 'bg-[var(--border)]'} items-center`}
         >
-          <Text style={{
-            color: isPaid ? '#fff' : '#666',
-            fontWeight: '600',
-            fontSize: 16
-          }}>
+          <Text className={`font-semibold text-lg ${isPaid ? 'text-white' : 'text-[var(--text-secondary)]'}`}>
             {isPaid ? '💰 Paid Post' : '🆓 Free Post'}
           </Text>
         </TouchableOpacity>
       </View>
 
-      <View className="section">
+      <View className="mb-4">
         <Text className="section-title">Media</Text>
         <PickMedia
           onMediaUploaded={handleMediaUploaded}

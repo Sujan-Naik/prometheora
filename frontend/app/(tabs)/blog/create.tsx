@@ -57,8 +57,8 @@ export default function CreateBlog() {
 
   if (!isAdmin) {
     return (
-      <View className="error-container">
-        <Text className="not-found-text">
+      <View className="container items-center justify-center">
+        <Text className="error-text">
           You are not authorized to create blogs.
         </Text>
       </View>
@@ -66,11 +66,11 @@ export default function CreateBlog() {
   }
 
   return (
-    <ScrollView className="container">
+    <ScrollView className="container" style={{ height: '100vh' as any }}>
       <Text className="title">Create Blog Post</Text>
 
-      <View className="input-container">
-        <Text className="input-label">Title</Text>
+      <View className="mb-4">
+        <Text className="section-title">Title</Text>
         <TextInput
           placeholder="Enter blog title"
           value={title}
@@ -79,8 +79,8 @@ export default function CreateBlog() {
         />
       </View>
 
-      <View className="input-container">
-        <Text className="input-label">Slug (URL)</Text>
+      <View className="mb-4">
+        <Text className="section-title">Slug (URL)</Text>
         <TextInput
           placeholder="blog-post-url"
           value={slug}
@@ -89,21 +89,21 @@ export default function CreateBlog() {
         />
       </View>
 
-      <View className="input-container">
-        <Text className="input-label">Content</Text>
+      <View className="mb-4">
+        <Text className="section-title">Content</Text>
         <TextInput
           placeholder="Write your blog content..."
           value={content}
           onChangeText={setContent}
           multiline
-          className="input-multiline input-tall"
+          className="input h-40"
         />
       </View>
 
       <TouchableOpacity
         onPress={handleCreate}
         disabled={loading}
-        className={loading ? 'button button-disabled' : 'button'}
+        className={loading ? 'button opacity-60' : 'button'}
       >
         <Text className="button-text">
           {loading ? 'Creating...' : 'Publish Blog Post'}
