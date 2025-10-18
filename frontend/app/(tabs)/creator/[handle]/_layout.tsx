@@ -12,8 +12,10 @@ export default function HandleLayout() {
   return (
     <Tabs>
       <TabSlot />
-      <View style={{ paddingBottom: insets.bottom }}>
-      <TabList className="tab-list tab-list-web tab-list-native">
+      <TabList
+        className="tab-list tab-list-web tab-list-native"
+        style={{ paddingBottom: insets.bottom }}
+      >
         <TabTrigger name="index" href={`/(tabs)/creator/${handle}`} asChild>
           <TabButton icon="👤">Profile</TabButton>
         </TabTrigger>
@@ -38,7 +40,6 @@ export default function HandleLayout() {
           <TabButton icon="📁">Projects</TabButton>
         </TabTrigger>
       </TabList>
-      </View>
     </Tabs>
   );
 }

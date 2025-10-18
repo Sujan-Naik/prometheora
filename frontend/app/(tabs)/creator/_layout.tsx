@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import {Pressable, Text, View} from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import axios from 'axios';
-import { Tabs, TabSlot, TabList, TabTrigger, TabTriggerSlotProps } from 'expo-router/ui';
+import { Tabs, TabSlot, TabList, TabTrigger } from 'expo-router/ui';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
-import {TabButton} from "@/components/TabButton";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
+import { TabButton } from "@/components/TabButton";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-// Combined Creator Layout with "View Your Profile" integration
 export default function CreatorLayout() {
   const token = useRequireAuth();
   const [handle, setHandle] = useState<string | null>(null);
@@ -21,20 +20,24 @@ export default function CreatorLayout() {
       .catch(console.error);
   }, [token]);
 
-  console.log(handle)
+  console.log(handle);
   const insets = useSafeAreaInsets();
 
-  if (!handle){
-    return (<div> Loading...</div>)
+  if (!handle) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
   return (
     <Tabs>
       <TabSlot />
-      <View style={{ paddingBottom: insets.bottom }}>
-      <TabSlot />
-
-      <TabList className="tab-list tab-list-web tab-list-native">
+      <TabList
+        className="tab-list tab-list-web tab-list-native"
+        style={{ paddingBottom: insets.bottom }}
+      >
         <TabTrigger name="creator-home" href="/(tabs)/creator" asChild>
           <TabButton icon="🎨">Overview</TabButton>
         </TabTrigger>
@@ -55,17 +58,16 @@ export default function CreatorLayout() {
           <TabButton icon="⭐">Tier</TabButton>
         </TabTrigger>
 
-        {/*{handle && (*/}
+        {handle && (
           <TabTrigger
             name="creator-profile"
-            href={`/creator/${handle}`}
+            href={`/(tabs)/creator/${handle}`}
             asChild
           >
             <TabButton icon="👤">Profile</TabButton>
           </TabTrigger>
-        {/*)}*/}
+        )}
       </TabList>
-      </View>
     </Tabs>
   );
 }

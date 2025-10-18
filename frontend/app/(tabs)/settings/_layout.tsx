@@ -8,11 +8,11 @@ export default function SettingsLayout() {
 
   return (
     <Tabs>
-      <TabSlot />
-      <View style={{ paddingBottom: insets.bottom }}>
-      <TabSlot />
-      <TabList className="tab-list tab-list-web tab-list-native">
-        <TabTrigger name="settings-home" href="/(tabs)/settings" asChild>
+        <TabSlot />
+<TabList
+        className="tab-list tab-list-web tab-list-native"
+        style={{ paddingBottom: insets.bottom }}
+      >        <TabTrigger name="settings-home" href="/(tabs)/settings" asChild>
           <TabButton icon="⚙️">General</TabButton>
         </TabTrigger>
 
@@ -28,7 +28,6 @@ export default function SettingsLayout() {
           <TabButton icon="📄">Profile</TabButton>
         </TabTrigger>
       </TabList>
-      </View>
     </Tabs>
   );
 }
