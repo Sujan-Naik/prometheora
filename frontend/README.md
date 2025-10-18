@@ -1,24 +1,10 @@
-app/
- ├── index.tsx               → Home / Discover feed
- ├── auth/
- │    ├── login.tsx
- │    └── signup.tsx
- ├── creator/
- │    ├── [handle]/
- │    │    ├── index.tsx     → Creator profile
- │    │    ├── posts.tsx     → Creator’s posts
- │    │    ├── tiers.tsx     → Support tiers
- │    │    └── about.tsx     → Bio / media
- │    └── create-post.tsx
- ├── patron/
- │    ├── subscriptions.tsx  → My subscriptions
- │    └── payments.tsx
- ├── blog/
- │    ├── index.tsx          → Blog list
- │    └── [slug].tsx         → Blog post detail
- ├── settings/
- │    ├── profile.tsx
- │    └── account.tsx
- └── _layout.tsx             → Shared navigation/tab layout
+# Building for Android
+From frontend dir:
+If running for the first time do npx expo prebuild 
 
 
+npx expo prebuild --clean
+cd android 
+./gradlew assembleRelease
+
+File is in android/app/build/outputs/apk/release/app-release.apk

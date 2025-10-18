@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { useAuthStatus } from '@/hooks/useAuthStatus';
 import PostCard from "@/components/PostCard";
 import { IPost } from "@/types/prisma";
-import '../global.css';
+import '@/global.css';
 
 export default function Home() {
   const [posts, setPosts] = useState<IPost[]>([]);

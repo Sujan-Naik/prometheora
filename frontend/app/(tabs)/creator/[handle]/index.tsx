@@ -26,7 +26,7 @@ export default function CreatorProfile() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Creator Profile: {handle}</Text>
-      {profile && <Text>{profile.bio!.replace(/<[^>]+>/g, '')}</Text>}
+      {profile?.bio && <Text>{profile.bio.replace(/<[^>]+>/g, '')}</Text>}
     </View>
   );
 }

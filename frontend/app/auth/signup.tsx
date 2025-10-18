@@ -1,10 +1,7 @@
-// app/auth/signup.tsx
-import { View, TextInput, Button, Text } from 'react-native';
-import {useEffect, useState} from 'react';
-import axios from 'axios';
+import { View, TextInput, Button, Text, Alert, ActivityIndicator } from 'react-native';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useAuthStatus} from "@/hooks/useAuthStatus";
+import { useAuthStatus } from "@/hooks/useAuthStatus";
 
 enum Role {
   CREATOR = 'CREATOR',
@@ -14,38 +11,97 @@ enum Role {
 interface SignupResponse {
   id: number;
   email: string;
-  // etc.
 }
 
 export default function Signup() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [handle, setHandle] = useState<string>('');
-  const [roles, setRoles] = useState<Role[]>([Role.PATRON]); // or toggle for creator
+  const [roles, setRoles] = useState<Role[]>([Role.PATRON]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
   const router = useRouter();
-
   const { isAuthenticated } = useAuthStatus();
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.replace('/'); // Redirect if already logged in
+      router.replace('/');
     }
   }, [isAuthenticated]);
 
+  const handleSignup = async () => {
+    if (!email || !password) {
+      setError('Please enter both email and password');
+      return;
+    }
 
-  const handleSignup = () => {
-    axios.post<SignupResponse>(`${process.env.EXPO_PUBLIC_API_URL}/auth/signup`, { email, password, handle, roles })
-      .then(res => router.push('/auth/login'))
-      .catch(err => console.error(err));
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/auth/signup`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({ email, password, handle, roles }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Signup failed. Please try again.');
+      }
+
+      Alert.alert(
+        'Success',
+        'Account created successfully! Please login.',
+        [{ text: 'OK', onPress: () => router.push('/auth/login') }]
+      );
+    } catch (err: any) {
+      const errorMessage = err.message || 'Unable to connect to server. Please check your internet connection.';
+      setError(errorMessage);
+      Alert.alert('Signup Failed', errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
       <Text>Signup</Text>
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} />
-      <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
-      <TextInput placeholder="Handle (for creators)" value={handle} onChangeText={setHandle} />
-      <Button title="Signup" onPress={handleSignup} />
+      {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        editable={!loading}
+      />
+      <TextInput
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        editable={!loading}
+      />
+      <TextInput
+        placeholder="Handle (optional)"
+        value={handle}
+        onChangeText={setHandle}
+        autoCapitalize="none"
+        editable={!loading}
+      />
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <Button title="Signup" onPress={handleSignup} />
+      )}
     </View>
   );
 }
