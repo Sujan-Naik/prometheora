@@ -1,11 +1,24 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { CreatorService } from './creator.service';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @Controller('creators')
-@UseGuards(JwtAuthGuard) // Apply where needed
+@UseGuards(JwtAuthGuard)
 export class CreatorController {
   constructor(private creatorService: CreatorService) {}
+
+  @Get()
+  async discover(
+    @Query('search') search?: string,
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+  ) {
+    return this.creatorService.discover({
+      search,
+      limit: limit ? parseInt(limit) : 20,
+      offset: offset ? parseInt(offset) : 0,
+    });
+  }
 
   @Get(':handle')
   async getProfile(@Param('handle') handle: string) {
