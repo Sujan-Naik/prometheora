@@ -1,11 +1,10 @@
-// app/(tabs)/blog/create.tsx
 import { View, TextInput, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { useAdmin } from "@/hooks/useAdmin";
-import '../../../global.css';
+import LoadingScreen from '@/components/LoadingScreen';
 
 interface CreateBlogResponse {
   id: number;
@@ -22,7 +21,6 @@ export default function CreateBlog() {
   const token = useRequireAuth();
   const { isAdmin } = useAdmin();
 
-  // Auto-generate slug from title
   const handleTitleChange = (text: string) => {
     setTitle(text);
     if (!slug) {
@@ -57,7 +55,7 @@ export default function CreateBlog() {
 
   if (!isAdmin) {
     return (
-      <View className="container items-center justify-center">
+      <View className="error-container">
         <Text className="error-text">
           You are not authorized to create blogs.
         </Text>
@@ -65,50 +63,58 @@ export default function CreateBlog() {
     );
   }
 
+  if (loading) {
+    return <LoadingScreen message="Creating blog post..." />;
+  }
+
   return (
-    <ScrollView className="container" style={{ height: '100vh' as any }}>
-      <Text className="title">Create Blog Post</Text>
+    <View style={{ flex: 1 }}>
+      <ScrollView>
+        <View className="container">
+          <Text className="title">Create Blog Post</Text>
 
-      <View className="mb-4">
-        <Text className="section-title">Title</Text>
-        <TextInput
-          placeholder="Enter blog title"
-          value={title}
-          onChangeText={handleTitleChange}
-          className="input"
-        />
-      </View>
+          <View className="input-container">
+            <Text className="input-label">Title</Text>
+            <TextInput
+              placeholder="Enter blog title"
+              value={title}
+              onChangeText={handleTitleChange}
+              className="input"
+            />
+          </View>
 
-      <View className="mb-4">
-        <Text className="section-title">Slug (URL)</Text>
-        <TextInput
-          placeholder="blog-post-url"
-          value={slug}
-          onChangeText={setSlug}
-          className="input"
-        />
-      </View>
+          <View className="input-container">
+            <Text className="input-label">Slug (URL)</Text>
+            <TextInput
+              placeholder="blog-post-url"
+              value={slug}
+              onChangeText={setSlug}
+              className="input"
+            />
+          </View>
 
-      <View className="mb-4">
-        <Text className="section-title">Content</Text>
-        <TextInput
-          placeholder="Write your blog content..."
-          value={content}
-          onChangeText={setContent}
-          multiline
-          className="input h-40"
-        />
-      </View>
+          <View className="input-container">
+            <Text className="input-label">Content</Text>
+            <TextInput
+              placeholder="Write your blog content..."
+              value={content}
+              onChangeText={setContent}
+              multiline
+              className="input-multiline input-tall"
+            />
+          </View>
 
-      <TouchableOpacity
-        onPress={handleCreate}
-        disabled={loading}
-        className={loading ? 'button opacity-60' : 'button'}
-      >
-        <Text className="button-text">
-          {loading ? 'Creating...' : 'Publish Blog Post'}
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+          <TouchableOpacity
+            onPress={handleCreate}
+            disabled={loading}
+            className={loading ? 'button button-disabled' : 'button'}
+          >
+            <Text className="button-text">
+              {loading ? 'Creating...' : 'Publish Blog Post'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
   );
 }

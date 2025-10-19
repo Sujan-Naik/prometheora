@@ -10,9 +10,7 @@ export default function HandleLayout() {
   return (
     <Tabs>
       <TabSlot />
-      <TabList
-        className="tab-list tab-list-web tab-list-native"
-      >
+      <TabList className="tab-list tab-list-web tab-list-native">
         <TabTrigger name="index" href={`/(tabs)/profile/${handle}`} asChild>
           <TabButton icon="👤">Profile</TabButton>
         </TabTrigger>

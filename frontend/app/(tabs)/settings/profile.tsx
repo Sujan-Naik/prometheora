@@ -7,12 +7,14 @@ import { IUser } from '@/types/prisma';
 import PickMedia from '@/components/PickMedia';
 import DisplayMedia from '@/components/DisplayMedia';
 import { MediaRecord, fetchMedia, deleteMedia } from '@/utils/mediaUtils';
+import LoadingScreen from '@/components/LoadingScreen';
 
 export default function ProfileSettings() {
   const [bio, setBio] = useState('');
   const [media, setMedia] = useState<MediaRecord[]>([]);
   const [userId, setUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const router = useRouter();
   const token = useRequireAuth();
 
@@ -31,6 +33,8 @@ export default function ProfileSettings() {
         setMedia(userMedia);
       } catch (err) {
         console.error('Failed to fetch profile:', err);
+      } finally {
+        setInitialLoading(false);
       }
     };
     fetchProfile();
@@ -72,50 +76,62 @@ export default function ProfileSettings() {
     }
   };
 
+  if (initialLoading) {
+    return <LoadingScreen message="Loading profile..." />;
+  }
+
   return (
-    <ScrollView className="container" style={{ height: '100vh' as any }}>
-      <Text className="title">Update Profile</Text>
+    <View style={{ flex: 1 }}>
+      <ScrollView>
+        <View className="container">
+          <Text className="title">Update Profile</Text>
 
-      <View className="mb-4">
-        <Text className="section-title">Bio</Text>
-        <TextInput
-          placeholder="Tell people about yourself..."
-          value={bio}
-          onChangeText={setBio}
-          multiline
-          className="input h-24"
-        />
-      </View>
-
-      <View className="mb-4">
-        <Text className="section-title">Media</Text>
-        {userId && (
-          <PickMedia
-            userId={userId}
-            onMediaUploaded={handleMediaUploaded}
-            onMediaDeleted={handleMediaDeleted}   // new callback
-            buttonText="Add Photo/Video"
-          />
-        )}
-
-        {media.map(item => (
-          <View key={item.id} className="mb-4">
-            <DisplayMedia media={item} showCaption />
-            <TouchableOpacity
-              onPress={() => handleDeleteMedia(item.id)}
-              className="button bg-[var(--error)] mt-2"
-            >
-              <Text className="button-text">Delete</Text>
-            </TouchableOpacity>
+          <View className="input-container">
+            <Text className="input-label">Bio</Text>
+            <TextInput
+              placeholder="Tell people about yourself..."
+              value={bio}
+              onChangeText={setBio}
+              multiline
+              className="input-multiline input-tall"
+            />
           </View>
-        ))}
-      </View>
 
-      <TouchableOpacity className="button" onPress={handleUpdate} disabled={loading}>
-        <Text className="button-text">
-          {loading ? 'Updating...' : 'Update Profile'}
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+          <View className="input-container">
+            <Text className="input-label">Media</Text>
+            {userId && (
+              <PickMedia
+                userId={userId}
+                onMediaUploaded={handleMediaUploaded}
+                onMediaDeleted={handleMediaDeleted}
+                buttonText="Add Photo/Video"
+              />
+            )}
+
+            {media.map(item => (
+              <View key={item.id} className="media-container">
+                <DisplayMedia media={item} showCaption />
+                <TouchableOpacity
+                  onPress={() => handleDeleteMedia(item.id)}
+                  className="button-error"
+                >
+                  <Text className="button-text">Delete</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+
+          <TouchableOpacity
+            className={loading ? 'button button-disabled' : 'button'}
+            onPress={handleUpdate}
+            disabled={loading}
+          >
+            <Text className="button-text">
+              {loading ? 'Updating...' : 'Update Profile'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
   );
 }

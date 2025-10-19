@@ -1,16 +1,17 @@
-// app/settings/account.tsx
-import {View, TextInput, Button, Text, ScrollView} from 'react-native';
+import { View, TextInput, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { IUser } from "@/types/prisma";
 import UserCard from "@/components/UserCard";
+import LoadingScreen from '@/components/LoadingScreen';
 
 export default function AccountSettings() {
   const [user, setUser] = useState<IUser | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const token = useRequireAuth();
 
@@ -23,8 +24,12 @@ export default function AccountSettings() {
     .then(res => {
       setUser(res.data);
       setEmail(res.data.email);
+      setLoading(false);
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      console.error(err);
+      setLoading(false);
+    });
   }, [token]);
 
   const handleUpdate = () => {
@@ -34,32 +39,51 @@ export default function AccountSettings() {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
-      setUser(res.data); // update local user data
+      setUser(res.data);
       router.back();
     })
     .catch(err => console.error(err));
   };
 
-  return (
-      <ScrollView style={{ height: "100vh" as any }} className="container">
-      {user && <UserCard user={user} />}
+  if (loading) {
+    return <LoadingScreen message="Loading account..." />;
+  }
 
-      <Text className="title">Update Account</Text>
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        className="input"
-      />
-      <TextInput
-        placeholder="New Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        className="input"
-      />
-      <Button title="Update" onPress={handleUpdate} />
+  return (
+    <View style={{ flex: 1 }}>
+      <ScrollView>
+        <View className="container">
+          {user && <UserCard user={user} />}
+
+          <Text className="title">Update Account</Text>
+          
+          <View className="input-container">
+            <Text className="input-label">Email</Text>
+            <TextInput
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              className="input"
+            />
+          </View>
+
+          <View className="input-container">
+            <Text className="input-label">New Password</Text>
+            <TextInput
+              placeholder="New Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              className="input"
+            />
+          </View>
+
+          <TouchableOpacity className="button" onPress={handleUpdate}>
+            <Text className="button-text">Update</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
+    </View>
   );
 }

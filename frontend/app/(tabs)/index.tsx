@@ -1,11 +1,11 @@
-// app/index.tsx
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useAuthStatus } from '@/hooks/useAuthStatus';
 import PostCard from '@/components/PostCard';
 import { IPost } from '@/types/prisma';
+import LoadingScreen from '@/components/LoadingScreen';
 import '@/global.css';
 
 export default function Home() {
@@ -34,136 +34,105 @@ export default function Home() {
     fetchPosts();
   }, []);
 
-  // Auth status loading
   if (isAuthenticated === null) {
-    return (
-      <ScrollView style={{ height: '100vh' as any }} className="container">
-        <ActivityIndicator size="large" color="var(--primary)" />
-        <Text className="loading-text">Loading...</Text>
-      </ScrollView>
-    );
+    return <LoadingScreen />;
   }
 
-  // Not authenticated - Landing page
   if (!isAuthenticated) {
     return (
-      <ScrollView style={{ height: '100vh' as any }} className="container">
-        <View className="flex-1 items-center justify-center p-5">
-          <Text className="text-5xl mb-2">🎨</Text>
-          <Text className="text-3xl font-bold text-[var(--text-primary)] text-center mb-2">
-            Creator Hub
-          </Text>
-          <Text className="text-base text-[var(--text-secondary)] text-center mb-10">
-            Support creators, follow projects, and discover amazing content
-          </Text>
-
-          <TouchableOpacity
-            onPress={() => router.push('/auth/signup')}
-            className="button w-full max-w-[300px] mb-3"
-          >
-            <Text className="button-text">Get Started</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => router.push('/auth/login')}
-            className="button border-2 border-[var(--primary)] bg-transparent w-full max-w-[300px]"
-          >
-            <Text className="button-text text-[var(--primary)]">Sign In</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Public Posts Preview */}
-        <View className="p-5 bg-[var(--secondary)]">
-          <View style={{ paddingHorizontal: 8 }}>
-            <Text className="text-xl font-bold mb-3 text-[var(--text-primary)]">
-              Recent Posts
+      <View style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View className="landing-container">
+            <Text className="landing-icon">🎨</Text>
+            <Text className="landing-title">Creator Hub</Text>
+            <Text className="landing-subtitle">
+              Support creators, follow projects, and discover amazing content
             </Text>
+
+            <TouchableOpacity
+              onPress={() => router.push('/auth/signup')}
+              className="button"
+            >
+              <Text className="button-text">Get Started</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => router.push('/auth/login')}
+              className="button-secondary"
+            >
+              <Text className="button-secondary-text">Sign In</Text>
+            </TouchableOpacity>
           </View>
-          {loading ? (
-            <ActivityIndicator size="small" color="var(--primary)" />
-          ) : error ? (
-            <Text className="text-[var(--text-secondary)] text-center">{error}</Text>
-          ) : posts.length === 0 ? (
-            <Text className="text-[var(--text-secondary)] text-center">No posts yet.</Text>
-          ) : (
-            <>
-              {posts.slice(0, 3).map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-              <Text className="text-[var(--text-secondary)] text-center mt-3">
-                Sign in to see more
-              </Text>
-            </>
-          )}
-        </View>
-      </ScrollView>
+
+          <View className="container">
+            <Text className="section-title">Recent Posts</Text>
+            {loading ? (
+              <LoadingScreen />
+            ) : error ? (
+              <Text className="error-text">{error}</Text>
+            ) : posts.length === 0 ? (
+              <Text className="subtitle">No posts yet.</Text>
+            ) : (
+              <>
+                {posts.slice(0, 3).map((post) => (
+                  <PostCard key={post.id} post={post} />
+                ))}
+                <Text className="subtitle">Sign in to see more</Text>
+              </>
+            )}
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 
-  // Authenticated - Feed view
   return (
-    <ScrollView style={{ height: '100vh' as any }} className="container">
-      {/* Header */}
-      <View className="p-5 pt-15 bg-[var(--primary)] rounded-b-2xl">
-        <Text className="text-2xl font-bold text-white mb-1">Discover</Text>
-        <Text className="text-sm text-white/80">Latest posts from creators you follow</Text>
+    <View style={{ flex: 1 }}>
+      <View className="header">
+        <Text className="header-title">Discover</Text>
+        <Text className="header-subtitle">Latest posts from creators you follow</Text>
       </View>
 
-      {/* Navigation Quick Access */}
-      <View className="flex-row p-4 gap-2 bg-[var(--background)] border-b border-[var(--border)]">
-        <TouchableOpacity
-          onPress={() => router.push('/(tabs)/blog')}
-          className="flex-1 bg-[var(--secondary)] p-3 rounded-lg items-center"
-        >
-          <Text className="text-xl mb-1">📰</Text>
-          <Text className="text-xs text-[var(--text-secondary)] font-semibold">Blog</Text>
-        </TouchableOpacity>
+      <ScrollView>
+        <View className="nav-card-container">
+          <TouchableOpacity onPress={() => router.push('/(tabs)/blog')} className="nav-card">
+            <Text className="nav-card-icon">📰</Text>
+            <Text className="nav-card-text">Blog</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => router.push('/(tabs)/creator')}
-          className="flex-1 bg-[var(--secondary)] p-3 rounded-lg items-center"
-        >
-          <Text className="text-xl mb-1">🎨</Text>
-          <Text className="text-xs text-[var(--text-secondary)] font-semibold">Creators</Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/(tabs)/creator')} className="nav-card">
+            <Text className="nav-card-icon">🎨</Text>
+            <Text className="nav-card-text">Creators</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => router.push('/(tabs)/patron')}
-          className="flex-1 bg-[var(--secondary)] p-3 rounded-lg items-center"
-        >
-          <Text className="text-xl mb-1">💎</Text>
-          <Text className="text-xs text-[var(--text-secondary)] font-semibold">Patronage</Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/(tabs)/patron')} className="nav-card">
+            <Text className="nav-card-icon">💎</Text>
+            <Text className="nav-card-text">Patronage</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => router.push('/(tabs)/settings')}
-          className="flex-1 bg-[var(--secondary)] p-3 rounded-lg items-center"
-        >
-          <Text className="text-xl mb-1">⚙️</Text>
-          <Text className="text-xs text-[var(--text-secondary)] font-semibold">Settings</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Posts Feed */}
-      {loading && posts.length === 0 ? (
-        <View className="container items-center justify-center">
-          <ActivityIndicator size="large" color="var(--primary)" />
-          <Text className="loading-text">Loading posts...</Text>
-        </View>
-      ) : error ? (
-        <View className="container items-center justify-center">
-          <Text className="error-text">{error}</Text>
-          <TouchableOpacity onPress={fetchPosts} className="button mt-4">
-            <Text className="button-text">Retry</Text>
+          <TouchableOpacity onPress={() => router.push('/(tabs)/settings')} className="nav-card">
+            <Text className="nav-card-icon">⚙️</Text>
+            <Text className="nav-card-text">Settings</Text>
           </TouchableOpacity>
         </View>
-      ) : (
-        <View style={{ padding: 16 }}>
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </View>
-      )}
-    </ScrollView>
+
+        {loading && posts.length === 0 ? (
+          <LoadingScreen message="Loading posts..." />
+        ) : error ? (
+          <View className="error-container">
+            <Text className="error-text">{error}</Text>
+            <TouchableOpacity onPress={fetchPosts} className="button">
+              <Text className="button-text">Retry</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View className="container">
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </View>
+        )}
+      </ScrollView>
+    </View>
   );
 }

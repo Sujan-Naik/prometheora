@@ -8,9 +8,7 @@ export default function SettingsLayout() {
   return (
     <Tabs>
       <TabSlot />
-      <TabList
-        className="tab-list tab-list-web tab-list-native"
-      >
+      <TabList className="tab-list tab-list-web tab-list-native">
         <TabTrigger name="settings-home" href="/(tabs)/settings" asChild>
           <TabButton icon="⚙️">General</TabButton>
         </TabTrigger>

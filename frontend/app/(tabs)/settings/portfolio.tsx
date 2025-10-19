@@ -1,36 +1,40 @@
-// app/settings/portfolio.tsx
-import {View, Text, FlatList, TextInput, Button, ScrollView} from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-import {IPortfolioItem, IProject} from "@/types/prisma";
+import { IPortfolioItem, IProject } from "@/types/prisma";
+import LoadingScreen from '@/components/LoadingScreen';
 
 export default function EditPortfolio() {
-  const [projects, setProjects] = useState<IProject[]>([]); // Available projects
+  const [projects, setProjects] = useState<IProject[]>([]);
   const [portfolio, setPortfolio] = useState<IPortfolioItem[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
   const [caption, setCaption] = useState<string>('');
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const token = useRequireAuth();
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
-    // Fetch user's projects
-    axios.get<IProject[]>(`${process.env.EXPO_PUBLIC_API_URL}/projects/creator/myhandle`, { // Replace 'myhandle' with actual
+    if (!token) return;
+    
+    axios.get<IProject[]>(`${process.env.EXPO_PUBLIC_API_URL}/projects/creator/myhandle`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setProjects(res.data))
       .catch(err => console.error(err));
 
-    // Fetch current portfolio
     axios.get<IPortfolioItem[]>(`${process.env.EXPO_PUBLIC_API_URL}/portfolio/myhandle`, {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(res => setPortfolio(res.data))
-      .catch(err => console.error(err));
+      .then(res => {
+        setPortfolio(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
   }, [token]);
 
   const handleAdd = () => {
@@ -61,33 +65,66 @@ export default function EditPortfolio() {
       .catch(err => console.error(err));
   };
 
-  // Add drag-and-drop for ordering if using a library like react-native-draggable-flatlist
+  if (loading) {
+    return <LoadingScreen message="Loading portfolio..." />;
+  }
 
   return (
-      <ScrollView style={{ height: "100vh" as any }} className="container">
-      <Text className="title">Edit Portfolio</Text>
-      <Text className="section-title">Select Project to Add:</Text>
-      <FlatList
-        data={projects}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
-          <Button title={item.title} onPress={() => setSelectedProjectId(item.id)} />
-        )}
-      />
-      <TextInput placeholder="Caption" value={caption} onChangeText={setCaption} className="input" />
-      <Button title="Add to Portfolio" onPress={handleAdd} />
-      <Text className="section-title">Current Portfolio:</Text>
-      <FlatList
-        data={portfolio}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
-          <View className="mb-4">
-            <Text className="text-base">{item.project!.title} - {item.caption}</Text>
-            <Button title="Remove" onPress={() => handleRemove(item.id)} />
+    <View style={{ flex: 1 }}>
+      <ScrollView>
+        <View className="container">
+          <Text className="title">Edit Portfolio</Text>
+          
+          <Text className="section-title">Select Project to Add:</Text>
+          <FlatList
+            data={projects}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity 
+                className="button-secondary" 
+                onPress={() => setSelectedProjectId(item.id)}
+              >
+                <Text className="button-secondary-text">{item.title}</Text>
+              </TouchableOpacity>
+            )}
+          />
+          
+          <View className="input-container">
+            <Text className="input-label">Caption</Text>
+            <TextInput 
+              placeholder="Caption" 
+              value={caption} 
+              onChangeText={setCaption} 
+              className="input" 
+            />
           </View>
-        )}
-      />
-      <Button title="Update Order" onPress={handleUpdateOrder} />
+          
+          <TouchableOpacity className="button" onPress={handleAdd}>
+            <Text className="button-text">Add to Portfolio</Text>
+          </TouchableOpacity>
+          
+          <Text className="section-title">Current Portfolio:</Text>
+          <FlatList
+            data={portfolio}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({ item }) => (
+              <View className="card">
+                <Text className="text-base">{item.project!.title} - {item.caption}</Text>
+                <TouchableOpacity 
+                  className="button-error" 
+                  onPress={() => handleRemove(item.id)}
+                >
+                  <Text className="button-text">Remove</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+          
+          <TouchableOpacity className="button" onPress={handleUpdateOrder}>
+            <Text className="button-text">Update Order</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
+    </View>
   );
 }

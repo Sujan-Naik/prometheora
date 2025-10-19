@@ -15,6 +15,7 @@
 }
 
 @layer components {
+  /* Layout Components */
   .container {
     @apply p-5 bg-[var(--background)] items-center pb-32;
     width: 100%;
@@ -28,52 +29,21 @@
     box-sizing: border-box;
   }
 
+  .scroll-container {
+    @apply flex-1 w-full;
+  }
+
+  /* Typography */
   .title {
     @apply text-3xl font-bold text-[var(--text-primary)] mb-6 text-center;
   }
 
   .section-title {
-    @apply text-xl font-semibold text-[var(--text-primary)] mb-3 text-center;
+    @apply text-xl font-semibold text-[var(--text-primary)] mb-3;
   }
 
-  .button {
-    @apply bg-[var(--primary)] py-4 px-6 rounded-xl items-center mb-4 shadow-md;
-  }
-
-  .button-text {
-    @apply text-white text-lg font-bold;
-  }
-
-  .input {
-    @apply border border-[var(--border)] p-3 rounded-lg mb-3 bg-[var(--background)] w-full;
-  }
-
-  .error-text {
-    @apply text-[var(--error)] mb-3 text-center;
-  }
-
-  .loading-text {
-    @apply text-[var(--text-secondary)] mt-2 text-center;
-  }
-
-  /* Tab Layout - Basic structure only, styling in components */
-  .tab-list {
-    @apply flex-row justify-around bg-[var(--background)] border-t border-[var(--border)] pb-5;
-  }
-
-  .tab-list-web {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-
-  .tab-list-native {
-    /* Native positioning handled by React Navigation */
-  }
-
-  .blog-item {
-    @apply p-5 border-b border-[var(--border)] bg-white rounded-lg mb-3 shadow-sm w-full;
+  .subtitle {
+    @apply text-base text-[var(--text-secondary)] mb-3;
   }
 
   .blog-title {
@@ -88,6 +58,43 @@
     @apply text-base text-[var(--text-secondary)] mb-5 text-center;
   }
 
+  .error-text {
+    @apply text-[var(--error)] mb-3 text-center;
+  }
+
+  .loading-text {
+    @apply text-[var(--text-secondary)] mt-2 text-center;
+  }
+
+  .not-found-text {
+    @apply text-2xl text-[var(--text-primary)] text-center;
+  }
+
+  /* Buttons */
+  .button {
+    @apply bg-[var(--primary)] py-4 px-6 rounded-xl items-center mb-4 shadow-md w-full;
+  }
+
+  .button-text {
+    @apply text-white text-lg font-bold;
+  }
+
+  .button-disabled {
+    @apply opacity-60;
+  }
+
+  .button-secondary {
+    @apply bg-[var(--secondary)] py-4 px-6 rounded-xl items-center mb-4 shadow-sm w-full;
+  }
+
+  .button-secondary-text {
+    @apply text-[var(--text-primary)] text-lg font-bold;
+  }
+
+  .button-error {
+    @apply bg-[var(--error)] py-4 px-6 rounded-xl items-center mb-4 shadow-md w-full;
+  }
+
   .profile-button {
     @apply bg-[var(--primary)] py-4 px-6 rounded-xl items-center mb-4 shadow-md w-full;
   }
@@ -96,35 +103,132 @@
     @apply text-white text-lg font-bold;
   }
 
-  .loading-container {
-    @apply flex-1 items-center justify-center;
-  }
-
-  .error-container {
-    @apply flex-1 items-center justify-center;
-  }
-
-  .not-found-text {
-    @apply text-2xl text-[var(--text-primary)] text-center;
-  }
-
+  /* Input Components */
   .input-container {
     @apply mb-5 w-full;
   }
 
   .input-label {
-    @apply text-xl font-semibold text-[var(--text-primary)] mb-3 text-left;
+    @apply text-base font-semibold text-[var(--text-primary)] mb-2;
+  }
+
+  .input {
+    @apply border border-[var(--border)] p-3 rounded-lg mb-3 bg-[var(--background)] w-full text-base;
   }
 
   .input-multiline {
-    @apply h-40;
+    @apply border border-[var(--border)] p-3 rounded-lg mb-3 bg-[var(--background)] w-full text-base;
   }
 
   .input-tall {
     @apply h-40;
   }
 
-  .button-disabled {
-    @apply opacity-60;
+  /* Cards */
+  .card {
+    @apply p-5 bg-white rounded-xl mb-4 shadow-sm border border-[var(--border)] w-full;
+  }
+
+  .card-compact {
+    @apply p-4 bg-white rounded-lg mb-3 shadow-sm border border-[var(--border)] w-full;
+  }
+
+  .blog-item {
+    @apply p-5 border-b border-[var(--border)] bg-white rounded-lg mb-3 shadow-sm w-full;
+  }
+
+  /* Container States */
+  .loading-container {
+    @apply flex-1 items-center justify-center p-5;
+  }
+
+  .error-container {
+    @apply flex-1 items-center justify-center p-5;
+  }
+
+  .empty-state-container {
+    @apply flex-1 items-center justify-center p-5;
+  }
+
+  /* Tab Layout */
+  .tab-list {
+    @apply flex-row justify-around bg-[var(--background)] border-t border-[var(--border)];
+  }
+
+  .tab-list-web {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .tab-list-native {
+    /* Native positioning handled by React Navigation */
+  }
+
+  /* Header */
+  .header {
+    @apply p-5 pt-12 bg-[var(--primary)] rounded-b-2xl mb-4;
+  }
+
+  .header-title {
+    @apply text-2xl font-bold text-white mb-1;
+  }
+
+  .header-subtitle {
+    @apply text-sm text-white;
+  }
+
+  /* Navigation Cards */
+  .nav-card-container {
+    @apply flex-row p-4 gap-2 bg-[var(--background)] border-b border-[var(--border)] flex-wrap;
+  }
+
+  .nav-card {
+    @apply flex-1 bg-[var(--secondary)] p-3 rounded-lg items-center min-w-[70px];
+  }
+
+  .nav-card-icon {
+    @apply text-xl mb-1;
+  }
+
+  .nav-card-text {
+    @apply text-xs text-[var(--text-secondary)] font-semibold;
+  }
+
+  /* Settings List */
+  .settings-item {
+    @apply p-4 border-b border-[var(--border)] w-full;
+  }
+
+  .settings-item-text {
+    @apply text-base text-[var(--text-primary)];
+  }
+
+  /* Landing Page */
+  .landing-container {
+    @apply flex-1 items-center justify-center p-5;
+  }
+
+  .landing-icon {
+    @apply text-5xl mb-2;
+  }
+
+  .landing-title {
+    @apply text-3xl font-bold text-[var(--text-primary)] text-center mb-2;
+  }
+
+  .landing-subtitle {
+    @apply text-base text-[var(--text-secondary)] text-center mb-10;
+  }
+
+  /* Picker */
+  .picker-container {
+    @apply border border-[var(--border)] rounded-lg mb-3;
+  }
+
+  /* Media */
+  .media-container {
+    @apply mb-4 w-full;
   }
 }

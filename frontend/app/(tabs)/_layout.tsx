@@ -8,7 +8,7 @@ export default function TabsLayout() {
   const { isAuthenticated } = useAuthStatus();
 
   if (isAuthenticated === null) {
-    return null; // or loading indicator
+    return null;
   }
 
   return (
@@ -19,7 +19,7 @@ export default function TabsLayout() {
         style={{ paddingBottom: insets.bottom }}
       >
         <TabTrigger name="home" href="/" asChild>
-          <TabButton icon="📝">Home</TabButton>
+          <TabButton icon="🏠">Home</TabButton>
         </TabTrigger>
 
         {isAuthenticated && (

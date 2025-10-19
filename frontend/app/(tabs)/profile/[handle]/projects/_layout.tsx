@@ -1,4 +1,3 @@
-// app/(tabs)/creator/[handle]/projects/_layout.tsx
 import { Stack } from 'expo-router';
 
 export default function ProjectsLayout() {

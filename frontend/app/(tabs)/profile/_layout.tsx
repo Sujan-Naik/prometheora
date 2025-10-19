@@ -1,4 +1,3 @@
-// app/profile/_layout.tsx
 import { UserProvider } from "../../../hooks/UserContext";
 import { Tabs, TabSlot, TabList, TabTrigger } from "expo-router/ui";
 import { TabButton } from "@/components/TabButton";

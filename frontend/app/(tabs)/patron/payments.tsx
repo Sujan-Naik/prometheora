@@ -1,31 +1,35 @@
-// app/patron/payments.tsx
 import { View, Text, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-import {IPayment} from "@/types/prisma";
+import { IPayment } from "@/types/prisma";
 import PaymentCard from "@/components/PaymentCard";
+import LoadingScreen from '@/components/LoadingScreen';
 
 export default function Payments() {
   const [payments, setPayments] = useState<IPayment[]>([]);
+  const [loading, setLoading] = useState(true);
   const token = useRequireAuth();
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
+    if (!token) return;
+    
     axios.get<IPayment[]>(`${process.env.EXPO_PUBLIC_API_URL}/payments`, {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(res => setPayments(res.data))
-      .catch(err => console.error(err));
+      .then(res => {
+        setPayments(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
   }, [token]);
 
-  // Optional: Function to record a payment, but might be triggered elsewhere (e.g., after subscribe)
   const handleRecordPayment = (subscriptionId: number, amount: number) => {
-    if (!token) {
-      return;
-    }
+    if (!token) return;
+    
     axios.post<{ id: number }>(`${process.env.EXPO_PUBLIC_API_URL}/payments`, { subscriptionId, amount }, {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -33,17 +37,23 @@ export default function Payments() {
       .catch(err => console.error(err));
   };
 
+  if (loading) {
+    return <LoadingScreen message="Loading payments..." />;
+  }
+
   return (
-    <View className="flex-1">
-      <Text className="title">My Payments</Text>
+    <View style={{ flex: 1 }}>
+      <View className="header">
+        <Text className="header-title">My Payments</Text>
+      </View>
       <FlatList
         data={payments}
         keyExtractor={item => item.id.toString()}
+        contentContainerStyle={{ padding: 20 }}
         renderItem={({ item }) => (
           <PaymentCard payment={item}/>
         )}
       />
-      {/* If needed, add buttons to record payments for specific subs */}
     </View>
   );
 }

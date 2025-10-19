@@ -1,4 +1,3 @@
-// app/creator/[handle]/about.tsx
 import { View, Text, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -6,6 +5,7 @@ import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import DisplayMedia from '@/components/DisplayMedia';
 import { MediaRecord } from '@/utils/mediaUtils';
+import LoadingScreen from '@/components/LoadingScreen';
 
 interface About {
   bio: string;
@@ -15,39 +15,54 @@ interface About {
 export default function CreatorAbout() {
   const { handle } = useLocalSearchParams<{ handle: string }>();
   const [about, setAbout] = useState<About>({ bio: '', media: [] });
+  const [loading, setLoading] = useState(true);
   const token = useRequireAuth();
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
+    if (!token) return;
+    
     axios.get<About>(`${process.env.EXPO_PUBLIC_API_URL}/creators/${handle}/about`, {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(res => setAbout(res.data))
-      .catch(err => console.error(err));
+      .then(res => {
+        setAbout(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
   }, [handle, token]);
 
-  return (
-    <ScrollView className="container" style={{ height: '100vh' as any }}>
-      <Text className="title">About {handle}</Text>
-      <View className="mb-4">
-        <Text className="section-title">Bio</Text>
-        <Text className="text-base">{about.bio || 'No bio available'}</Text>
-      </View>
+  if (loading) {
+    return <LoadingScreen message="Loading about..." />;
+  }
 
-      {about.media && about.media.length > 0 && (
-        <View className="mb-4">
-          <Text className="section-title">Media</Text>
-          {about.media.map((item) => (
-            <DisplayMedia
-              key={item.id}
-              media={item}
-              showCaption={true}
-            />
-          ))}
+  return (
+    <View style={{ flex: 1 }}>
+      <ScrollView>
+        <View className="container">
+          <Text className="title">About {handle}</Text>
+          
+          <View className="input-container">
+            <Text className="section-title">Bio</Text>
+            <Text className="text-base">{about.bio || 'No bio available'}</Text>
+          </View>
+
+          {about.media && about.media.length > 0 && (
+            <View className="input-container">
+              <Text className="section-title">Media</Text>
+              {about.media.map((item) => (
+                <DisplayMedia
+                  key={item.id}
+                  media={item}
+                  showCaption={true}
+                />
+              ))}
+            </View>
+          )}
         </View>
-      )}
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }

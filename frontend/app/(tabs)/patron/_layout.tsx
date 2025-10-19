@@ -8,9 +8,7 @@ export default function PatronLayout() {
   return (
     <Tabs>
       <TabSlot />
-      <TabList
-        className="tab-list tab-list-web tab-list-native"
-      >
+      <TabList className="tab-list tab-list-web tab-list-native">
         <TabTrigger name="patron-home" href="/(tabs)/patron" asChild>
           <TabButton icon="🎁">Overview</TabButton>
         </TabTrigger>
