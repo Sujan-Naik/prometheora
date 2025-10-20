@@ -40,7 +40,7 @@ export default function CreatorAbout() {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView>
+      <ScrollView style={{ height: '100vh' as any }} className="container">
         <View className="container">
           <Text className="title">About {handle}</Text>
           

@@ -1,6 +1,6 @@
 // components/DevlogCard.tsx
 import { View, Text, TouchableOpacity, Linking } from 'react-native';
-import { Link } from 'expo-router';  // Add this import
+import {Href, Link} from 'expo-router';  // Add this import
 import { IDevlog } from '@/types/prisma';
 
 interface DevlogCardProps {
@@ -85,7 +85,7 @@ export default function DevlogCard({ devlog, onPress }: DevlogCardProps) {
   if (devlog.project?.creator?.handle && !onPress) {
     return (
       <Link
-        href={`/(tabs)/creator/${devlog.project.creator.handle}/projects/${devlog.project.id}`}
+        href={`/(tabs)/profile/${devlog.project.creator.handle}/projects/${devlog.project.id}` as Href}
         asChild
       >
         <TouchableOpacity activeOpacity={0.7}>

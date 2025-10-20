@@ -7,6 +7,13 @@ export default function ProfileLayout() {
     <UserProvider>
       <Tabs>
         <TabSlot />
+
+        {/* Hidden TabList for the dynamic route - registers it but doesn't show */}
+        <TabList style={{ display: 'none' }}>
+          <TabTrigger name="profile-handle" href="/profile/[handle]" />
+        </TabList>
+
+        {/* Visible TabList for your actual tabs */}
         <TabList className="tab-list">
           <TabTrigger name="profile-home" href="/profile" asChild>
             <TabButton icon="🎨">Create</TabButton>

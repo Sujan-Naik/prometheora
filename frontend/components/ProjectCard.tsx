@@ -1,6 +1,6 @@
 // components/ProjectCard.tsx
 import { View, Text, TouchableOpacity, Image, Linking } from 'react-native';
-import { Link } from 'expo-router';
+import {Href, Link} from 'expo-router';
 import { IProject, Visibility } from '@/types/prisma';
 
 interface ProjectCardProps {
@@ -45,9 +45,7 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
         >
           {project.creator?.handle ? (
             <Link
-              href={`/(tabs)/creator/${project.creator.handle}/projects/${project.id}`}
-              asChild
-            >
+  href={`/profile/${project.creator.handle}/projects/${project.id}` as Href}            >
               <TouchableOpacity activeOpacity={0.7}>
                 <Text
                   style={{

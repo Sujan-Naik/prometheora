@@ -7,7 +7,7 @@ export default function SettingsScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView>
+      <ScrollView style={{ height: '100vh' as any }} className="container">
         <View className="container">
           <Text className="title">Settings</Text>
 

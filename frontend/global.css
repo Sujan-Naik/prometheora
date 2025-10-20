@@ -152,7 +152,7 @@
 
   /* Tab Layout */
   .tab-list {
-    @apply flex-row justify-around bg-[var(--background)] border-t border-[var(--border)];
+    @apply flex-row justify-around bg-[var(--background)] border-t border-[var(--border)] pb-5;
   }
 
   .tab-list-web {
