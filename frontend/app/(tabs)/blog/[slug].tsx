@@ -53,10 +53,10 @@ export default function BlogPostDetail() {
     );
   }
 
-  return (
-    <View style={{ flex: 1 }}>
-      <ScrollView style={{ height: '100vh' as any }} className="container">
-        <View className="container">
+  return(
+  <View className="page-container">
+      <ScrollView style={{ height: '100vh' as any }} className="basic-container">
+        <View className="basic-container">
           <Text className="blog-title">{post.title}</Text>
           <Text className="date-text">
             {new Date(post.createdAt).toLocaleDateString('en-US', {

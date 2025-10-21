@@ -42,7 +42,7 @@ export default function Payments() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="page-container">
       <View className="header">
         <Text className="header-title">My Payments</Text>
       </View>

@@ -34,7 +34,8 @@ export default function CreatorPosts() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="page-container" >
+        <View>
       <View className="header">
         <Text className="header-title">Posts for {handle}</Text>
       </View>
@@ -46,6 +47,7 @@ export default function CreatorPosts() {
           <PostCard post={item}/>
         )}
       />
+            </View>
     </View>
   );
 }

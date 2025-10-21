@@ -1,22 +1,10 @@
 import React, { useState } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  Image,
-} from 'react-native';
-import {
-  pickMedia,
-  uploadMediaToS3,
-  deleteMedia,
-  type MediaRecord,
-} from '@/utils/mediaUtils';
+import { View, TouchableOpacity, Text, Image, ActivityIndicator } from 'react-native';
+import { pickMedia, uploadMediaToS3, deleteMedia, type MediaRecord } from '@/utils/mediaUtils';
 
 interface PickMediaProps {
   onMediaUploaded?: (media: MediaRecord) => void;
-  onMediaDeleted?: (id: number) => void;     // 👈 new prop
+  onMediaDeleted?: (id: number) => void;
   userId?: number;
   projectId?: number;
   postId?: number;
@@ -84,7 +72,7 @@ export default function PickMedia({
       await deleteMedia(uploadedMedia.id);
       setUploadedMedia(null);
       setRefreshKey(prev => prev + 1);
-      onMediaDeleted?.(uploadedMedia.id);     // 👈 inform parent
+      onMediaDeleted?.(uploadedMedia.id);
     } catch (err) {
       console.error('Error deleting media:', err);
       setError('Failed to delete media.');
@@ -92,72 +80,38 @@ export default function PickMedia({
   };
 
   return (
-    <View style={styles.container} key={refreshKey}>
+    <View className="media-container items-center" key={refreshKey}>
       {uploadedMedia ? (
         <>
           <Image
             key={uploadedMedia.id + '-' + refreshKey}
             source={{ uri: uploadedMedia.url + `?v=${Date.now()}` }}
-            style={styles.preview}
+            className="w-48 h-48 rounded-lg mt-2"
           />
           <TouchableOpacity
-            style={[styles.button, styles.deleteButton]}
+            className="button bg-error"
             onPress={handleDeleteMedia}
           >
-            <Text style={styles.buttonText}>Delete</Text>
+            <Text className="button-text">Delete</Text>
           </TouchableOpacity>
         </>
       ) : (
         <TouchableOpacity
-          style={[styles.button, buttonStyle, uploading && styles.buttonDisabled]}
+          className={`button ${uploading ? 'button-disabled' : ''}`}
+          style={buttonStyle}
           onPress={handlePickMedia}
           disabled={uploading}
         >
           {uploading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color="var(--header-text-color)" />
           ) : (
-            <Text style={[styles.buttonText, textStyle]}>{buttonText}</Text>
+            <Text className="button-text" style={textStyle}>
+              {buttonText}
+            </Text>
           )}
         </TouchableOpacity>
       )}
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && <Text className="error-text">{error}</Text>}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    marginVertical: 8,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 8,
-  },
-  deleteButton: {
-    backgroundColor: '#FF3B30',
-  },
-  buttonDisabled: {
-    backgroundColor: '#ccc',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  preview: {
-    width: 180,
-    height: 180,
-    borderRadius: 10,
-    marginVertical: 10,
-  },
-  errorText: {
-    color: 'red',
-    marginTop: 8,
-    fontSize: 14,
-  },
-});

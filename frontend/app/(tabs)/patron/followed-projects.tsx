@@ -32,7 +32,7 @@ export default function FollowedProjectsFeed() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="page-container">
       <View className="header">
         <Text className="header-title">Followed Projects Feed</Text>
       </View>

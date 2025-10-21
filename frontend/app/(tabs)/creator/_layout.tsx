@@ -3,16 +3,14 @@ import { View } from 'react-native';
 import axios from 'axios';
 import { Tabs, TabSlot, TabList, TabTrigger } from 'expo-router/ui';
 import { TabButton } from '@/components/TabButton';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useTabBarHeight } from '@/context/TabBarHeightContext';
 
 export default function CreatorLayout() {
   const token = useRequireAuth();
   const [handle, setHandle] = useState<string | null>(null);
-  const { outerTabBarHeight, setOuterTabBarHeight } = useTabBarHeight();
-  const insets = useSafeAreaInsets();
-  const hasSetHeight = useRef(false); // <-- guard flag
+  const { getTotalHeight } = useTabBarHeight();
+  const hasMeasured = useRef(false);
 
   useEffect(() => {
     if (!token) return;
@@ -26,17 +24,13 @@ export default function CreatorLayout() {
 
   return (
     <Tabs>
-      <View>
-        <TabSlot />
-      </View>
-
+      <View><TabSlot /></View>
       <TabList
         className="tab-list tab-list-web"
-        style={{ bottom: outerTabBarHeight, paddingBottom: insets.bottom }}
-        onLayout={(e) => {
-          if (hasSetHeight.current) return; // <-- only first layout run
-          setOuterTabBarHeight(e.nativeEvent.layout.height);
-          hasSetHeight.current = true;
+        style={{ bottom: getTotalHeight('outer') }}
+        onLayout={() => {
+          if (hasMeasured.current) return;
+          hasMeasured.current = true;
         }}
       >
         <TabTrigger name="create-home" href="/(tabs)/creator" asChild>

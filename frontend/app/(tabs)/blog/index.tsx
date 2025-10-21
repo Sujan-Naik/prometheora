@@ -27,7 +27,7 @@ export default function BlogList() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="page-container">
       <View className="header">
         <Text className="header-title">Blog List</Text>
       </View>

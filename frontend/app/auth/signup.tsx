@@ -77,9 +77,9 @@ export default function Signup() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="page-container">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View className="container">
+        <View className="basic-container">
           <Text className="title">Signup</Text>
           {error ? <Text className="error-text">{error}</Text> : null}
 

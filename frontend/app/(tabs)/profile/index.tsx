@@ -15,11 +15,12 @@ export default function ProfileScreen() {
   );
 
   return (
-    <View style={{ flex: 1 }}>
-      <View className="container">
-        <Text className="title">Profile Dashboard</Text>
+    <View style={{ flex: 1 }} >
+      <View className="basic-container ">
+        <Text className="title">Your Private Profile Dashboard</Text>
         <UserCard user={user} />
 
+        <Text className="section-title">Your portfolio projects!</Text>
         <FlatList
           data={user.portfolioItems}
           keyExtractor={item => item.id.toString()}

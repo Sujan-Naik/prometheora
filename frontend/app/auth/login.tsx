@@ -71,9 +71,9 @@ export default function Login() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="page-container">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View className="container">
+        <View className="basic-container">
           <Text className="title">Login</Text>
           {error ? <Text className="error-text">{error}</Text> : null}
 

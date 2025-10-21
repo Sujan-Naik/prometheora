@@ -32,7 +32,7 @@ export default function Subscriptions() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="page-container">
       <View className="header">
         <Text className="header-title">My Subscriptions</Text>
       </View>

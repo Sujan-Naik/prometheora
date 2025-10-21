@@ -68,9 +68,9 @@ export default function CreateBlog() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView style={{ height: '100vh' as any }} className="container">
-        <View className="container">
+    <View className="page-container">
+      <ScrollView style={{ height: '100vh' as any }} className="basic-container">
+        <View className="basic-container">
           <Text className="title">Create Blog Post</Text>
 
           <View className="input-container">

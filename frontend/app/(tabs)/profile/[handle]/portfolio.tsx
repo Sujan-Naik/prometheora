@@ -34,7 +34,7 @@ export default function CreatorPortfolio() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="page-container">
       <View className="header">
         <Text className="header-title">Portfolio for {handle}</Text>
       </View>

@@ -6,7 +6,7 @@ import { useAuthStatus } from '@/hooks/useAuthStatus';
 import PostCard from '@/components/PostCard';
 import { IPost } from '@/types/prisma';
 import LoadingScreen from '@/components/LoadingScreen';
-import '@/global.css';
+import '@/global.css'
 
 export default function Home() {
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -15,7 +15,6 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { isAuthenticated } = useAuthStatus();
-
   const fetchPosts = async () => {
     try {
       setError(null);
@@ -29,24 +28,20 @@ export default function Home() {
       setRefreshing(false);
     }
   };
-
   useEffect(() => {
     fetchPosts();
   }, []);
-
   if (isAuthenticated === null) {
     return <LoadingScreen />;
   }
-
   // Show loading screen for initial load when authenticated
   if (isAuthenticated && loading && posts.length === 0) {
     return <LoadingScreen message="Loading posts..." />;
   }
-
   if (!isAuthenticated) {
     return (
-      <View style={{ flex: 1 }}>
-        <ScrollView style={{ height: '100vh' as any }} className="container">
+      <View style={{ flex: 1}}>
+        <ScrollView style={{ height: '100vh' as any }} className="basic-container">
           <View className="landing-container">
             <Text className="landing-icon">🎨</Text>
             <Text className="landing-title">Creator Hub</Text>
@@ -66,7 +61,7 @@ export default function Home() {
               <Text className="button-secondary-text">Sign In</Text>
             </TouchableOpacity>
           </View>
-          <View className="container w">
+          <View className="basic-container w">
             <Text className="section-title">Recent Posts</Text>
             {loading ? (
               <LoadingScreen />
@@ -87,14 +82,13 @@ export default function Home() {
       </View>
     );
   }
-
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1}}>
       <View className="header">
         <Text className="header-title">Discover</Text>
         <Text className="header-subtitle">Latest posts from creators you follow</Text>
       </View>
-      <ScrollView style={{ height: '100vh' as any }} className="container">
+      <ScrollView style={{ height: '100vh' as any}} className="basic-container">
         <View className="nav-card-container">
           <TouchableOpacity onPress={() => router.push('/(tabs)/blog')} className="nav-card">
             <Text className="nav-card-icon">📰</Text>
@@ -113,7 +107,6 @@ export default function Home() {
             <Text className="nav-card-text">Settings</Text>
           </TouchableOpacity>
         </View>
-
         {error ? (
           <View className="error-container">
             <Text className="error-text">{error}</Text>
@@ -122,7 +115,7 @@ export default function Home() {
             </TouchableOpacity>
           </View>
         ) : (
-          <View className="container">
+          <View className="basic-container">
             {posts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}

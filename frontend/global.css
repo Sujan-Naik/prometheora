@@ -2,17 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Define theme color variables */
+:root {
+  --background-color: #fff; /* Default background */
+  --primary-color: #3b82f6; /* Blue for buttons and headers */
+  --secondary-color: #f3f4f6; /* Light gray for secondary elements */
+  --text-color: #000; /* Primary text */
+  --muted-text-color: #4b5563; /* Gray for subtitles and secondary text */
+  --error-color: #ef4444; /* Red for errors */
+  --border-color: #d1d5db; /* Gray for borders */
+  --header-text-color: #fff; /* White for header text */
+  --success-color: #34c759; /* Green for success states */
+  --warning-color: #ff9500; /* Orange for warnings */
+  --neutral-color: #8e8e93; /* Neutral gray for inactive states */
+  --admin-color: #ff3b30; /* Red for admin roles */
+  --creator-color: #007aff; /* Blue for creator roles */
+  --quoted-bg-color: #f5f5f5; /* Light gray for quoted sections */
+  --benefit-bg-color: #fff8e1; /* Light yellow for benefits */
+}
+
+
 @layer components {
   /* Layout Components */
+  .page-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    box-sizing: border-box;
+    margin: 0 auto;
+    background-color: var(--background-color);
+  }
+
   .basic-container {
-    @apply p-5  items-center pb-32;
+    @apply p-5 items-center pb-32 w-full;
+
   }
 
   .basic-container * {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 
   .scroll-container {
     @apply flex-1 w-full;
@@ -20,19 +50,23 @@
 
   /* Typography */
   .title {
-    @apply text-3xl font-bold text-black mb-6 text-center;
+    @apply text-3xl font-bold mb-6 text-center;
+    color: var(--text-color);
   }
 
   .section-title {
-    @apply text-xl font-semibold text-black mb-3;
+    @apply text-xl font-semibold mb-3;
+    color: var(--text-color);
   }
 
   .subtitle {
-    @apply text-base text-gray-600 mb-3;
+    @apply text-base mb-3;
+    color: var(--muted-text-color);
   }
 
   .blog-title {
     @apply text-3xl font-bold mb-3 text-center;
+    color: var(--text-color);
   }
 
   .blog-content {
@@ -40,28 +74,34 @@
   }
 
   .date-text {
-    @apply text-base text-gray-600 mb-5 text-center;
+    @apply text-base mb-5 text-center;
+    color: var(--muted-text-color);
   }
 
   .error-text {
-    @apply text-red-500 mb-3 text-center;
+    @apply mb-3 text-center;
+    color: var(--error-color);
   }
 
   .loading-text {
-    @apply text-gray-600 mt-2 text-center;
+    @apply mt-2 text-center;
+    color: var(--muted-text-color);
   }
 
   .not-found-text {
-    @apply text-2xl text-black text-center;
+    @apply text-2xl text-center;
+    color: var(--text-color);
   }
 
   /* Buttons */
   .button {
-    @apply bg-blue-500 py-4 px-6 rounded-xl items-center mb-4 w-full;
+    @apply py-4 px-6 rounded-xl items-center mb-4 w-full;
+    background-color: var(--primary-color);
   }
 
   .button-text {
-    @apply text-white text-lg font-bold;
+    @apply text-lg font-bold;
+    color: var(--header-text-color);
   }
 
   .button-disabled {
@@ -69,23 +109,28 @@
   }
 
   .button-secondary {
-    @apply bg-gray-100 py-4 px-6 rounded-xl items-center mb-4 w-full;
+    @apply py-4 px-6 rounded-xl items-center mb-4 w-full;
+    background-color: var(--secondary-color);
   }
 
   .button-secondary-text {
-    @apply text-black text-lg font-bold;
+    @apply text-lg font-bold;
+    color: var(--text-color);
   }
 
   .button-error {
-    @apply bg-red-500 py-4 px-6 rounded-xl items-center mb-4 w-full;
+    @apply py-4 px-6 rounded-xl items-center mb-4 w-full;
+    background-color: var(--error-color);
   }
 
   .profile-button {
-    @apply bg-blue-500 py-4 px-6 rounded-xl items-center mb-4 w-full;
+    @apply py-4 px-6 rounded-xl items-center mb-4 w-full;
+    background-color: var(--primary-color);
   }
 
   .profile-button-text {
-    @apply text-white text-lg font-bold;
+    @apply text-lg font-bold;
+    color: var(--header-text-color);
   }
 
   /* Input Components */
@@ -94,15 +139,20 @@
   }
 
   .input-label {
-    @apply text-base font-semibold text-black mb-2;
+    @apply text-base font-semibold mb-2;
+    color: var(--text-color);
   }
 
   .input {
-    @apply border border-gray-300 p-3 rounded-lg mb-3 bg-white w-full text-base;
+    @apply p-3 rounded-lg mb-3 w-full text-base;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-color);
   }
 
   .input-multiline {
-    @apply border border-gray-300 p-3 rounded-lg mb-3 bg-white w-full text-base;
+    @apply p-3 rounded-lg mb-3 w-full text-base;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-color);
   }
 
   .input-tall {
@@ -111,21 +161,27 @@
 
   /* Cards */
   .card {
-    @apply p-5 bg-white rounded-xl mb-4 border border-gray-300 w-full;
+    @apply p-5 rounded-xl mb-4 w-full;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
   }
 
   .card-compact {
-    @apply p-4 bg-white rounded-lg mb-3 border border-gray-300 w-full;
+    @apply p-4 rounded-lg mb-3 w-full;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
   }
 
   .blog-item {
-    @apply p-5 border-b border-gray-300 bg-white rounded-lg mb-3 w-full;
+    @apply p-5 rounded-lg mb-3 w-full;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--background-color);
   }
 
-  /* Container States */
-  .loading-container {
-    @apply flex-1 items-center justify-center p-5;
-  }
+ .loading-container {
+  @apply fixed inset-0 flex items-center justify-center p-5;
+  background-color: var(--background-color);
+}
 
   .error-container {
     @apply flex-1 items-center justify-center p-5;
@@ -137,11 +193,12 @@
 
   /* Tab Layout */
   .tab-list {
-    @apply flex-row justify-around bg-white border-t border-gray-300 pb-5;
+    @apply flex-row justify-around pb-5;
+    background-color: var(--background-color);
+    border-top: 1px solid var(--border-color);
   }
 
   .tab-list-web {
-    /* Note: position absolute works in RN but may need adjustment for web */
     @apply absolute left-0 right-0;
   }
 
@@ -151,24 +208,30 @@
 
   /* Header */
   .header {
-    @apply p-5 pt-12 bg-blue-500 rounded-b-2xl mb-4;
+    @apply p-5 pt-12 rounded-b-2xl mb-4;
+    background-color: var(--primary-color);
   }
 
   .header-title {
-    @apply text-2xl font-bold text-white mb-1;
+    @apply text-2xl font-bold mb-1;
+    color: var(--header-text-color);
   }
 
   .header-subtitle {
-    @apply text-sm text-white;
+    @apply text-sm;
+    color: var(--header-text-color);
   }
 
   /* Navigation Cards */
   .nav-card-container {
-    @apply flex-row p-4 gap-2 bg-white border-b border-gray-300 flex-wrap;
+    @apply flex-row p-4 gap-2 flex-wrap;
+    background-color: var(--background-color);
+    border-bottom: 1px solid var(--border-color);
   }
 
   .nav-card {
-    @apply flex-1 bg-gray-100 p-3 rounded-lg items-center min-w-[70px];
+    @apply flex-1 p-3 rounded-lg items-center min-w-[70px];
+    background-color: var(--secondary-color);
   }
 
   .nav-card-icon {
@@ -176,16 +239,19 @@
   }
 
   .nav-card-text {
-    @apply text-xs text-gray-600 font-semibold;
+    @apply text-xs font-semibold;
+    color: var(--muted-text-color);
   }
 
   /* Settings List */
   .settings-item {
-    @apply p-4 border-b border-gray-300 w-full;
+    @apply p-4 w-full;
+    border-bottom: 1px solid var(--border-color);
   }
 
   .settings-item-text {
-    @apply text-base text-black;
+    @apply text-base;
+    color: var(--text-color);
   }
 
   /* Landing Page */
@@ -198,20 +264,134 @@
   }
 
   .landing-title {
-    @apply text-3xl font-bold text-black text-center mb-2;
+    @apply text-3xl font-bold text-center mb-2;
+    color: var(--text-color);
   }
 
   .landing-subtitle {
-    @apply text-base text-gray-600 text-center mb-10;
+    @apply text-base text-center mb-10;
+    color: var(--muted-text-color);
   }
 
   /* Picker */
   .picker-container {
-    @apply border border-gray-300 rounded-lg mb-3;
+    @apply rounded-lg mb-3;
+    border: 1px solid var(--border-color);
   }
 
   /* Media */
   .media-container {
     @apply mb-4 w-full;
+  }
+
+  /* New Classes for Components */
+  .card-header {
+    @apply flex-row justify-between items-start;
+  }
+
+  .tag {
+    @apply px-2 py-1 rounded-xl;
+  }
+
+  .tag-text {
+    @apply text-xs font-semibold;
+    color: var(--header-text-color);
+  }
+
+  .content-text {
+    @apply text-sm mt-3 leading-5;
+    color: var(--muted-text-color);
+  }
+
+  .quoted-container {
+    @apply mt-3 p-3 rounded-lg;
+    background-color: var(--quoted-bg-color);
+    border-left-width: 3px;
+    border-left-color: var(--primary-color);
+  }
+
+  .benefit-container {
+    @apply mt-3 p-3 rounded-lg;
+    background-color: var(--benefit-bg-color);
+  }
+
+  .media-preview {
+    @apply w-full rounded-lg;
+  }
+
+  .audio-container {
+    @apply rounded-lg justify-center items-center;
+    background-color: var(--secondary-color);
+  }
+
+  .file-container {
+    @apply rounded-lg justify-center items-center p-4;
+    background-color: var(--secondary-color);
+  }
+
+  .modal-background {
+    @apply flex-1 justify-center items-center;
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .modal-close {
+    @apply absolute top-10 right-5 z-10;
+  }
+
+  .close-text {
+    @apply text-3xl;
+    color: var(--header-text-color);
+  }
+
+  .profile-image {
+    @apply w-16 h-16 rounded-full mr-3;
+  }
+
+  .placeholder-image {
+    @apply w-16 h-16 rounded-full mr-3 justify-center items-center;
+    background-color: var(--secondary-color);
+  }
+
+  .role-tag {
+    @apply px-2 py-1 rounded-xl;
+  }
+
+  .action-container {
+    @apply flex-row mt-3 gap-2;
+  }
+
+  .action-button {
+    @apply flex-1 p-3 rounded-lg items-center;
+  }
+
+  .action-button-text {
+    @apply text-sm font-semibold;
+  }
+
+  .status-text {
+    @apply text-xs;
+    color: var(--muted-text-color);
+  }
+
+  .tab-button {
+    @apply flex-col items-center p-2;
+  }
+
+  .tab-button-focused {
+    @apply bg-gray-200;
+  }
+
+  .tab-icon {
+    @apply text-xl mb-1;
+  }
+
+  .tab-label {
+    @apply text-sm;
+    color: var(--muted-text-color);
+  }
+
+  .tab-label-focused {
+    @apply font-semibold;
+    color: var(--primary-color);
   }
 }

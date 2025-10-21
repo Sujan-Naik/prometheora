@@ -17,7 +17,7 @@ export default function ProjectDetail() {
 
   useEffect(() => {
     if (!token) return;
-    
+
     axios.get<IProject>(`${process.env.EXPO_PUBLIC_API_URL}/projects/${projectId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -34,9 +34,11 @@ export default function ProjectDetail() {
       });
   }, [projectId, token]);
 
+
+
   const handleFollow = () => {
     if (!token) return;
-    
+
     const method = isFollowed ? 'delete' : 'post';
     axios[method](`${process.env.EXPO_PUBLIC_API_URL}/projects/${projectId}/follow`, {}, {
       headers: { Authorization: `Bearer ${token}` }
@@ -50,12 +52,17 @@ export default function ProjectDetail() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView style={{ height: '100vh' as any }} className="container">
-        <View className="container">
+    <View className="page-container">
+      <ScrollView style={{ height: '100vh' as any}} className="basic-container" >
+        <View className="basic-container">
           {project && (
             <>
+              <View className="header">
+                <Text className="header-title">{project.title} by {handle}</Text>
+              </View>
+
               <ProjectCard project={project} />
+
               <Text className="section-title">Devlogs:</Text>
               <FlatList
                 data={project.devlogs}

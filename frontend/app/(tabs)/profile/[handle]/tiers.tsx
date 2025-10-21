@@ -44,7 +44,7 @@ export default function CreatorTiers() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="page-container">
       <View className="header">
         <Text className="header-title">Tiers for {handle}</Text>
       </View>

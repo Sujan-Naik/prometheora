@@ -1,19 +1,54 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+type TabBarHeights = {
+  outer: number;
+  profile: number;
+  handle: number;
+};
 
 const TabBarHeightContext = createContext<{
-  outerTabBarHeight: number;
-  setOuterTabBarHeight: (height: number) => void;
+  heights: TabBarHeights;
+  setHeight: (level: keyof TabBarHeights, height: number) => void;
+  getTotalHeight: (upToLevel: keyof TabBarHeights) => number;
 }>({
-  outerTabBarHeight: 56,
-  setOuterTabBarHeight: () => {},
+  heights: { outer: 0, profile: 0, handle: 0 },
+  setHeight: () => {},
+  getTotalHeight: () => 0,
 });
 
 export function TabBarHeightProvider({ children }: { children: ReactNode }) {
-  const [outerTabBarHeight, setOuterTabBarHeight] = useState(56);
+  const insets = useSafeAreaInsets();
+  const [heights, setHeights] = useState<TabBarHeights>({
+    outer: insets.bottom,
+    profile: 0,
+    handle: 0,
+  });
 
+  // Update outer height when insets change
+  useEffect(() => {
+    setHeights(prev => ({ ...prev, outer: insets.bottom }));
+  }, [insets.bottom]);
+
+  const setHeight = (level: keyof TabBarHeights, height: number) => {
+    setHeights(prev => ({ ...prev, [level]: height }));
+  };
+
+  const getTotalHeight = (upToLevel: keyof TabBarHeights) => {
+    switch (upToLevel) {
+      case 'outer':
+        return heights.outer;
+      case 'profile':
+        return heights.outer + heights.profile;
+      case 'handle':
+        return heights.outer + heights.profile + heights.handle;
+      default:
+        return 0;
+    }
+  };
 
   return (
-    <TabBarHeightContext.Provider value={{ outerTabBarHeight, setOuterTabBarHeight }}>
+    <TabBarHeightContext.Provider value={{ heights, setHeight, getTotalHeight }}>
       {children}
     </TabBarHeightContext.Provider>
   );

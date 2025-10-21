@@ -1,10 +1,16 @@
 import { Stack } from 'expo-router';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import '@/global.css';
 import { View } from 'react-native';
 import {TabBarHeightProvider} from "@/context/TabBarHeightContext";
+import {useAuthStatus} from "@/hooks/useAuthStatus";
 
 export default function RootLayout() {
+
+    const { isAuthenticated } = useAuthStatus();
+
+
+      if (isAuthenticated === null) return null;
+
   return (
       <TabBarHeightProvider>
     <SafeAreaProvider>

@@ -5,9 +5,9 @@ module.exports = {
     "./components/**/*.{js,jsx,ts,tsx}",
       './global.css'
   ],
-  presets: [require('nativewind/preset')],
   theme: {
     extend: {},
   },
+  presets: [require('nativewind/preset')],
   plugins: [],
 }

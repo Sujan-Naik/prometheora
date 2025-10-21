@@ -16,11 +16,12 @@ export default function CreatorProjects() {
   useEffect(() => {
     if (!token) return;
 
-    axios.get<IProject[]>(`${process.env.EXPO_PUBLIC_API_URL}/projects/profile/${handle}`, {
+    axios.get<IProject[]>(`${process.env.EXPO_PUBLIC_API_URL}/projects/creator/${handle}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
         setProjects(res.data);
+        console.log(projects)
         setLoading(false);
       })
       .catch(err => {
@@ -34,14 +35,14 @@ export default function CreatorProjects() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+
+    <View className="page-container" style={{height: '100vh' as any}}>
       <View className="header">
         <Text className="header-title">Projects for {handle}</Text>
       </View>
       <FlatList
         data={projects}
         keyExtractor={item => item.id.toString()}
-        contentContainerStyle={{ padding: 20 }}
         renderItem={({ item }) => (
           <ProjectCard project={item}/>
         )}

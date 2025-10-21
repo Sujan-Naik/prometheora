@@ -1,5 +1,5 @@
-import {TabTriggerSlotProps} from "expo-router/ui";
-import {Pressable, Text} from "react-native";
+import { TabTriggerSlotProps } from 'expo-router/ui';
+import { Pressable, Text } from 'react-native';
 
 export type TabButtonProps = TabTriggerSlotProps & { icon: string; children: string };
 

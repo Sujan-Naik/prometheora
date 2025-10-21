@@ -1,4 +1,3 @@
-// components/UserCard.tsx
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Link } from 'expo-router';
 import { IUser } from '@/types/prisma';
@@ -14,51 +13,31 @@ export default function UserCard({ user, showBio = true, onPress }: UserCardProp
   const roles = user.userRoles?.map(r => r.role) || [];
 
   const content = (
-    <View className="bg-white rounded-lg p-4 mb-3 border border-gray-200">
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View className="card">
+      <View className="flex-row items-center">
         {profileImage ? (
-          <Image
-            source={{ uri: profileImage }}
-            style={{ width: 60, height: 60, borderRadius: 30, marginRight: 12 }}
-          />
+          <Image source={{ uri: profileImage }} className="profile-image" />
         ) : (
-          <View
-            style={{
-              width: 60,
-              height: 60,
-              borderRadius: 30,
-              backgroundColor: '#e0e0e0',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginRight: 12,
-            }}
-          >
-            <Text style={{ fontSize: 24 }}>👤</Text>
+          <View className="placeholder-image">
+            <Text className="text-2xl">👤</Text>
           </View>
         )}
 
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 18, fontWeight: '600', color: '#000' }}>
+        <View className="flex-1">
+          <Text className="text-lg font-semibold text-black">
             {user.handle || 'Anonymous'}
           </Text>
-          <Text style={{ fontSize: 14, color: '#666', marginTop: 2 }}>
-            {user.email}
-          </Text>
+          <Text className="subtitle mt-1">{user.email}</Text>
           {roles.length > 0 && (
-            <View style={{ flexDirection: 'row', marginTop: 4, gap: 4 }}>
+            <View className="flex-row mt-1 gap-1">
               {roles.map((role, idx) => (
                 <View
                   key={idx}
-                  style={{
-                    backgroundColor: role === 'ADMIN' ? '#ff3b30' : role === 'CREATOR' ? '#007aff' : '#34c759',
-                    paddingHorizontal: 8,
-                    paddingVertical: 2,
-                    borderRadius: 12,
-                  }}
+                  className={`role-tag ${
+                    role === 'ADMIN' ? 'bg-error' : role === 'CREATOR' ? 'bg-blue-500' : 'bg-success'
+                  }`}
                 >
-                  <Text style={{ fontSize: 10, color: '#fff', fontWeight: '600' }}>
-                    {role}
-                  </Text>
+                  <Text className="tag-text">{role}</Text>
                 </View>
               ))}
             </View>
@@ -67,9 +46,7 @@ export default function UserCard({ user, showBio = true, onPress }: UserCardProp
       </View>
 
       {showBio && user.bio && (
-        <Text style={{ marginTop: 12, fontSize: 14, color: '#333', lineHeight: 20 }}>
-          {user.bio}
-        </Text>
+        <Text className="content-text">{user.bio}</Text>
       )}
     </View>
   );

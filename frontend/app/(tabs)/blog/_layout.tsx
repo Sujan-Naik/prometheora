@@ -9,13 +9,6 @@ export default function BlogLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        headerStyle: {
-          backgroundColor: 'var(--primary)',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
       }}
     >
       <Stack.Screen
