@@ -1,22 +1,29 @@
+import { useState } from 'react';
 import { Tabs, TabSlot, TabList, TabTrigger } from 'expo-router/ui';
 import { TabButton } from '@/components/TabButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStatus } from '@/hooks/useAuthStatus';
+import { useTabBarHeight } from '@/context/TabBarHeightContext';
 
-export default function TabsLayout() {
+export default function TabsContent() {
   const insets = useSafeAreaInsets();
   const { isAuthenticated } = useAuthStatus();
+  const { setOuterTabBarHeight } = useTabBarHeight();
+  const [measured, setMeasured] = useState(false);
 
-  if (isAuthenticated === null) {
-    return null;
-  }
+  if (isAuthenticated === null) return null;
 
   return (
     <Tabs key={isAuthenticated ? 'auth' : 'unauth'}>
       <TabSlot />
+
       <TabList
-        className="tab-list tab-list-web tab-list-native"
-        style={{ paddingBottom: insets.bottom }}
+        style={{ paddingBottom: insets.bottom, opacity: measured ? 1 : 0, bottom: 0 }}
+          className="tab-list tab-list-web"
+        onLayout={(e) => {
+          setOuterTabBarHeight(e.nativeEvent.layout.height);
+          if (!measured) setMeasured(true);
+        }}
       >
         <TabTrigger name="home" href="/" asChild>
           <TabButton icon="🏠">Home</TabButton>

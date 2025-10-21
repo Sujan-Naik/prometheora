@@ -8,7 +8,7 @@ export default function BlogLayout() {
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         headerStyle: {
           backgroundColor: 'var(--primary)',
         },
