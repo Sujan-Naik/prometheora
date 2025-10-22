@@ -34,7 +34,7 @@ export default function CreatorScreen() {
   return (
     <View className="page-container">
       <ScrollView style={{ height: '100vh' as any }} contentContainerStyle={{alignItems: "center"}} className="basic-container">
-        <View style={{width: '100vw' as any}} className="basic-container">
+        <View style={{width: '100%'}} className="basic-container">
           <Text className="title">Creator Dashboard</Text>
 
           <View className="input-container">

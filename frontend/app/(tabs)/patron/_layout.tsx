@@ -10,7 +10,7 @@ export default function PatronLayout() {
 
   return (
     <Tabs>
-      <View><TabSlot /></View>
+      <View style={{flex: 1}}><TabSlot /></View>
       <TabList
         className="tab-list tab-list-web"
         style={{ bottom: getTotalHeight('outer') }}

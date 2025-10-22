@@ -135,7 +135,7 @@
 
   /* Input Components */
   .input-container {
-    @apply mb-5 w-full;
+    @apply mb-5 w-full items-center;
   }
 
   .input-label {
@@ -275,7 +275,7 @@
 
   /* Picker */
   .picker-container {
-    @apply rounded-lg mb-3;
+    @apply rounded-lg mb-3 w-1/2;
     border: 1px solid var(--border-color);
   }
 

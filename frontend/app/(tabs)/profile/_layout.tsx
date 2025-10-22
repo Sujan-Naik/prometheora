@@ -12,7 +12,7 @@ export default function ProfileLayout() {
   return (
     <UserProvider>
       <Tabs>
-        <View><TabSlot /></View>
+        <View style={{flex: 1}}><TabSlot /></View>
 
         <TabList style={{ display: 'none' }}>
           <TabTrigger name="[handle]" href="/profile/[handle]" />

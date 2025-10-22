@@ -85,7 +85,6 @@ export default function Home() {
   }
   return (
     <View style={{ flex: 1}}>
-      <LogoutButton/>
       <View className="header">
         <Text className="header-title">Discover</Text>
         <Text className="header-subtitle">Latest posts from creators you follow</Text>
