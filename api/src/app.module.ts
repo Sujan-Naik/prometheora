@@ -12,6 +12,7 @@ import { BlogModule } from './blog/blog.module';
 import { ProjectModule } from './project/project.module';
 import { DevlogModule } from './devlog/devlog.module';
 import { PortfolioModule } from './portfolio/portfolio.module';
+import {MediaModule} from "./media/media.module";
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PortfolioModule } from './portfolio/portfolio.module';
     ProjectModule,
     DevlogModule,
     PortfolioModule,
+      MediaModule
   ],
   providers: [PrismaService],
 })

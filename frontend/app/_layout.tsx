@@ -1,11 +1,29 @@
 import { Stack } from 'expo-router';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+import {TabBarHeightProvider} from "@/context/TabBarHeightContext";
+import {useAuthStatus} from "@/hooks/useAuthStatus";
 
 export default function RootLayout() {
+
+    const { isAuthenticated } = useAuthStatus();
+
+
+      if (isAuthenticated === null) return null;
+
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="auth" />
-      <Stack.Screen name="(tabs)" />
-    </Stack>
+      <TabBarHeightProvider>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }} className="bg-[var(--background)]">
+        <View style={{ flex: 1 }}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="auth/login" />
+            <Stack.Screen name="auth/signup" />
+          </Stack>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
+        </TabBarHeightProvider>
   );
 }

@@ -1,57 +1,37 @@
-// app/(tabs)/patron.tsx
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 
 export default function PatronScreen() {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Patron</Text>
+    <View className="page-container">
+      <ScrollView style={{ height: '100vh' as any }} contentContainerStyle={{alignItems: "center"}} className="basic-container">
+        <View className="basic-container">
+          <Text className="title">Patron</Text>
 
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => router.push('/patron/followed-projects')}
-      >
-        <Text style={styles.cardTitle}>Followed Projects</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            className="card"
+            onPress={() => router.push('/patron/followed-projects')}
+          >
+            <Text className="text-lg font-semibold">Followed Projects</Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => router.push('/patron/subscriptions')}
-      >
-        <Text style={styles.cardTitle}>Subscriptions</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            className="card"
+            onPress={() => router.push('/patron/subscriptions')}
+          >
+            <Text className="text-lg font-semibold">Subscriptions</Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => router.push('/patron/payments')}
-      >
-        <Text style={styles.cardTitle}>Payments</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            className="card"
+            onPress={() => router.push('/patron/payments')}
+          >
+            <Text className="text-lg font-semibold">Payments</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  card: {
-    backgroundColor: '#f5f5f5',
-    padding: 20,
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-});

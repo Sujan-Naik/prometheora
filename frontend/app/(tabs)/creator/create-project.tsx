@@ -1,36 +1,39 @@
-// app/creator/create-project.tsx
 import { View, TextInput, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
-import { useRequireAuth } from "@/hooks/useRequireAuth";
-import { IProject, Visibility } from "@/types/prisma";
+import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { IProject, Visibility } from '@/types/prisma';
 import PickMedia from '@/components/PickMedia';
 import DisplayMedia from '@/components/DisplayMedia';
 import { MediaRecord } from '@/utils/mediaUtils';
+import LoadingScreen from '@/components/LoadingScreen';
 
 export default function CreateProject() {
-  const [title, setTitle] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [repoUrl, setRepoUrl] = useState<string>('');
-  const [demoUrl, setDemoUrl] = useState<string>('');
-  const [status, setStatus] = useState<string>('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [repoUrl, setRepoUrl] = useState('');
+  const [demoUrl, setDemoUrl] = useState('');
+  const [status, setStatus] = useState('');
   const [visibility, setVisibility] = useState<Visibility>(Visibility.PATRON_ONLY);
   const [media, setMedia] = useState<MediaRecord[]>([]);
-  const [tempProjectId, setTempProjectId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const token = useRequireAuth();
 
   const handleMediaUploaded = (newMedia: MediaRecord) => {
-    setMedia([...media, newMedia]);
+    setMedia(prev => [...prev, newMedia]);
+  };
+
+  const handleMediaDeleted = (id: number) => {
+    setMedia(prev => prev.filter(m => m.id !== id));
   };
 
   const handleCreate = async () => {
-    if (!token) {
-      return;
-    }
+    if (!token) return;
 
+    setLoading(true);
     try {
       const response = await axios.post<IProject>(
         `${process.env.EXPO_PUBLIC_API_URL}/projects`,
@@ -40,25 +43,22 @@ export default function CreateProject() {
           repoUrl: repoUrl || undefined,
           demoUrl: demoUrl || undefined,
           status: status || undefined,
-          visibility
+          visibility,
         },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       const projectId = response.data.id;
 
-      // Link all uploaded media to the project
       if (media.length > 0) {
         await Promise.all(
           media.map((m, index) =>
             axios.put(
               `${process.env.EXPO_PUBLIC_API_URL}/media/${m.id}`,
-              { order: index },
-              { headers: { Authorization: `Bearer ${token}` } }
-            )
-          )
+              { order: index, projectId },
+              { headers: { Authorization: `Bearer ${token}` } },
+            ),
+          ),
         );
       }
 
@@ -67,118 +67,105 @@ export default function CreateProject() {
     } catch (err) {
       console.error(err);
       Alert.alert('Error', 'Failed to create project');
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (loading) {
+    return <LoadingScreen message="Creating project..." />;
+  }
+
   return (
-    <ScrollView className="container">
-      <Text className="title">Create Project</Text>
+    <View className="page-container">
+      <ScrollView style={{ height: '100vh' as any }} contentContainerStyle={{alignItems: "center"}} className="basic-container">
+        <View style={{width: '100%'}} className="basic-container">
+          <Text className="title">Create Project</Text>
 
-      <View className="section">
-        <TextInput
-          placeholder="Project Title"
-          value={title}
-          onChangeText={setTitle}
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            marginBottom: 10
-          }}
-        />
+          <View className="input-container">
+            <Text className="input-label">Project Title</Text>
+            <TextInput
+              placeholder="Project Title"
+              value={title}
+              onChangeText={setTitle}
+              className="input"
+            />
+          </View>
 
-        <TextInput
-          placeholder="Description"
-          value={description}
-          onChangeText={setDescription}
-          multiline
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            minHeight: 100,
-            textAlignVertical: 'top',
-            marginBottom: 10
-          }}
-        />
+          <View className="input-container">
+            <Text className="input-label">Description</Text>
+            <TextInput
+              placeholder="Description"
+              value={description}
+              onChangeText={setDescription}
+              multiline
+              className="input-multiline input-tall"
+            />
+          </View>
 
-        <TextInput
-          placeholder="Repository URL (optional)"
-          value={repoUrl}
-          onChangeText={setRepoUrl}
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            marginBottom: 10
-          }}
-        />
+          <View className="input-container">
+            <Text className="input-label">Repository URL (optional)</Text>
+            <TextInput
+              placeholder="Repository URL"
+              value={repoUrl}
+              onChangeText={setRepoUrl}
+              className="input"
+            />
+          </View>
 
-        <TextInput
-          placeholder="Demo URL (optional)"
-          value={demoUrl}
-          onChangeText={setDemoUrl}
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            marginBottom: 10
-          }}
-        />
+          <View className="input-container">
+            <Text className="input-label">Demo URL (optional)</Text>
+            <TextInput
+              placeholder="Demo URL"
+              value={demoUrl}
+              onChangeText={setDemoUrl}
+              className="input"
+            />
+          </View>
 
-        <TextInput
-          placeholder="Status (e.g., In Progress, Completed)"
-          value={status}
-          onChangeText={setStatus}
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 10,
-            borderRadius: 8,
-            marginBottom: 10
-          }}
-        />
+          <View className="input-container">
+            <Text className="input-label">Status</Text>
+            <TextInput
+              placeholder="e.g., In Progress, Completed"
+              value={status}
+              onChangeText={setStatus}
+              className="input"
+            />
+          </View>
 
-        <Text style={{ marginBottom: 5, fontWeight: '600' }}>Visibility</Text>
-        <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 8, marginBottom: 10 }}>
-          <Picker
-            selectedValue={visibility}
-            onValueChange={(itemValue) => setVisibility(itemValue as Visibility)}
-          >
-            <Picker.Item label="Public" value={Visibility.PUBLIC} />
-            <Picker.Item label="Patron Only" value={Visibility.PATRON_ONLY} />
-            <Picker.Item label="Follower Only" value={Visibility.FOLLOWER_ONLY} />
-            <Picker.Item label="Private" value={Visibility.PRIVATE} />
-          </Picker>
+          <View className="input-container">
+            <Text className="input-label">Visibility</Text>
+            <View className="picker-container">
+              <Picker
+                selectedValue={visibility}
+                onValueChange={itemValue => setVisibility(itemValue as Visibility)}
+              >
+                <Picker.Item label="Public" value={Visibility.PUBLIC} />
+                <Picker.Item label="Patron Only" value={Visibility.PATRON_ONLY} />
+                <Picker.Item label="Follower Only" value={Visibility.FOLLOWER_ONLY} />
+                <Picker.Item label="Private" value={Visibility.PRIVATE} />
+              </Picker>
+            </View>
+          </View>
+
+          <View className="input-container">
+            <Text className="input-label">Media</Text>
+            <PickMedia
+              onMediaUploaded={handleMediaUploaded}
+              onMediaDeleted={handleMediaDeleted}
+              buttonText="Add Photo/Video"
+            />
+
+            {media.map(item => (
+              <DisplayMedia key={item.id} media={item} showCaption={false} />
+            ))}
+          </View>
+
+          <TouchableOpacity className="button" onPress={handleCreate}>
+            <Text className="button-text">Create Project</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-
-      <View className="section">
-        <Text className="section-title">Media</Text>
-        <PickMedia
-          onMediaUploaded={handleMediaUploaded}
-          buttonText="Add Photo/Video"
-        />
-
-        {media.map((item) => (
-          <DisplayMedia
-            key={item.id}
-            media={item}
-            showCaption={false}
-          />
-        ))}
-      </View>
-
-      <TouchableOpacity
-        className="button"
-        onPress={handleCreate}
-      >
-        <Text className="button-text">Create Project</Text>
-      </TouchableOpacity>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }

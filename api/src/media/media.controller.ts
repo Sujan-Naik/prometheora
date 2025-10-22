@@ -17,7 +17,7 @@ import { MediaService } from './media.service';
 
 @Controller('media')
 export class MediaController {
-  constructor(private readonly mediaService: MediaService) {}
+  constructor(private mediaService: MediaService) {}
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
@@ -29,6 +29,8 @@ export class MediaController {
     @Body('caption') caption?: string,
     @Body('order') order?: string,
   ) {
+
+console.log('Received file:', file);
     if (!file) {
       throw new BadRequestException('No file provided');
     }

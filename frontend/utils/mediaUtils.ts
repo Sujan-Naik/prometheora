@@ -68,9 +68,6 @@ export async function pickDocument(): Promise<DocumentPicker.DocumentPickerAsset
   return null;
 }
 
-/**
- * Upload media to S3 via backend
- */
 export async function uploadMediaToS3(
   fileUri: string,
   fileName: string,
@@ -84,32 +81,35 @@ export async function uploadMediaToS3(
   } = {},
 ): Promise<MediaRecord> {
   const formData = new FormData();
+  let file: any;
 
-  // Create file object for upload
-  const file = {
-    uri: fileUri,
-    type: mimeType,
-    name: fileName,
-  } as any;
+  // On native (iOS/Android)
+  if (fileUri.startsWith('file://') || fileUri.startsWith('content://')) {
+    file = { uri: fileUri, name: fileName, type: mimeType };
+  } else {
+    // On web: convert to a File rather than Blob (Blob.name is read-only)
+    const blob = await (await fetch(fileUri)).blob();
+    file = new File([blob], fileName, { type: mimeType });
+  }
 
   formData.append('file', file);
 
-  if (options.userId) formData.append('userId', options.userId.toString());
-  if (options.projectId) formData.append('projectId', options.projectId.toString());
-  if (options.postId) formData.append('postId', options.postId.toString());
+  if (options.userId) formData.append('userId', String(options.userId));
+  if (options.projectId) formData.append('projectId', String(options.projectId));
+  if (options.postId) formData.append('postId', String(options.postId));
   if (options.caption) formData.append('caption', options.caption);
-  if (options.order !== undefined) formData.append('order', options.order.toString());
+  if (options.order !== undefined) formData.append('order', String(options.order));
 
   try {
     const response = await fetch(`${API_URL}/media/upload`, {
       method: 'POST',
       body: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+      // no Content-Type header
     });
 
     if (!response.ok) {
+      const text = await response.text();
+      console.error('Upload failed:', response.status, text);
       throw new Error(`Upload failed: ${response.statusText}`);
     }
 
@@ -119,6 +119,7 @@ export async function uploadMediaToS3(
     throw error;
   }
 }
+
 
 /**
  * Save a media record to the backend (when URL already exists)

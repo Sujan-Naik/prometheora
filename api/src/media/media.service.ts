@@ -1,7 +1,13 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { v4 as uuidv4 } from 'uuid';
+// remove static import
+let uuidv4: () => string;
+
+(async () => {
+  const { v4 } = await import('uuid');
+  uuidv4 = v4;
+})();
 import {PrismaService} from "../prisma.service";
 
 @Injectable()
@@ -45,15 +51,15 @@ export class MediaService {
       Key: key,
       Body: file.buffer,
       ContentType: file.mimetype,
-      ACL: 'public-read',
     });
 
     try {
-      await this.s3Client.send(command);
-      return `${this.publicUrl}/${key}`;
-    } catch (error) {
-      throw new BadRequestException('Failed to upload file to S3');
-    }
+    await this.s3Client.send(command);
+    return `${this.publicUrl}/${key}`;
+  } catch (error) {
+    console.error('S3 upload error:', error);
+    throw new BadRequestException('Failed to upload file to S3');
+  }
   }
 
   async deleteFromS3(url: string): Promise<void> {

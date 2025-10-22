@@ -1,8 +1,9 @@
-import { View, TextInput, Button, Text, Alert, ActivityIndicator } from 'react-native';
+import { View, TextInput, Text, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuthStatus } from "@/hooks/useAuthStatus";
+import LoadingScreen from '@/components/LoadingScreen';
 
 interface LoginResponse {
   access_token: string;
@@ -65,30 +66,45 @@ export default function Login() {
     }
   };
 
+  if (loading) {
+    return <LoadingScreen message="Logging in..." />;
+  }
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
-      <Text>Login</Text>
-      {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        editable={!loading}
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        editable={!loading}
-      />
-      {loading ? (
-        <ActivityIndicator />
-      ) : (
-        <Button title="Login" onPress={handleLogin} />
-      )}
+    <View className="page-container">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View className="basic-container">
+          <Text className="title">Login</Text>
+          {error ? <Text className="error-text">{error}</Text> : null}
+
+          <View className="input-container">
+            <TextInput
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              editable={!loading}
+              className="input"
+            />
+          </View>
+
+          <View className="input-container">
+            <TextInput
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              editable={!loading}
+              className="input"
+            />
+          </View>
+
+          <TouchableOpacity className="button" onPress={handleLogin} disabled={loading}>
+            <Text className="button-text">Login</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </View>
   );
 }

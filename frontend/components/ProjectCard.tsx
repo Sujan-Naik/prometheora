@@ -1,6 +1,5 @@
-// components/ProjectCard.tsx
 import { View, Text, TouchableOpacity, Image, Linking } from 'react-native';
-import { Link } from 'expo-router';
+import { Href, Link } from 'expo-router';
 import { IProject, Visibility } from '@/types/prisma';
 
 interface ProjectCardProps {
@@ -13,10 +12,10 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
   const followerCount = project.followers?.length || 0;
 
   const visibilityConfig = {
-    [Visibility.PUBLIC]: { icon: '🌐', label: 'Public', color: '#34c759' },
-    [Visibility.PATRON_ONLY]: { icon: '💎', label: 'Patron Only', color: '#ff9500' },
-    [Visibility.FOLLOWER_ONLY]: { icon: '👥', label: 'Followers', color: '#007aff' },
-    [Visibility.PRIVATE]: { icon: '🔒', label: 'Private', color: '#8e8e93' },
+    [Visibility.PUBLIC]: { icon: '🌐', label: 'Public', color: 'bg-success' },
+    [Visibility.PATRON_ONLY]: { icon: '💎', label: 'Patron Only', color: 'bg-warning' },
+    [Visibility.FOLLOWER_ONLY]: { icon: '👥', label: 'Followers', color: 'bg-blue-500' },
+    [Visibility.PRIVATE]: { icon: '🔒', label: 'Private', color: 'bg-neutral' },
   };
 
   const visInfo = visibilityConfig[project.visibility];
@@ -26,115 +25,67 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
   };
 
   return (
-    <View className="bg-white rounded-lg overflow-hidden mb-4 border border-gray-200">
+    <View className="basic-container">
       {thumbnail && (
-        <Image
-          source={{ uri: thumbnail }}
-          style={{ width: '100%', height: 200 }}
-          resizeMode="cover"
-        />
+        <Image source={{ uri: thumbnail }} className="media-preview" resizeMode="cover" />
       )}
 
-      <View style={{ padding: 16 }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-          }}
-        >
+      <View className="p-4">
+        <View className="card-header">
           {project.creator?.handle ? (
-            <Link
-              href={`/(tabs)/creator/${project.creator.handle}/projects/${project.id}`}
-              asChild
-            >
+            <Link href={`/profile/${project.creator.handle}/projects/${project.id}` as Href}>
               <TouchableOpacity activeOpacity={0.7}>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontWeight: '700',
-                    flex: 1,
-                    color: '#007aff',
-                  }}
-                >
-                  {project.title}
-                </Text>
+                <Text className="section-title text-blue-500">{project.title}</Text>
               </TouchableOpacity>
             </Link>
           ) : (
-            <Text style={{ fontSize: 20, fontWeight: '700', flex: 1, color: '#000' }}>
-              {project.title}
-            </Text>
+            <Text className="section-title">{project.title}</Text>
           )}
-
-          <View
-            style={{
-              backgroundColor: visInfo.color,
-              paddingHorizontal: 8,
-              paddingVertical: 4,
-              borderRadius: 12,
-              marginLeft: 8,
-            }}
-          >
-            <Text style={{ fontSize: 10, color: '#fff', fontWeight: '600' }}>
-              {visInfo.icon} {visInfo.label}
-            </Text>
+          <View className={`tag ${visInfo.color}`}>
+            <Text className="tag-text">{visInfo.icon} {visInfo.label}</Text>
           </View>
         </View>
 
-        <Text
-          style={{ fontSize: 14, color: '#666', marginTop: 8, lineHeight: 20 }}
-          numberOfLines={3}
-        >
+        <Text className="content-text" numberOfLines={3}>
           {project.description}
         </Text>
 
-        <View style={{ flexDirection: 'row', marginTop: 12, gap: 12 }}>
+        <View className="flex-row mt-3 gap-3">
           {project.status && (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ fontSize: 12, color: '#666' }}>📊 {project.status}</Text>
+            <View className="flex-row items-center">
+              <Text className="status-text">📊 {project.status}</Text>
             </View>
           )}
           {followerCount > 0 && (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ fontSize: 12, color: '#666' }}>
+            <View className="flex-row items-center">
+              <Text className="status-text">
                 ❤️ {followerCount} follower{followerCount !== 1 ? 's' : ''}
               </Text>
             </View>
           )}
         </View>
 
-        <View style={{ flexDirection: 'row', marginTop: 12, gap: 8 }}>
+        <View className="action-container">
           {project.repoUrl && (
             <TouchableOpacity
               onPress={() => openExternal(project.repoUrl)}
-              style={{
-                backgroundColor: '#f0f0f0',
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                borderRadius: 6,
-              }}
+              className="action-button bg-secondary"
             >
-              <Text style={{ fontSize: 11, color: '#007aff' }}>💻 Code</Text>
+              <Text className="action-button-text text-blue-500">💻 Code</Text>
             </TouchableOpacity>
           )}
           {project.demoUrl && (
             <TouchableOpacity
               onPress={() => openExternal(project.demoUrl)}
-              style={{
-                backgroundColor: '#f0f0f0',
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                borderRadius: 6,
-              }}
+              className="action-button bg-secondary"
             >
-              <Text style={{ fontSize: 11, color: '#34c759' }}>🚀 Demo</Text>
+              <Text className="action-button-text text-success">🚀 Demo</Text>
             </TouchableOpacity>
           )}
         </View>
 
         {project.creator && (
-          <Text style={{ fontSize: 12, color: '#999', marginTop: 8 }}>
+          <Text className="status-text mt-2">
             by @{project.creator.handle || 'anonymous'}
           </Text>
         )}
