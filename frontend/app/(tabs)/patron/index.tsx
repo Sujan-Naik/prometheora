@@ -6,7 +6,7 @@ export default function PatronScreen() {
 
   return (
     <View className="page-container">
-      <ScrollView style={{ height: '100vh' as any }} className="basic-container">
+      <ScrollView style={{ height: '100vh' as any }} contentContainerStyle={{alignItems: "center"}} className="basic-container">
         <View className="basic-container">
           <Text className="title">Patron</Text>
 

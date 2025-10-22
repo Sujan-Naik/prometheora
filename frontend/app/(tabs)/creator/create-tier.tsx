@@ -38,7 +38,7 @@ export default function CreateTier() {
 
   return (
     <View className="page-container">
-      <ScrollView style={{ height: '100vh' as any }} className="basic-container">
+      <ScrollView style={{ height: '100vh' as any }} contentContainerStyle={{alignItems: "center"}} className="basic-container">
         <View style={{width: '100vw' as any}} className="basic-container">
           <Text className="title">Create Tier</Text>
 

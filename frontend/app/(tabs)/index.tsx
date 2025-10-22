@@ -7,6 +7,7 @@ import PostCard from '@/components/PostCard';
 import { IPost } from '@/types/prisma';
 import LoadingScreen from '@/components/LoadingScreen';
 import '@/global.css'
+import LogoutButton from "@/components/Logout";
 
 export default function Home() {
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -41,7 +42,7 @@ export default function Home() {
   if (!isAuthenticated) {
     return (
       <View style={{ flex: 1}}>
-        <ScrollView style={{ height: '100vh' as any }} className="basic-container">
+        <ScrollView style={{ height: '100vh' as any }} contentContainerStyle={{alignItems: "center"}} className="basic-container">
           <View className="landing-container">
             <Text className="landing-icon">🎨</Text>
             <Text className="landing-title">Creator Hub</Text>
@@ -84,6 +85,7 @@ export default function Home() {
   }
   return (
     <View style={{ flex: 1}}>
+      <LogoutButton/>
       <View className="header">
         <Text className="header-title">Discover</Text>
         <Text className="header-subtitle">Latest posts from creators you follow</Text>

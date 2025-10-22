@@ -35,7 +35,7 @@
   }
 
   .basic-container {
-    @apply p-5 items-center pb-32 w-full;
+    @apply p-5 pb-32 w-full;
 
   }
 
