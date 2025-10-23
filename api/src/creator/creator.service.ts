@@ -26,6 +26,13 @@ export class CreatorService {
         }
       : { roles: { has: 'CREATOR' } };
 
+    const orderBy = searchTerm
+      ? [
+          { handle: { sort: 'asc' as const, nulls: 'last' as const } },
+          { createdAt: 'desc' as const },
+        ]
+      : { createdAt: 'desc' as const };
+
     const [creators, total] = await Promise.all([
       this.prisma.user.findMany({
         where,
@@ -44,7 +51,7 @@ export class CreatorService {
             },
           },
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy,
       }),
       this.prisma.user.count({ where }),
     ]);
