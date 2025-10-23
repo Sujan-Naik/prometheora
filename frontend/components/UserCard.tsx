@@ -1,9 +1,17 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Link } from 'expo-router';
-import { IUser } from '@/types/prisma';
+import { Role, IMedia, IUserRole } from '@/types/prisma';
+
+interface UserCardData {
+  id: number;
+  handle?: string | null;
+  bio?: string | null;
+  media?: IMedia[] | null;
+  userRoles?: IUserRole[] | null;
+}
 
 interface UserCardProps {
-  user: IUser;
+  user: UserCardData;
   showBio?: boolean;
   onPress?: () => void;
 }
@@ -27,14 +35,13 @@ export default function UserCard({ user, showBio = true, onPress }: UserCardProp
           <Text className="text-lg font-semibold text-black">
             {user.handle || 'Anonymous'}
           </Text>
-          <Text className="subtitle mt-1">{user.email}</Text>
           {roles.length > 0 && (
             <View className="flex-row mt-1 gap-1">
               {roles.map((role, idx) => (
                 <View
                   key={idx}
                   className={`role-tag ${
-                    role === 'ADMIN' ? 'bg-error' : role === 'CREATOR' ? 'bg-blue-500' : 'bg-success'
+                    role === Role.ADMIN ? 'bg-error' : role === Role.CREATOR ? 'bg-blue-500' : 'bg-success'
                   }`}
                 >
                   <Text className="tag-text">{role}</Text>

@@ -38,8 +38,8 @@ export default function BlogList() {
         renderItem={({ item }) => (
           <Link href={`/(tabs)/blog/${item.slug}`} asChild>
             <Pressable className="blog-item">
-              <Text className="text-lg font-semibold text-[var(--text-primary)]">{item.title}</Text>
-              <Text className="text-sm text-[var(--text-secondary)]">
+              <Text className="text-lg font-semibold text-[var(--text-color)]">{item.title}</Text>
+              <Text className="text-sm text-[var(--text-color)]">
                 {new Date(item.createdAt).toLocaleDateString()}
               </Text>
             </Pressable>

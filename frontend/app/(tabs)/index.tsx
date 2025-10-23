@@ -84,12 +84,12 @@ export default function Home() {
     );
   }
   return (
-    <View style={{ flex: 1}}>
+    <View style={{ flex: 1}} className="page-container">
       <View className="header">
         <Text className="header-title">Discover</Text>
         <Text className="header-subtitle">Latest posts from creators you follow</Text>
       </View>
-      <ScrollView style={{ height: '100vh' as any}} className="basic-container">
+      <ScrollView style={{ height: '100vh' as any}}>
         <View className="nav-card-container">
           <TouchableOpacity onPress={() => router.push('/(tabs)/blog')} className="nav-card">
             <Text className="nav-card-icon">📰</Text>

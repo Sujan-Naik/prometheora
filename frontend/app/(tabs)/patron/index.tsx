@@ -14,21 +14,21 @@ export default function PatronScreen() {
             className="card"
             onPress={() => router.push('/patron/followed-projects')}
           >
-            <Text className="text-lg font-semibold">Followed Projects</Text>
+            <Text className="text-lg font-semibold  text-[var(--text-color)]">Followed Projects</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             className="card"
             onPress={() => router.push('/patron/subscriptions')}
           >
-            <Text className="text-lg font-semibold">Subscriptions</Text>
+            <Text className="text-lg font-semibold  text-[var(--text-color)]">Subscriptions</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             className="card"
             onPress={() => router.push('/patron/payments')}
           >
-            <Text className="text-lg font-semibold">Payments</Text>
+            <Text className="text-lg font-semibold  text-[var(--text-color)]">Payments</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

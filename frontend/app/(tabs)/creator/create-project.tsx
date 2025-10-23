@@ -139,6 +139,7 @@ export default function CreateProject() {
               <Picker
                 selectedValue={visibility}
                 onValueChange={itemValue => setVisibility(itemValue as Visibility)}
+                style={{backgroundColor: 'inherit', color: 'var(--text-color)'}}
               >
                 <Picker.Item label="Public" value={Visibility.PUBLIC} />
                 <Picker.Item label="Patron Only" value={Visibility.PATRON_ONLY} />

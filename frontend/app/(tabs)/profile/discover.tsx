@@ -1,8 +1,9 @@
-import { View, Text, TextInput, FlatList, TouchableOpacity } from 'react-native';
+import {View, Text, TextInput, ScrollView, TouchableOpacity, RefreshControl} from 'react-native';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import UserCard from '@/components/UserCard';
 import LoadingScreen from '@/components/LoadingScreen';
 
 interface Creator {
@@ -38,12 +39,9 @@ export default function Discover() {
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const abortControllerRef = useRef<AbortController | undefined>(undefined);
   const isFetchingRef = useRef(false);
-  const lastQueryRef = useRef<string>('');
 
   const fetchCreators = useCallback(async (searchQuery: string, currentOffset: number, append = false) => {
-    const queryKey = `${searchQuery}-${currentOffset}-${append}`;
-
-    if (isFetchingRef.current) {
+    if (isFetchingRef.current || !token) {
       return;
     }
 
@@ -56,7 +54,7 @@ export default function Discover() {
 
     if (append) {
       setLoadingMore(true);
-    } else if (currentOffset === 0) {
+    } else {
       setLoading(true);
     }
 
@@ -84,14 +82,12 @@ export default function Discover() {
       }
 
       setHasMore(currentOffset + response.data.creators.length < response.data.total);
-      lastQueryRef.current = queryKey;
     } catch (err) {
       if (axios.isCancel(err)) {
         return;
       }
       console.error('Failed to fetch creators:', err);
-      setError('Failed to load creators. Pull to refresh.');
-      setHasMore(false);
+      setError('Failed to load creators. Please try again.');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -102,11 +98,8 @@ export default function Discover() {
 
   useEffect(() => {
     if (!token) return;
-    const initialFetch = async () => {
-      await fetchCreators('', 0);
-    };
-    initialFetch();
-  }, [token]);
+    fetchCreators('', 0);
+  }, [token, fetchCreators]);
 
   const handleSearchChange = (text: string) => {
     setSearch(text);
@@ -151,78 +144,75 @@ export default function Discover() {
     };
   }, []);
 
-  if (loading && creators.length === 0 && !error) {
+  if (loading && !refreshing && creators.length === 0) {
     return <LoadingScreen message="Finding creators..." />;
   }
 
   return (
     <View className="page-container">
-      <View className="header">
-        <Text className="header-title">Discover Creators</Text>
-        <Text className="header-subtitle">Find amazing creators to follow</Text>
-      </View>
-      <View style={{ padding: 20 }}>
-        <TextInput
-          className="input"
-          placeholder="Search creators..."
-          value={search}
-          onChangeText={handleSearchChange}
-          returnKeyType="search"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-      </View>
-      {error && (
-        <View style={{ padding: 20, paddingTop: 0 }}>
-          <Text style={{ color: 'red', textAlign: 'center' }}>{error}</Text>
-        </View>
-      )}
-      <FlatList
-        data={creators}
-        keyExtractor={item => item.id.toString()}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.5}
-        contentContainerStyle={{ padding: 20 }}
-        ListEmptyComponent={
-          <View className="empty-state-container">
-            <Text className="not-found-text">
-              {error ? 'Pull down to try again' : search.trim() ? 'No creators found matching your search' : 'No creators found'}
+      <ScrollView
+        style={{ height: '100vh' as any }}
+        contentContainerStyle={{ alignItems: 'center' }}
+        className="basic-container"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
+        <View className="basic-container">
+          <Text className="title">Discover Creators</Text>
+          <Text className="subtitle">Find amazing creators to follow</Text>
+
+          <TextInput
+            className="input"
+            placeholder="Search creators..."
+            value={search}
+            onChangeText={handleSearchChange}
+            returnKeyType="search"
+            autoCapitalize="none"
+            autoCorrect={false}
+            style={{ marginVertical: 20, width: '100%' }}
+          />
+
+          {error && (
+            <Text className="subtitle" style={{ color: 'red', textAlign: 'center', marginBottom: 20 }}>
+              {error}
             </Text>
-          </View>
-        }
-        ListFooterComponent={
-          loadingMore ? (
-            <View style={{ padding: 20, alignItems: 'center' }}>
-              <Text className="subtitle">Loading more...</Text>
-            </View>
-          ) : null
-        }
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            className="card"
-            onPress={() => router.push(`/(tabs)/profile/${item.handle}`)}
-          >
-            <Text className="section-title">@{item.handle}</Text>
-            {item.bio && <Text className="subtitle">{item.bio}</Text>}
-            <View className="flex-row justify-around mt-3">
-              <View className="items-center">
-                <Text className="text-lg font-bold">{item._count.posts}</Text>
-                <Text className="subtitle">Posts</Text>
-              </View>
-              <View className="items-center">
-                <Text className="text-lg font-bold">{item._count.projects}</Text>
-                <Text className="subtitle">Projects</Text>
-              </View>
-              <View className="items-center">
-                <Text className="text-lg font-bold">{item._count.tiers}</Text>
-                <Text className="subtitle">Tiers</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
+          )}
+
+          {creators.length === 0 && !loading && (
+            <Text className="subtitle" style={{ textAlign: 'center', marginVertical: 20 }}>
+              {search.trim() ? 'No creators found matching your search' : 'No creators found'}
+            </Text>
+          )}
+
+          {creators.map(creator => (
+            <TouchableOpacity
+              key={creator.id}
+              onPress={() => router.push(`/(tabs)/profile/${creator.handle}`)}
+            >
+              <UserCard user={creator} />
+            </TouchableOpacity>
+          ))}
+
+          {hasMore && !loadingMore && (
+            <TouchableOpacity
+              className="card"
+              onPress={handleLoadMore}
+              disabled={loadingMore || loading}
+            >
+              <Text className="subtitle" style={{ textAlign: 'center' }}>
+                Load More
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          {loadingMore && (
+            <Text className="subtitle" style={{ textAlign: 'center', marginVertical: 20 }}>
+              Loading more...
+            </Text>
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 }
