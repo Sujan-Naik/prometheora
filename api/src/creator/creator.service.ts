@@ -14,11 +14,13 @@ export class CreatorService {
   async discover(options: DiscoverOptions) {
     const { search, limit, offset } = options;
 
-    const where = search
+    const searchTerm = search?.trim();
+
+    const where = searchTerm
       ? {
           OR: [
-            { handle: { contains: search, mode: 'insensitive' as const } },
-            { bio: { contains: search, mode: 'insensitive' as const } },
+            { handle: { contains: searchTerm, mode: 'insensitive' as const } },
+            { bio: { contains: searchTerm, mode: 'insensitive' as const } },
           ],
           roles: { has: 'CREATOR' },
         }
