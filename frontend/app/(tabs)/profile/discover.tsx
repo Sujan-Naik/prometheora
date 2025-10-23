@@ -1,5 +1,5 @@
 import { View, Text, TextInput, FlatList, TouchableOpacity } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
@@ -29,15 +29,27 @@ export default function Discover() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const token = useRequireAuth();
   const router = useRouter();
 
-  const fetchCreators = async (searchQuery?: string, refresh = false) => {
-    if (refresh) setRefreshing(true);
-    else setLoading(true);
+  const fetchCreators = async (searchQuery: string, currentOffset: number, append = false) => {
+    if (append) {
+      setLoadingMore(true);
+    } else if (currentOffset === 0) {
+      setLoading(true);
+    } else {
+      setRefreshing(true);
+    }
 
     try {
-      const params = searchQuery ? { search: searchQuery, limit: 20 } : { limit: 20 };
+      const params: any = { limit: 20, offset: currentOffset };
+      if (searchQuery.trim()) {
+        params.search = searchQuery.trim();
+      }
+
       const response = await axios.get<DiscoverResponse>(
         `${process.env.EXPO_PUBLIC_API_URL}/creators`,
         {
@@ -45,23 +57,51 @@ export default function Discover() {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      setCreators(response.data.creators);
+
+      if (append) {
+        setCreators(prev => [...prev, ...response.data.creators]);
+      } else {
+        setCreators(response.data.creators);
+      }
+
+      setHasMore(currentOffset + response.data.creators.length < response.data.total);
     } catch (err) {
       console.error('Failed to fetch creators:', err);
     } finally {
       setLoading(false);
       setRefreshing(false);
+      setLoadingMore(false);
     }
   };
 
   useEffect(() => {
     if (!token) return;
-    fetchCreators();
+    fetchCreators('', 0);
   }, [token]);
 
-  const handleSearch = () => {
-    fetchCreators(search);
-  };
+  useEffect(() => {
+    if (!token) return;
+
+    const delaySearch = setTimeout(() => {
+      setOffset(0);
+      fetchCreators(search, 0);
+    }, 300);
+
+    return () => clearTimeout(delaySearch);
+  }, [search, token]);
+
+  const handleRefresh = useCallback(() => {
+    setOffset(0);
+    fetchCreators(search, 0);
+  }, [search, token]);
+
+  const handleLoadMore = useCallback(() => {
+    if (!loadingMore && hasMore) {
+      const newOffset = offset + 20;
+      setOffset(newOffset);
+      fetchCreators(search, newOffset, true);
+    }
+  }, [search, offset, loadingMore, hasMore, token]);
 
   if (loading) {
     return <LoadingScreen message="Finding creators..." />;
@@ -73,28 +113,38 @@ export default function Discover() {
         <Text className="header-title">Discover Creators</Text>
         <Text className="header-subtitle">Find amazing creators to follow</Text>
       </View>
-
       <View style={{ padding: 20 }}>
         <TextInput
           className="input"
           placeholder="Search creators..."
           value={search}
           onChangeText={setSearch}
-          onSubmitEditing={handleSearch}
           returnKeyType="search"
+          autoCapitalize="none"
+          autoCorrect={false}
         />
       </View>
-
       <FlatList
         data={creators}
         keyExtractor={item => item.id.toString()}
         refreshing={refreshing}
-        onRefresh={() => fetchCreators(search, true)}
+        onRefresh={handleRefresh}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
         contentContainerStyle={{ padding: 20 }}
         ListEmptyComponent={
           <View className="empty-state-container">
-            <Text className="not-found-text">No creators found</Text>
+            <Text className="not-found-text">
+              {search.trim() ? 'No creators found matching your search' : 'No creators found'}
+            </Text>
           </View>
+        }
+        ListFooterComponent={
+          loadingMore ? (
+            <View style={{ padding: 20, alignItems: 'center' }}>
+              <Text className="subtitle">Loading more...</Text>
+            </View>
+          ) : null
         }
         renderItem={({ item }) => (
           <TouchableOpacity
