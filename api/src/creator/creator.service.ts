@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
+import { Role } from '@prisma/client';
 
 interface DiscoverOptions {
   search?: string;
@@ -16,56 +17,64 @@ export class CreatorService {
 
     const searchTerm = search?.trim();
 
-    const where = searchTerm
-      ? {
-          OR: [
-            { handle: { contains: searchTerm, mode: 'insensitive' as const } },
-            { bio: { contains: searchTerm, mode: 'insensitive' as const } },
-          ],
-          roles: { has: 'CREATOR' },
-        }
-      : { roles: { has: 'CREATOR' } };
+    try {
+      const where = searchTerm
+        ? {
+            userRoles: {
+              some: {
+                role: Role.CREATOR,
+              },
+            },
+            OR: [
+              { handle: { contains: searchTerm, mode: 'insensitive' as const } },
+              { bio: { contains: searchTerm, mode: 'insensitive' as const } },
+            ],
+          }
+        : {
+            userRoles: {
+              some: {
+                role: Role.CREATOR,
+              },
+            },
+          };
 
-    const orderBy = searchTerm
-      ? [
-          { handle: { sort: 'asc' as const, nulls: 'last' as const } },
-          { createdAt: 'desc' as const },
-        ]
-      : { createdAt: 'desc' as const };
-
-    const [creators, total] = await Promise.all([
-      this.prisma.user.findMany({
-        where,
-        take: limit,
-        skip: offset,
-        select: {
-          id: true,
-          handle: true,
-          bio: true,
-          createdAt: true,
-          _count: {
-            select: {
-              posts: true,
-              projects: true,
-              tiers: true,
+      const [creators, total] = await Promise.all([
+        this.prisma.user.findMany({
+          where,
+          take: Math.min(limit, 100),
+          skip: offset,
+          select: {
+            id: true,
+            handle: true,
+            bio: true,
+            createdAt: true,
+            _count: {
+              select: {
+                posts: true,
+                projects: true,
+                tiers: true,
+              },
             },
           },
-        },
-        orderBy,
-      }),
-      this.prisma.user.count({ where }),
-    ]);
+          orderBy: { createdAt: 'desc' },
+        }),
+        this.prisma.user.count({ where }),
+      ]);
 
-    return {
-      creators,
-      total,
-      limit,
-      offset,
-    };
+      return {
+        creators,
+        total,
+        limit,
+        offset,
+      };
+    } catch (error) {
+      console.error('Error in discover:', error);
+      throw error;
+    }
   }
 
   async getProfile(handle: string) {
-    return this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { handle },
       include: {
         posts: true,
@@ -74,6 +83,12 @@ export class CreatorService {
         portfolioItems: { include: { project: true } },
       },
     });
+
+    if (!user) {
+      throw new NotFoundException('Creator not found');
+    }
+
+    return user;
   }
 
   async getPosts(handle: string) {
@@ -81,7 +96,10 @@ export class CreatorService {
     if (!creator) {
       throw new NotFoundException('Creator not found');
     }
-    return this.prisma.post.findMany({ where: { creatorId: creator.id } });
+    return this.prisma.post.findMany({
+      where: { creatorId: creator.id },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
   async getTiers(handle: string) {
@@ -89,13 +107,22 @@ export class CreatorService {
     if (!creator) {
       throw new NotFoundException('Creator not found');
     }
-    return this.prisma.tier.findMany({ where: { creatorId: creator.id } });
+    return this.prisma.tier.findMany({
+      where: { creatorId: creator.id },
+      orderBy: { price: 'asc' },
+    });
   }
 
   async getAbout(handle: string) {
-    return this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { handle },
       select: { bio: true, media: true },
     });
+
+    if (!user) {
+      throw new NotFoundException('Creator not found');
+    }
+
+    return user;
   }
 }
