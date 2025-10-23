@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, Text, Modal, useWindowDimensions } from 'react-native';
+import {View, Image, TouchableOpacity, Text, Modal, useWindowDimensions, Platform} from 'react-native';
 import { Video, ResizeMode, Audio } from 'expo-av';
 import { IMedia } from '@/types/prisma';
 
 interface DisplayMediaProps {
   media: IMedia;
-  width?: number | string;
-  height?: number;
-  maxHeight?: number; // Add maxHeight prop
+  height?: number | string;
+  width?: number;
+  maxWidth?: number; // Add maxWidth prop
   aspectRatio?: number;
   showCaption?: boolean;
   resizeMode?: 'cover' | 'contain' | 'stretch';
@@ -16,9 +16,9 @@ interface DisplayMediaProps {
 
 export default function DisplayMedia({
   media,
-  width = "100%",
-  height,
-  maxHeight, // Will default to 30% of screen height if not provided
+  height = "100%",
+  width,
+  maxWidth, // Will default to 30% of screen width if not provided
   aspectRatio,
   showCaption = true,
   resizeMode = 'cover',
@@ -29,8 +29,13 @@ export default function DisplayMedia({
   const [calculatedAspectRatio, setCalculatedAspectRatio] = React.useState<number | undefined>(aspectRatio);
   const windowDimensions = useWindowDimensions();
 
-  // Default maxHeight to 30% of viewport height
-  const effectiveMaxHeight = maxHeight ?? windowDimensions.height * 0.3;
+  // Default maxWidth to 30% of viewport width
+
+  let effectiveMaxWidth = maxWidth ?? windowDimensions.width * 0.1;
+
+      if (Platform.OS !== 'web') {
+        effectiveMaxWidth = maxWidth ?? windowDimensions.width;
+      }
 
   // Calculate aspect ratio from image dimensions
   React.useEffect(() => {
@@ -38,7 +43,7 @@ export default function DisplayMedia({
       Image.getSize(
         media.url,
         (imgWidth, imgHeight) => {
-          setCalculatedAspectRatio(imgWidth / imgHeight);
+          setCalculatedAspectRatio( imgWidth / imgHeight);
         },
         () => {
           setCalculatedAspectRatio(16 / 9); // Fallback aspect ratio
@@ -74,22 +79,38 @@ export default function DisplayMedia({
   const renderMedia = (isExpanded = false) => {
     // For expanded view, use full window dimensions
     if (isExpanded) {
-      const expandedWidth = windowDimensions.width;
-      const expandedHeight = calculatedAspectRatio
-        ? expandedWidth / calculatedAspectRatio
-        : windowDimensions.height * 0.75;
+      // const expandedHeight = windowDimensions.height;
+      // const expandedWidth = calculatedAspectRatio
+      //   ? expandedHeight / calculatedAspectRatio
+      //   : windowDimensions.width * 0.75;
 
-      const displayStyle = {
-        width: expandedWidth,
-        height: Math.min(expandedHeight, windowDimensions.height * 0.9),
+      let expandedWidth = windowDimensions.width;
+      // const expandedHeight = calculatedAspectRatio ? expandedWidth / calculatedAspectRatio : windowDimensions.width * 0.75;
+      let expandedHeight = expandedWidth / calculatedAspectRatio!;
+
+
+
+      let displayStyle = {
+        height: expandedHeight,
+        width: Math.min(expandedWidth, windowDimensions.width)
       };
+
+      if (calculatedAspectRatio && calculatedAspectRatio < 1){
+        expandedHeight = windowDimensions.height;
+        expandedWidth = expandedHeight * calculatedAspectRatio;
+
+        displayStyle = {
+          width: expandedWidth,
+          height: Math.min(expandedHeight, windowDimensions.height)
+        }
+      }
 
       switch (media.type) {
         case 'image':
           return (
             <Image
               source={{ uri: media.url }}
-              className="media-preview"
+              // className="media-preview"
               style={displayStyle}
               resizeMode={resizeMode}
             />
@@ -108,22 +129,22 @@ export default function DisplayMedia({
       }
     }
 
-    // For normal view, use aspectRatio style prop with maxHeight constraint
-    const normalStyle: any = { width };
+    // For normal view, use aspectRatio style prop with maxWidth constraint
+    const normalStyle: any = { height };
 
-    if (height) {
-      normalStyle.height = Math.min(height, effectiveMaxHeight);
+    if (width) {
+      normalStyle.width = Math.min(width, effectiveMaxWidth);
     } else if (calculatedAspectRatio) {
       normalStyle.aspectRatio = calculatedAspectRatio;
-      normalStyle.maxHeight = effectiveMaxHeight;
+      normalStyle.maxWidth = effectiveMaxWidth;
     } else {
-      normalStyle.height = Math.min(300, effectiveMaxHeight); // Fallback height
+      normalStyle.width = Math.min(300, effectiveMaxWidth); // Fallback width
     }
 
     switch (media.type) {
       case 'image':
         return (
-          <TouchableOpacity onPress={handlePress} activeOpacity={0.8}>
+          <TouchableOpacity onPress={handlePress} activeOpacity={0.8} className={'flex-row justify-center'}>
             <Image
               source={{ uri: media.url }}
               className="media-preview"
@@ -149,7 +170,7 @@ export default function DisplayMedia({
         return (
           <TouchableOpacity
             className="audio-container"
-            style={{ width, height: 100 } as any}
+            style={{ height, width: 100 } as any}
             onPress={playAudio}
           >
             <Text className="text-4xl mb-2">🎵</Text>
@@ -158,7 +179,7 @@ export default function DisplayMedia({
         );
       default:
         return (
-          <View className="file-container" style={{ width, height: 100 } as any}>
+          <View className="file-container" style={{ height, width: 100 } as any}>
             <Text className="text-4xl mb-2">📄</Text>
             <Text className="text-sm text-gray-600 text-center">
               File: {media.url.split('/').pop()}
