@@ -71,7 +71,7 @@ export default function CreateTier() {
               value={benefits}
               onChangeText={setBenefits}
               multiline
-              className="input-multiline input-tall"
+              className="input"
             />
           </View>
 

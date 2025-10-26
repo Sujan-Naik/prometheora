@@ -33,8 +33,8 @@ export default function UserCard({ user, showBio = true, onPress }: UserCardProp
           </View>
         )}
 
-        <View className="flex-1">
-          <Text className="text-lg font-semibold text-black">
+        <View className="flex-1 ">
+          <Text className="text-lg font-semibold section-title">
             {user.handle || 'Anonymous'}
           </Text>
           {roles.length > 0 && (

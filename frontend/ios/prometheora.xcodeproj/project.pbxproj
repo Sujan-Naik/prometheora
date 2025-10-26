@@ -11,7 +11,7 @@
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		26DD6A20EDE148ABA236837F /* Open-Dyslexic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5296963321F540DEB1695BF1 /* Open-Dyslexic.otf */; };
+		86AD4FFB51F1484080E28322 /* Open-Dyslexic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 314A6B8B3AC74BE0A025E134 /* Open-Dyslexic.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,7 +23,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = prometheora/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* prometheora-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "prometheora-Bridging-Header.h"; path = "prometheora/prometheora-Bridging-Header.h"; sourceTree = "<group>"; };
-		5296963321F540DEB1695BF1 /* Open-Dyslexic.otf */ = {isa = PBXFileReference; name = "Open-Dyslexic.otf"; path = "../assets/fonts/Open-Dyslexic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		314A6B8B3AC74BE0A025E134 /* Open-Dyslexic.otf */ = {isa = PBXFileReference; name = "Open-Dyslexic.otf"; path = "../assets/fonts/Open-Dyslexic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +72,7 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				BE73FD220FF7487D8727EC88 /* Resources */,
+				71561790D316401FA8D1F76F /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -96,10 +96,10 @@
 			path = prometheora/Supporting;
 			sourceTree = "<group>";
 		};
-		BE73FD220FF7487D8727EC88 /* Resources */ = {
+		71561790D316401FA8D1F76F /* Resources */ = {
 			isa = "PBXGroup";
 			children = (
-				5296963321F540DEB1695BF1 /* Open-Dyslexic.otf */,
+				314A6B8B3AC74BE0A025E134 /* Open-Dyslexic.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -167,7 +167,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				26DD6A20EDE148ABA236837F /* Open-Dyslexic.otf in Resources */,
+				86AD4FFB51F1484080E28322 /* Open-Dyslexic.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

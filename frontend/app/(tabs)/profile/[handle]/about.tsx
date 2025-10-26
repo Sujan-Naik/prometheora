@@ -48,7 +48,7 @@ export default function CreatorAbout() {
           
           <View className="input-container">
             <Text className="section-title">Bio</Text>
-            <Text className="text-base">{about.bio || 'No bio available'}</Text>
+            <Text className="subtitle">{about.bio || 'No bio available'}</Text>
           </View>
 
           {about.media && about.media.length > 0 && (

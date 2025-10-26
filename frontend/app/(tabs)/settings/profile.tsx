@@ -94,7 +94,7 @@ export default function ProfileSettings() {
               value={bio}
               onChangeText={setBio}
               multiline
-              className="input-multiline input-tall"
+              className="input"
             />
           </View>
 

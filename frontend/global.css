@@ -132,7 +132,7 @@
     @apply text-base font-semibold mb-2 text-[var(--text-color)];
   }
   .input {
-    @apply p-3 rounded-lg mb-3 w-full text-base border border-[var(--border-color)] bg-[var(--background-color)];
+    @apply p-3 rounded-lg mb-3 w-full text-base border border-[var(--border-color)] bg-[var(--background-color)] text-[var(--text-color)];
   }
   .input-multiline {
     @apply p-3 rounded-lg mb-3 w-full text-base border border-[var(--border-color)] bg-[var(--background-color)];
@@ -218,7 +218,7 @@
     @apply px-2 py-1 rounded-xl;
   }
   .tag-text {
-    @apply text-xs font-semibold text-[var(--header-text-color)];
+    @apply text-xs font-semibold text-[var(--text-color)];
   }
   .content-text {
     @apply text-sm mt-3 leading-5 text-[var(--muted-text-color)];

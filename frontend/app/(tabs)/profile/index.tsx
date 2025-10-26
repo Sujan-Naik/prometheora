@@ -24,17 +24,17 @@ export default function ProfileScreen() {
         <Text className="title">Your Private Profile Dashboard</Text>
         <UserCard user={user} />
 
-        <Text className="section-title">Your portfolio projects!</Text>
-        {user.portfolioItems?.length===0 && <Text>Add more in
-          <Link href={"/settings/portfolio"}>your portfolio settings</Link></Text>
-        }
-        <FlatList
-          data={user.portfolioItems}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <ProjectCard project={item.project!} />
-          )}
-        />
+        <Text className="section-title">To-do</Text>
+        {/*{user.portfolioItems?.length===0 && <Text>Add more in*/}
+        {/*  <Link href={"/settings/portfolio"}>your portfolio settings</Link></Text>*/}
+        {/*}*/}
+        {/*<FlatList*/}
+        {/*  data={user.portfolioItems}*/}
+        {/*  keyExtractor={item => item.id.toString()}*/}
+        {/*  renderItem={({ item }) => (*/}
+        {/*    <ProjectCard project={item.project!} />*/}
+        {/*  )}*/}
+        {/*/>*/}
       </View>
     </View>
   );
