@@ -3,6 +3,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 import {TabBarHeightProvider} from "@/context/TabBarHeightContext";
 import {useAuthStatus} from "@/hooks/useAuthStatus";
+import '../global.css'
 
 export default function RootLayout() {
 

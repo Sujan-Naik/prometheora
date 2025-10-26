@@ -34,19 +34,19 @@ export default function CreatorLayout() {
         }}
       >
         <TabTrigger name="create-home" href="/(tabs)/creator" asChild>
-          <TabButton icon="🎨">Create</TabButton>
+          <TabButton className={"font-sans"} icon="🎨">Create</TabButton>
         </TabTrigger>
         <TabTrigger name="create-post" href="/(tabs)/creator/create-post" asChild>
-          <TabButton icon="📝">Post</TabButton>
+          <TabButton className={"font-sans"} icon="📝">Post</TabButton>
         </TabTrigger>
         <TabTrigger name="create-devlog" href="/(tabs)/creator/create-devlog" asChild>
-          <TabButton icon="💻">Devlog</TabButton>
+          <TabButton className={"font-sans"} icon="💻">Devlog</TabButton>
         </TabTrigger>
         <TabTrigger name="create-project" href="/(tabs)/creator/create-project" asChild>
-          <TabButton icon="🚀">Project</TabButton>
+          <TabButton className={"font-sans"} icon="🚀">Project</TabButton>
         </TabTrigger>
         <TabTrigger name="create-tier" href="/(tabs)/creator/create-tier" asChild>
-          <TabButton icon="⭐">Tier</TabButton>
+          <TabButton className={"font-sans"} icon="⭐">Tier</TabButton>
         </TabTrigger>
       </TabList>
     </Tabs>

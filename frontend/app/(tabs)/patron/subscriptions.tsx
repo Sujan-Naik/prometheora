@@ -1,10 +1,11 @@
-import { View, Text, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { ISubscription } from "@/types/prisma";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import LoadingScreen from '@/components/LoadingScreen';
+import { Text } from '@/components/ThemedText';
 
 export default function Subscriptions() {
   const [subscriptions, setSubscriptions] = useState<ISubscription[]>([]);

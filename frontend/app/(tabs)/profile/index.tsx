@@ -1,4 +1,6 @@
-import { FlatList, Text, View } from "react-native";
+import { FlatList, View } from "react-native";
+import { Text } from '@/components/ThemedText';
+
 import { useUser } from "../../../hooks/UserContext";
 import UserCard from "@/components/UserCard";
 import ProjectCard from "@/components/ProjectCard";

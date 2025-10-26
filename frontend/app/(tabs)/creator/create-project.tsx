@@ -1,4 +1,4 @@
-import { View, TextInput, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import PickMedia from '@/components/PickMedia';
 import DisplayMedia from '@/components/DisplayMedia';
 import { MediaRecord } from '@/utils/mediaUtils';
 import LoadingScreen from '@/components/LoadingScreen';
+import { Text } from '@/components/ThemedText';
 
 export default function CreateProject() {
   const [title, setTitle] = useState('');

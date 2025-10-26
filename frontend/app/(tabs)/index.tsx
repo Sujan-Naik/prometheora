@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
@@ -6,8 +6,9 @@ import { useAuthStatus } from '@/hooks/useAuthStatus';
 import PostCard from '@/components/PostCard';
 import { IPost } from '@/types/prisma';
 import LoadingScreen from '@/components/LoadingScreen';
-import '@/global.css'
 import LogoutButton from "@/components/Logout";
+import { Text } from '@/components/ThemedText';
+
 
 export default function Home() {
   const [posts, setPosts] = useState<IPost[]>([]);

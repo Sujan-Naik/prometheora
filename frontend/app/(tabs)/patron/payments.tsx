@@ -1,10 +1,11 @@
-import { View, Text, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { IPayment } from "@/types/prisma";
 import PaymentCard from "@/components/PaymentCard";
 import LoadingScreen from '@/components/LoadingScreen';
+import { Text } from '@/components/ThemedText';
 
 export default function Payments() {
   const [payments, setPayments] = useState<IPayment[]>([]);

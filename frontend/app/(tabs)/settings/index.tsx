@@ -1,4 +1,6 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
+import { Text } from '@/components/ThemedText';
+
 import { useRouter } from 'expo-router';
 import LogoutButton from "@/components/Logout";
 

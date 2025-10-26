@@ -29,10 +29,10 @@ export default function ProfileLayout() {
           }}
         >
           <TabTrigger name="profile-home" href="/profile" asChild>
-            <TabButton icon="🎨">Your Profile</TabButton>
+            <TabButton className={"font-sans"} icon="🎨">Your Profile</TabButton>
           </TabTrigger>
           <TabTrigger name="profile-discover" href="/profile/discover" asChild>
-            <TabButton icon="🧭">Discover</TabButton>
+            <TabButton className={"font-sans"} icon="🧭">Discover</TabButton>
           </TabTrigger>
         </TabList>
       </Tabs>

@@ -87,9 +87,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.anonymous.prometheora'
+    namespace 'me.sujan.prometheora'
     defaultConfig {
-        applicationId 'com.anonymous.prometheora'
+        applicationId 'me.sujan.prometheora'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

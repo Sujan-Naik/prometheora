@@ -1,4 +1,6 @@
-import { View, Text, TouchableOpacity, Image, Linking } from 'react-native';
+import { View, TouchableOpacity, Image, Linking } from 'react-native';
+import { Text } from '@/components/ThemedText';
+
 import { Href, Link } from 'expo-router';
 import { IProject, Visibility } from '@/types/prisma';
 

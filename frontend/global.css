@@ -1,7 +1,21 @@
+
 @import url('https://fonts.cdnfonts.com/css/open-dyslexic');
+
+
+/*@font-face {*/
+/*  font-family: 'OpenDyslexic';*/
+/*  src: url('https://fonts.cdnfonts.com/css/open-dyslexic') format('woff');*/
+/*  font-weight: normal;*/
+/*  font-style: normal;*/
+/*}*/
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
 
 :root {
   --background-color: hsl(216, 96%, 94%);
@@ -41,11 +55,10 @@
   }
 }
 
-
-
 [class*="css-text-"] {
   white-space: normal !important;
-  font-family: 'Open-Dyslexic', sans-serif;
+  font-family: 'Open-Dyslexic', sans-serif !important;
+
 }
 
 @layer components {
@@ -196,7 +209,7 @@
     @apply rounded-lg mb-3 w-1/2 border border-[var(--border-color)];
   }
   .media-container {
-    @apply mb-4 w-full h-full;
+    @apply mb-4 w-full h-auto;
   }
   .card-header {
     @apply flex-row justify-between items-start;

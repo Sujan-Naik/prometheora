@@ -1,4 +1,6 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
+import { Text } from '@/components/ThemedText';
+
 import { ITier } from '@/types/prisma';
 
 interface TierCardProps {

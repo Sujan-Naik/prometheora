@@ -1,9 +1,10 @@
-import { View, TextInput, Text, Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { View, TextInput, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuthStatus } from "@/hooks/useAuthStatus";
 import LoadingScreen from '@/components/LoadingScreen';
+import { Text } from '@/components/ThemedText';
 
 interface LoginResponse {
   access_token: string;

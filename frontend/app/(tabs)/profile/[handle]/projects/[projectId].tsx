@@ -1,4 +1,6 @@
-import { View, Text, FlatList, ScrollView } from 'react-native';
+import { View, FlatList, ScrollView } from 'react-native';
+import { Text } from '@/components/ThemedText';
+
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';

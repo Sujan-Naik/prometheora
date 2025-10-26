@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { Text } from 'react-native';
+import { Text } from '@/components/ThemedText';
 import { useAdmin } from '@/hooks/useAdmin';
 
 export default function BlogLayout() {
@@ -16,7 +16,7 @@ export default function BlogLayout() {
         options={{
           title: 'Blog Posts',
           headerRight: isAdmin ? () => (
-            <Text className="text-white mr-2.5">✏️ Admin</Text>
+            <Text className="font-sans">✏️ Admin</Text>
           ) : undefined
         }}
       />

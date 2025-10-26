@@ -20,16 +20,16 @@ export default function SettingsLayout() {
         }}
       >
         <TabTrigger name="settings-home" href="/(tabs)/settings" asChild>
-          <TabButton icon="⚙️">General</TabButton>
+          <TabButton className={"font-sans"} icon="⚙️">General</TabButton>
         </TabTrigger>
         <TabTrigger name="settings-account" href="/(tabs)/settings/account" asChild>
-          <TabButton icon="👤">Account</TabButton>
+          <TabButton className={"font-sans"} icon="👤">Account</TabButton>
         </TabTrigger>
         <TabTrigger name="settings-portfolio" href="/(tabs)/settings/portfolio" asChild>
-          <TabButton icon="🖼️">Portfolio</TabButton>
+          <TabButton className={"font-sans"} icon="🖼️">Portfolio</TabButton>
         </TabTrigger>
         <TabTrigger name="settings-profile" href="/(tabs)/settings/profile" asChild>
-          <TabButton icon="📄">Profile</TabButton>
+          <TabButton className={"font-sans"} icon="📄">Profile</TabButton>
         </TabTrigger>
       </TabList>
     </Tabs>

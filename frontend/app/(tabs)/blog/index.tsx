@@ -1,9 +1,10 @@
-import { View, Text, FlatList, Pressable } from 'react-native';
+import { View, FlatList, Pressable } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'expo-router';
 import { IBlog } from "@/types/prisma";
 import LoadingScreen from '@/components/LoadingScreen';
+import { Text } from '@/components/ThemedText';
 
 export default function BlogList() {
   const [blogs, setBlogs] = useState<IBlog[]>([]);

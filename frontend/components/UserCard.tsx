@@ -1,4 +1,6 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, TouchableOpacity, Image } from 'react-native';
+import { Text } from '@/components/ThemedText';
+
 import { Link } from 'expo-router';
 import { Role, IMedia, IUserRole } from '@/types/prisma';
 

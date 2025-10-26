@@ -20,16 +20,16 @@ export default function PatronLayout() {
         }}
       >
         <TabTrigger name="patron-home" href="/(tabs)/patron" asChild>
-          <TabButton icon="🎁">Overview</TabButton>
+          <TabButton className={"font-sans"} icon="🎁">Overview</TabButton>
         </TabTrigger>
         <TabTrigger name="patron-followed" href="/(tabs)/patron/followed-projects" asChild>
-          <TabButton icon="📦">Followed</TabButton>
+          <TabButton className={"font-sans"} icon="📦">Followed</TabButton>
         </TabTrigger>
         <TabTrigger name="patron-subscriptions" href="/(tabs)/patron/subscriptions" asChild>
-          <TabButton icon="💳">Subscriptions</TabButton>
+          <TabButton className={"font-sans"} icon="💳">Subscriptions</TabButton>
         </TabTrigger>
         <TabTrigger name="patron-payments" href="/(tabs)/patron/payments" asChild>
-          <TabButton icon="💰">Payments</TabButton>
+          <TabButton className={"font-sans"} icon="💰">Payments</TabButton>
         </TabTrigger>
       </TabList>
     </Tabs>
