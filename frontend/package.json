@@ -11,7 +11,8 @@
     "comlpete-android-build": "npm run prebuild && npm run build:android",
     "web": "expo start --web",
     "lint": "expo lint",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "build:web": "npx expo export --platform web"
   },
   "dependencies": {
     "@expo/metro-runtime": "~6.1.2",
