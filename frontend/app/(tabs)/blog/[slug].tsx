@@ -1,9 +1,10 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { IBlog } from "@/types/prisma";
 import LoadingScreen from '@/components/LoadingScreen';
+import { Text } from '@/components/ThemedText';
 
 export default function BlogPostDetail() {
   const { slug } = useLocalSearchParams<{ slug: string }>();

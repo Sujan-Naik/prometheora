@@ -27,28 +27,23 @@ export default function TabsContent() {
                   }}
               >
                   <TabTrigger name="home" href="/" asChild>
-                      <TabButton icon="🏠">Home</TabButton>
+                      <TabButton className={"font-sans"} icon="🏠">Home</TabButton>
                   </TabTrigger>
-
-                  {isAuthenticated && (
-                      <>
-                          <TabTrigger name="blog" href="/blog" asChild>
-                              <TabButton icon="📝">Blog</TabButton>
-                          </TabTrigger>
-                          <TabTrigger name="patron" href="/patron" asChild>
-                              <TabButton icon="❤️">Patron</TabButton>
-                          </TabTrigger>
-                          <TabTrigger name="creator" href="/creator" asChild>
-                              <TabButton icon="✨">Creator</TabButton>
-                          </TabTrigger>
-                          <TabTrigger name="profile" href="/profile" asChild>
-                              <TabButton icon="👤">Profile</TabButton>
-                          </TabTrigger>
-                          <TabTrigger name="settings" href="/settings" asChild>
-                              <TabButton icon="⚙️">Settings</TabButton>
-                          </TabTrigger>
-                      </>
-                  )}
+                  <TabTrigger name="blog" href="/blog" asChild>
+                      <TabButton className={"font-sans"} icon="📝">Blog</TabButton>
+                  </TabTrigger>
+                  <TabTrigger name="patron" href="/patron" asChild>
+                      <TabButton className={"font-sans"} icon="❤️">Patron</TabButton>
+                  </TabTrigger>
+                  <TabTrigger name="creator" href="/creator" asChild>
+                      <TabButton className={"font-sans"} icon="✨">Creator</TabButton>
+                  </TabTrigger>
+                  <TabTrigger name="profile" href="/profile" asChild>
+                      <TabButton className={"font-sans"} icon="👤">Profile</TabButton>
+                  </TabTrigger>
+                  <TabTrigger name="settings" href="/settings" asChild>
+                      <TabButton className={"font-sans"} icon="⚙️">Settings</TabButton>
+                  </TabTrigger>
               </TabList>
           </Tabs>
       );
@@ -70,28 +65,8 @@ export default function TabsContent() {
                   }}
               >
                   <TabTrigger name="home" href="/" asChild>
-                      <TabButton icon="🏠">Home</TabButton>
+                      <TabButton className={"font-sans"} icon="🏠">Home</TabButton>
                   </TabTrigger>
-
-                  {isAuthenticated && (
-                      <>
-                          <TabTrigger name="blog" href="/blog" asChild>
-                              <TabButton icon="📝">Blog</TabButton>
-                          </TabTrigger>
-                          <TabTrigger name="patron" href="/patron" asChild>
-                              <TabButton icon="❤️">Patron</TabButton>
-                          </TabTrigger>
-                          <TabTrigger name="creator" href="/creator" asChild>
-                              <TabButton icon="✨">Creator</TabButton>
-                          </TabTrigger>
-                          <TabTrigger name="profile" href="/profile" asChild>
-                              <TabButton icon="👤">Profile</TabButton>
-                          </TabTrigger>
-                          <TabTrigger name="settings" href="/settings" asChild>
-                              <TabButton icon="⚙️">Settings</TabButton>
-                          </TabTrigger>
-                      </>
-                  )}
               </TabList>
           </Tabs>
       );

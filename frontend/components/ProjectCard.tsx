@@ -1,4 +1,6 @@
-import { View, Text, TouchableOpacity, Image, Linking } from 'react-native';
+import { View, TouchableOpacity, Image, Linking } from 'react-native';
+import { Text } from '@/components/ThemedText';
+
 import { Href, Link } from 'expo-router';
 import { IProject, Visibility } from '@/types/prisma';
 
@@ -12,10 +14,10 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
   const followerCount = project.followers?.length || 0;
 
   const visibilityConfig = {
-    [Visibility.PUBLIC]: { icon: '🌐', label: 'Public', color: 'bg-success' },
-    [Visibility.PATRON_ONLY]: { icon: '💎', label: 'Patron Only', color: 'bg-warning' },
-    [Visibility.FOLLOWER_ONLY]: { icon: '👥', label: 'Followers', color: 'bg-blue-500' },
-    [Visibility.PRIVATE]: { icon: '🔒', label: 'Private', color: 'bg-neutral' },
+    [Visibility.PUBLIC]: { icon: '🌐', label: 'Public' },
+    [Visibility.PATRON_ONLY]: { icon: '💎', label: 'Patron Only' },
+    [Visibility.FOLLOWER_ONLY]: { icon: '👥', label: 'Followers'},
+    [Visibility.PRIVATE]: { icon: '🔒', label: 'Private'},
   };
 
   const visInfo = visibilityConfig[project.visibility];
@@ -35,14 +37,14 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
           {project.creator?.handle ? (
             <Link href={`/profile/${project.creator.handle}/projects/${project.id}` as Href}>
               <TouchableOpacity activeOpacity={0.7}>
-                <Text className="section-title text-blue-500">{project.title}</Text>
+                <Text className="section-title ">{project.title}</Text>
               </TouchableOpacity>
             </Link>
           ) : (
             <Text className="section-title">{project.title}</Text>
           )}
-          <View className={`tag ${visInfo.color}`}>
-            <Text className="tag-text">{visInfo.icon} {visInfo.label}</Text>
+          <View className={`tag`}>
+            <Text className="tag-text ">{visInfo.icon} {visInfo.label}</Text>
           </View>
         </View>
 
@@ -71,7 +73,7 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
               onPress={() => openExternal(project.repoUrl)}
               className="action-button bg-secondary"
             >
-              <Text className="action-button-text text-blue-500">💻 Code</Text>
+              <Text className="action-button-text section-title">💻 Code</Text>
             </TouchableOpacity>
           )}
           {project.demoUrl && (
@@ -79,7 +81,7 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
               onPress={() => openExternal(project.demoUrl)}
               className="action-button bg-secondary"
             >
-              <Text className="action-button-text text-success">🚀 Demo</Text>
+              <Text className="action-button-text section-title">🚀 Demo</Text>
             </TouchableOpacity>
           )}
         </View>

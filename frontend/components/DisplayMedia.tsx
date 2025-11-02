@@ -1,6 +1,8 @@
 import React from 'react';
-import {View, Image, TouchableOpacity, Text, Modal, useWindowDimensions, Platform} from 'react-native';
+import {View, Image, TouchableOpacity, Modal, useWindowDimensions, Platform} from 'react-native';
 import { Video, ResizeMode, Audio } from 'expo-av';
+import { Text } from '@/components/ThemedText';
+
 import { IMedia } from '@/types/prisma';
 
 interface DisplayMediaProps {

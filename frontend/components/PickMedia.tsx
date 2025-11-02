@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, Image, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { Text } from '@/components/ThemedText';
+
 import { pickMedia, uploadMediaToS3, deleteMedia, type MediaRecord } from '@/utils/mediaUtils';
 
 interface PickMediaProps {

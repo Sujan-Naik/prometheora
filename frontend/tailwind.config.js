@@ -6,7 +6,11 @@ module.exports = {
       // './global.css'
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'sans': ['Open-Dyslexic'],
+      }
+    }
   },
   presets: [require('nativewind/preset')],
   plugins: [],

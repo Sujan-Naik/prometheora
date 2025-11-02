@@ -1,4 +1,4 @@
-package com.anonymous.prometheora
+package me.sujan.prometheora
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

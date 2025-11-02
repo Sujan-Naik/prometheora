@@ -24,22 +24,22 @@ export default function HandleLayout() {
         }}
       >
         <TabTrigger name="handle-home" href={`/profile/${handle}`} asChild>
-          <TabButton icon="👤">Profile</TabButton>
+          <TabButton className={"font-sans"} icon="👤">Profile</TabButton>
         </TabTrigger>
         <TabTrigger name="handle-about" href={`/profile/${handle}/about`} asChild>
-          <TabButton icon="ℹ️">About</TabButton>
+          <TabButton className={"font-sans"} icon="ℹ️">About</TabButton>
         </TabTrigger>
         <TabTrigger name="handle-posts" href={`/profile/${handle}/posts`} asChild>
-          <TabButton icon="📰">Posts</TabButton>
+          <TabButton className={"font-sans"} icon="📰">Posts</TabButton>
         </TabTrigger>
         <TabTrigger name="handle-tiers" href={`/profile/${handle}/tiers`} asChild>
-          <TabButton icon="⭐">Tiers</TabButton>
+          <TabButton className={"font-sans"} icon="⭐">Tiers</TabButton>
         </TabTrigger>
         <TabTrigger name="handle-portfolio" href={`/profile/${handle}/portfolio`} asChild>
-          <TabButton icon="🖼️">Portfolio</TabButton>
+          <TabButton className={"font-sans"} icon="🖼️">Portfolio</TabButton>
         </TabTrigger>
         <TabTrigger name="handle-projects" href={`/profile/${handle}/projects`} asChild>
-          <TabButton icon="📁">Projects</TabButton>
+          <TabButton className={"font-sans"} icon="📁">Projects</TabButton>
         </TabTrigger>
       </TabList>
     </Tabs>

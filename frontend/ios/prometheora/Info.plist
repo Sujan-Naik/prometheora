@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>prometheora</string>
-          <string>com.anonymous.prometheora</string>
+          <string>me.sujan.prometheora</string>
         </array>
       </dict>
     </array>
@@ -57,6 +57,10 @@
     </array>
     <key>RCTNewArchEnabled</key>
     <true/>
+    <key>UIAppFonts</key>
+    <array>
+      <string>Open-Dyslexic.otf</string>
+    </array>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>

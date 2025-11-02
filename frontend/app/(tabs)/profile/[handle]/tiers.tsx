@@ -1,4 +1,6 @@
-import { View, Text, FlatList } from 'react-native';
+import {View, FlatList, ScrollView} from 'react-native';
+import { Text } from '@/components/ThemedText';
+
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -45,6 +47,7 @@ export default function CreatorTiers() {
 
   return (
     <View className="page-container">
+      <ScrollView style={{ height: '100vh' as any }} contentContainerStyle={{alignItems: "center"}} className="basic-container">
       <View className="header">
         <Text className="header-title">Tiers for {handle}</Text>
       </View>
@@ -56,6 +59,7 @@ export default function CreatorTiers() {
           <TierCard tier={item} onSubscribe={() => handleSubscribe(item.id)} />
         )}
       />
+        </ScrollView>
     </View>
   );
 }

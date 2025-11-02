@@ -1,4 +1,6 @@
-import { View, Text, FlatList, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, FlatList, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { Text } from '@/components/ThemedText';
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';

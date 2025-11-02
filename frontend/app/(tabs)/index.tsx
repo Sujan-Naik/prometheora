@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
@@ -6,8 +6,9 @@ import { useAuthStatus } from '@/hooks/useAuthStatus';
 import PostCard from '@/components/PostCard';
 import { IPost } from '@/types/prisma';
 import LoadingScreen from '@/components/LoadingScreen';
-import '@/global.css'
 import LogoutButton from "@/components/Logout";
+import { Text } from '@/components/ThemedText';
+
 
 export default function Home() {
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -84,12 +85,12 @@ export default function Home() {
     );
   }
   return (
-    <View style={{ flex: 1}}>
+    <View style={{ flex: 1}} className="page-container">
       <View className="header">
         <Text className="header-title">Discover</Text>
         <Text className="header-subtitle">Latest posts from creators you follow</Text>
       </View>
-      <ScrollView style={{ height: '100vh' as any}} className="basic-container">
+      <ScrollView style={{ height: '100vh' as any}}>
         <View className="nav-card-container">
           <TouchableOpacity onPress={() => router.push('/(tabs)/blog')} className="nav-card">
             <Text className="nav-card-icon">📰</Text>

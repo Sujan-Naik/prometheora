@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
+import { Text } from '@/components/ThemedText';
 import { ITier } from '@/types/prisma';
 
 interface TierCardProps {
@@ -16,24 +17,24 @@ export default function TierCard({ tier, isSubscribed = false, onSubscribe, onMa
           <Text className="tag-text">✓ ACTIVE</Text>
         </View>
       )}
-
       <Text className="section-title">{tier.name}</Text>
-
       <View className="flex-row items-baseline mb-3">
-        <Text className="text-4xl font-bold text-blue-500">${tier.price}</Text>
+        <Text className="text-4xl font-bold" style={{ color: 'var(--primary-color)' }}>${tier.price}</Text>
         <Text className="subtitle ml-1">/ month</Text>
       </View>
-
       <Text className="content-text mb-4">{tier.benefits}</Text>
-
       {isSubscribed ? (
         onManage && (
           <TouchableOpacity
             onPress={onManage}
-            className="action-button border border-blue-500"
-            style={{ backgroundColor: 'var(--background-color)' }}
+            className="action-button"
+            style={{
+              backgroundColor: 'var(--background-color)',
+              borderColor: 'var(--primary-color)',
+              borderWidth: 1
+            }}
           >
-            <Text className="action-button-text text-blue-500">Manage Subscription</Text>
+            <Text className="action-button-text" style={{ color: 'var(--primary-color)' }}>Manage Subscription</Text>
           </TouchableOpacity>
         )
       ) : (
@@ -43,7 +44,6 @@ export default function TierCard({ tier, isSubscribed = false, onSubscribe, onMa
           </TouchableOpacity>
         )
       )}
-
       {tier.creator && (
         <Text className="status-text mt-2 text-center">
           Supporting @{tier.creator.handle || 'anonymous'}

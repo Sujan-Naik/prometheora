@@ -1,4 +1,5 @@
-import { View, TextInput, Text, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import { View, TextInput, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import {Text} from '@/components/ThemedText';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
@@ -93,7 +94,7 @@ export default function ProfileSettings() {
               value={bio}
               onChangeText={setBio}
               multiline
-              className="input-multiline input-tall"
+              className="input"
             />
           </View>
 

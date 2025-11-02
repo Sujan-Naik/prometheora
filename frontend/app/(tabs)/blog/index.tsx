@@ -1,9 +1,10 @@
-import { View, Text, FlatList, Pressable } from 'react-native';
+import { View, FlatList, Pressable } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'expo-router';
 import { IBlog } from "@/types/prisma";
 import LoadingScreen from '@/components/LoadingScreen';
+import { Text } from '@/components/ThemedText';
 
 export default function BlogList() {
   const [blogs, setBlogs] = useState<IBlog[]>([]);
@@ -38,8 +39,8 @@ export default function BlogList() {
         renderItem={({ item }) => (
           <Link href={`/(tabs)/blog/${item.slug}`} asChild>
             <Pressable className="blog-item">
-              <Text className="text-lg font-semibold text-[var(--text-primary)]">{item.title}</Text>
-              <Text className="text-sm text-[var(--text-secondary)]">
+              <Text className="text-lg font-semibold text-[var(--text-color)]">{item.title}</Text>
+              <Text className="text-sm text-[var(--text-color)]">
                 {new Date(item.createdAt).toLocaleDateString()}
               </Text>
             </Pressable>

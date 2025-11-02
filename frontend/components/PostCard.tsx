@@ -1,4 +1,6 @@
-import { View, Text, TouchableOpacity, Button } from 'react-native';
+import { View, TouchableOpacity, Button } from 'react-native';
+import { Text } from '@/components/ThemedText';
+
 import { IPost } from '@/types/prisma';
 import DisplayMedia from './DisplayMedia';
 import { router } from 'expo-router';
