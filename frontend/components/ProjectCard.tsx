@@ -1,8 +1,9 @@
-import { View, TouchableOpacity, Image, Linking } from 'react-native';
+import { View, TouchableOpacity, Image, Linking, Platform } from 'react-native';
 import { Text } from '@/components/ThemedText';
-
 import { Href, Link } from 'expo-router';
 import { IProject, Visibility } from '@/types/prisma';
+import { WebView } from 'react-native-webview';
+import { useState } from 'react';
 
 interface ProjectCardProps {
   project: IProject;
@@ -10,6 +11,7 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project, onPress }: ProjectCardProps) {
+  const [showEmbed, setShowEmbed] = useState(false);
   const thumbnail = project.media?.[0]?.url;
   const followerCount = project.followers?.length || 0;
 
@@ -26,8 +28,11 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
     if (url) Linking.openURL(url);
   };
 
+  // Check if URL is an itch.io embed URL
+  const isItchEmbed = project.demoUrl?.includes('itch.io/embed');
+
   return (
-    <View className="basic-container">
+    <View className="basic-container" >
       {thumbnail && (
         <Image source={{ uri: thumbnail }} className="media-preview" resizeMode="cover" />
       )}
@@ -67,6 +72,8 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
           )}
         </View>
 
+
+
         <View className="action-container">
           {project.repoUrl && (
             <TouchableOpacity
@@ -78,13 +85,48 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
           )}
           {project.demoUrl && (
             <TouchableOpacity
-              onPress={() => openExternal(project.demoUrl)}
+              onPress={() => isItchEmbed ? setShowEmbed(!showEmbed) : openExternal(project.demoUrl)}
               className="action-button bg-secondary"
             >
-              <Text className="action-button-text section-title">🚀 Demo</Text>
+              <Text className="action-button-text section-title">
+                🚀 {isItchEmbed ? (showEmbed ? 'Hide Game' : 'Play Game') : 'Demo'}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
+
+        {/* Itch.io embed - different for web vs native */}
+        {isItchEmbed && showEmbed && project.demoUrl && (
+      <View className="mt-4" style={{ width: '100%', maxWidth: 1200, aspectRatio: 16/9, alignSelf: 'center' }}>
+      {Platform.OS === 'web' ? (
+              <iframe
+                  key={project.demoUrl}
+                src={project.demoUrl}
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                allowFullScreen
+                style={{ border: 'none', display: 'block' }}
+              />
+            ) : (
+               <WebView
+                   key={project.demoUrl}
+                source={{ uri: project.demoUrl }}
+                style={{ width: '100%', aspectRatio: 16/9 }}
+                javaScriptEnabled={true}
+                domStorageEnabled={true}
+                startInLoadingState={true}
+                scalesPageToFit={true}
+                scrollEnabled={true}
+                allowsFullscreenVideo={true}
+                allowsInlineMediaPlayback={true}
+                mediaPlaybackRequiresUserAction={false}
+                mixedContentMode="always"
+                originWhitelist={['*']}
+              />
+            )}
+          </View>
+        )}
 
         {project.creator && (
           <Text className="status-text mt-2">
