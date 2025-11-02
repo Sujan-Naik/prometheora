@@ -17,6 +17,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { isAuthenticated } = useAuthStatus();
+
   const fetchPosts = async () => {
     try {
       setError(null);
@@ -30,16 +31,20 @@ export default function Home() {
       setRefreshing(false);
     }
   };
+
   useEffect(() => {
     fetchPosts();
   }, []);
+
   if (isAuthenticated === null) {
     return <LoadingScreen />;
   }
+
   // Show loading screen for initial load when authenticated
   if (isAuthenticated && loading && posts.length === 0) {
     return <LoadingScreen message="Loading posts..." />;
   }
+
   if (!isAuthenticated) {
     return (
       <View style={{ flex: 1}}>
@@ -73,7 +78,7 @@ export default function Home() {
               <Text className="subtitle">No posts yet.</Text>
             ) : (
               <>
-                {posts.slice(0, 3).map((post) => (
+                {(posts || []).slice(0, 3).map((post) => (
                   <PostCard key={post.id} post={post} />
                 ))}
                 <Text className="subtitle">Sign in to see more</Text>
@@ -84,6 +89,7 @@ export default function Home() {
       </View>
     );
   }
+
   return (
     <View style={{ flex: 1}} className="page-container">
       <View className="header">
@@ -118,7 +124,7 @@ export default function Home() {
           </View>
         ) : (
           <View className="basic-container">
-            {posts.map((post) => (
+            {(posts || []).map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
           </View>
