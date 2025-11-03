@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards, Request } from '@nestjs/common';
 import { CreatorService } from './creator.service';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
@@ -39,4 +39,16 @@ export class CreatorController {
   async getAbout(@Param('handle') handle: string) {
     return this.creatorService.getAbout(handle);
   }
+
+
+  @Get('me')
+  async getMyProfile(@Request() req) {
+    return this.creatorService.getProfileByUserId(req.user.id);
+  }
+
+  @Get('me/projects')
+  async getMyProjects(@Request() req) {
+    return this.creatorService.getProjectsByUserId(req.user.id);
+  }
+
 }

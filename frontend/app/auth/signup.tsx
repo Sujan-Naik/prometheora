@@ -19,6 +19,7 @@ export default function Signup() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [handle, setHandle] = useState<string>('');
+  const [inviteCode, setInviteCode] = useState<string>('');
   const [roles, setRoles] = useState<Role[]>([Role.PATRON]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -32,8 +33,8 @@ export default function Signup() {
   }, [isAuthenticated]);
 
   const handleSignup = async () => {
-    if (!email || !password) {
-      setError('Please enter both email and password');
+    if (!email || !password || !inviteCode) {
+      setError('Please fill in all required fields');
       return;
     }
 
@@ -49,7 +50,7 @@ export default function Signup() {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
           },
-          body: JSON.stringify({ email, password, handle, roles }),
+          body: JSON.stringify({ email, password, inviteCode, handle, roles }),
         }
       );
 
@@ -82,7 +83,21 @@ export default function Signup() {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="basic-container">
           <Text className="title">Signup</Text>
+          <Text style={{ marginBottom: 20, textAlign: 'center', opacity: 0.7 }}>
+            Closed Alpha - Invite code required
+          </Text>
           {error ? <Text className="error-text">{error}</Text> : null}
+
+          <View className="input-container">
+            <TextInput
+              placeholder="Invite Code"
+              value={inviteCode}
+              onChangeText={setInviteCode}
+              autoCapitalize="none"
+              editable={!loading}
+              className="input"
+            />
+          </View>
 
           <View className="input-container">
             <TextInput

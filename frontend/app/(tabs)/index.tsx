@@ -1,4 +1,4 @@
-import { View, ScrollView, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Image} from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
@@ -50,10 +50,10 @@ export default function Home() {
       <View style={{ flex: 1}}>
         <ScrollView style={{ height: '100vh' as any }} contentContainerStyle={{alignItems: "center"}} className="basic-container">
           <View className="landing-container">
-            <Text className="landing-icon">🎨</Text>
-            <Text className="landing-title">Creator Hub</Text>
+            <Image className="landing-icon" source={require('@/assets/images/icon.png')}/>
+            <Text className="landing-title">Prometheora</Text>
             <Text className="landing-subtitle">
-              Support creators, follow projects, and discover amazing content
+              Support Game Developers
             </Text>
             <TouchableOpacity
               onPress={() => router.push('/auth/signup')}
@@ -93,8 +93,8 @@ export default function Home() {
   return (
     <View style={{ flex: 1}} className="page-container">
       <View className="header">
-        <Text className="header-title">Discover</Text>
-        <Text className="header-subtitle">Latest posts from creators you follow</Text>
+        <Text className="header-title">Prometheora</Text>
+        <Text className="header-subtitle">Support Game Developers</Text>
       </View>
       <ScrollView style={{ height: '100vh' as any}}>
         <View className="nav-card-container">

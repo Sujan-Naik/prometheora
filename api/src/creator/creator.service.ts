@@ -125,4 +125,36 @@ export class CreatorService {
 
     return user;
   }
+
+  async getProfileByUserId(userId: number) {
+  const user = await this.prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      posts: true,
+      tiers: true,
+      projects: true,
+      portfolioItems: { include: { project: true } },
+    },
+  });
+
+  if (!user) {
+    throw new NotFoundException('Creator not found');
+  }
+
+  return user;
+}
+
+async getProjectsByUserId(userId: number) {
+  return this.prisma.project.findMany({
+    where: { creatorId: userId },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      status: true,
+      createdAt: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+}
 }

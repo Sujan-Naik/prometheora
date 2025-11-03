@@ -1,14 +1,11 @@
 // src/auth/auth.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { Prisma } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 
-type SafeUser = Omit<
-  Prisma.UserGetPayload<{ include: { userRoles: true } }>,
-  'passwordHash'
->;
+type SafeUser = Omit<User & { userRoles: UserRole[] }, 'passwordHash'>;
 
 @Injectable()
 export class AuthService {
@@ -20,9 +17,21 @@ export class AuthService {
   async signup(
     email: string,
     password: string,
+    inviteCode: string,
     handle?: string,
     roles: ('CREATOR' | 'PATRON' | 'ADMIN')[] = [],
   ): Promise<SafeUser> {
+    // Check invite code
+    const validInviteCode = process.env.INVITE_CODE;
+
+    if (!validInviteCode) {
+      throw new BadRequestException('Signups are currently closed');
+    }
+
+    if (inviteCode !== validInviteCode) {
+      throw new BadRequestException('Invalid invite code');
+    }
+
     const passwordHash = await bcrypt.hash(password, 10);
 
     const user = await this.prisma.user.create({
@@ -54,10 +63,8 @@ export class AuthService {
       throw new Error('Invalid credentials');
     }
 
-    // ✅ Determine admin status (e.g. CREATORs are admins)
     const isAdmin = user.userRoles.some((r) => r.role === 'ADMIN');
 
-    // ✅ Include isAdmin in the payload
     const payload = {
       sub: user.id,
       email: user.email,

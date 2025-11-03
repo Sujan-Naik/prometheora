@@ -1,8 +1,10 @@
 import { View, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { useMyProjects } from '@/hooks/useMyProjects';
 import { IPost } from '@/types/prisma';
 import PickMedia from '@/components/PickMedia';
 import DisplayMedia from '@/components/DisplayMedia';
@@ -11,10 +13,11 @@ import LoadingScreen from '@/components/LoadingScreen';
 import { Text } from '@/components/ThemedText';
 
 export default function CreatePost() {
+  const { projects, loading: projectsLoading } = useMyProjects();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isPaid, setIsPaid] = useState(false);
-  const [quotedProjectId, setQuotedProjectId] = useState('');
+  const [quotedProjectId, setQuotedProjectId] = useState<number | null>(null);
   const [media, setMedia] = useState<MediaRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -39,7 +42,7 @@ export default function CreatePost() {
           title,
           content,
           isPaid,
-          quotedProjectId: quotedProjectId ? parseInt(quotedProjectId) : undefined,
+          quotedProjectId: quotedProjectId || undefined,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -68,8 +71,8 @@ export default function CreatePost() {
     }
   };
 
-  if (loading) {
-    return <LoadingScreen message="Creating post..." />;
+  if (loading || projectsLoading) {
+    return <LoadingScreen message={loading ? "Creating post..." : "Loading..."} />;
   }
 
   return (
@@ -100,14 +103,19 @@ export default function CreatePost() {
           </View>
 
           <View className="input-container">
-            <Text className="input-label">Quoted Project ID (optional)</Text>
-            <TextInput
-              placeholder="Project ID"
-              value={quotedProjectId}
-              onChangeText={setQuotedProjectId}
-              keyboardType="numeric"
-              className="input"
-            />
+            <Text className="input-label">Quote a Project (optional)</Text>
+            <View className="picker-container">
+              <Picker
+                selectedValue={quotedProjectId}
+                onValueChange={(value) => setQuotedProjectId(value)}
+                style={{backgroundColor: 'inherit', color: 'var(--text-color)'}}
+              >
+                <Picker.Item label="None" value={null} />
+                {projects.map(project => (
+                  <Picker.Item key={project.id} label={project.title} value={project.id} />
+                ))}
+              </Picker>
+            </View>
           </View>
 
           <TouchableOpacity
