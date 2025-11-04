@@ -3,10 +3,10 @@ import { CreatorService } from './creator.service';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @Controller('creators')
-@UseGuards(JwtAuthGuard)
 export class CreatorController {
   constructor(private creatorService: CreatorService) {}
 
+  // Public routes - no auth required
   @Get()
   async discover(
     @Query('search') search?: string,
@@ -20,6 +20,20 @@ export class CreatorController {
     });
   }
 
+  // Protected routes - auth required
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async getMyProfile(@Request() req) {
+    return this.creatorService.getProfileByUserId(req.user.id);
+  }
+
+  @Get('me/projects')
+  @UseGuards(JwtAuthGuard)
+  async getMyProjects(@Request() req) {
+    return this.creatorService.getProjectsByUserId(req.user.id);
+  }
+
+  // Public profile routes - no auth required
   @Get(':handle')
   async getProfile(@Param('handle') handle: string) {
     return this.creatorService.getProfile(handle);
@@ -39,16 +53,4 @@ export class CreatorController {
   async getAbout(@Param('handle') handle: string) {
     return this.creatorService.getAbout(handle);
   }
-
-
-  @Get('me')
-  async getMyProfile(@Request() req) {
-    return this.creatorService.getProfileByUserId(req.user.id);
-  }
-
-  @Get('me/projects')
-  async getMyProjects(@Request() req) {
-    return this.creatorService.getProjectsByUserId(req.user.id);
-  }
-
 }

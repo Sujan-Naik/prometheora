@@ -67,6 +67,7 @@ export default function TabsContent() {
                   <TabTrigger name="home" href="/" asChild>
                       <TabButton className={"font-sans"} icon="🏠">Home</TabButton>
                   </TabTrigger>
+
               </TabList>
           </Tabs>
       );

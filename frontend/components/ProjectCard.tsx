@@ -35,15 +35,15 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
   console.log(thumbnail)
   return (
     <View className="basic-container" >
-      {thumbnail && (
-        <DisplayMedia
-    media={thumbnail}
-    height={thumbnail.type === 'video' ? 250 : 'auto'}
-    aspectRatio={16/9} // Force aspect ratio for videos
-    resizeMode="cover"
-    showCaption={false}
-  />
-      )}
+          {thumbnail && (
+            <DisplayMedia
+        media={thumbnail}
+        height={thumbnail.type === 'video' ? 250 : 'auto'}
+        aspectRatio={16/9} // Force aspect ratio for videos
+        resizeMode="cover"
+        showCaption={false}
+      />
+          )}
         <View className="card-header">
           {project.creator?.handle ? (
             <Link href={`/profile/${project.creator.handle}/projects/${project.id}` as Href}>
