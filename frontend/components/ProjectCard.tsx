@@ -1,9 +1,10 @@
-import { View, TouchableOpacity, Image, Linking, Platform } from 'react-native';
+import { View, TouchableOpacity, Linking, Platform } from 'react-native';
 import { Text } from '@/components/ThemedText';
 import { Href, Link } from 'expo-router';
 import { IProject, Visibility } from '@/types/prisma';
 import { WebView } from 'react-native-webview';
 import { useState } from 'react';
+import DisplayMedia from '@/components/DisplayMedia';
 
 interface ProjectCardProps {
   project: IProject;
@@ -12,7 +13,7 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project, onPress }: ProjectCardProps) {
   const [showEmbed, setShowEmbed] = useState(false);
-  const thumbnail = project.media?.[0]?.url;
+  const thumbnail = project.media?.[0];
   const followerCount = project.followers?.length || 0;
 
   const visibilityConfig = {
@@ -31,13 +32,18 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
   // Check if URL is an itch.io embed URL
   const isItchEmbed = project.demoUrl?.includes('itch.io/embed');
 
+  console.log(thumbnail)
   return (
     <View className="basic-container" >
       {thumbnail && (
-        <Image source={{ uri: thumbnail }} className="media-preview" resizeMode="cover" />
+        <DisplayMedia
+    media={thumbnail}
+    height={thumbnail.type === 'video' ? 250 : 'auto'}
+    aspectRatio={16/9} // Force aspect ratio for videos
+    resizeMode="cover"
+    showCaption={false}
+  />
       )}
-
-      <View className="p-4">
         <View className="card-header">
           {project.creator?.handle ? (
             <Link href={`/profile/${project.creator.handle}/projects/${project.id}` as Href}>
@@ -72,8 +78,6 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
           )}
         </View>
 
-
-
         <View className="action-container">
           {project.repoUrl && (
             <TouchableOpacity
@@ -97,10 +101,10 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
 
         {/* Itch.io embed - different for web vs native */}
         {isItchEmbed && showEmbed && project.demoUrl && (
-      <View className="mt-4" style={{ width: '100%', maxWidth: 1200, aspectRatio: 16/9, alignSelf: 'center' }}>
-      {Platform.OS === 'web' ? (
+          <View className="mt-4" style={{ width: '100%', maxWidth: 1200, aspectRatio: 16/9, alignSelf: 'center' }}>
+            {Platform.OS === 'web' ? (
               <iframe
-                  key={project.demoUrl}
+                key={project.demoUrl}
                 src={project.demoUrl}
                 width="100%"
                 height="100%"
@@ -109,8 +113,8 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
                 style={{ border: 'none', display: 'block' }}
               />
             ) : (
-               <WebView
-                   key={project.demoUrl}
+              <WebView
+                key={project.demoUrl}
                 source={{ uri: project.demoUrl }}
                 style={{ width: '100%', aspectRatio: 16/9 }}
                 javaScriptEnabled={true}
@@ -134,6 +138,5 @@ export default function ProjectCard({ project, onPress }: ProjectCardProps) {
           </Text>
         )}
       </View>
-    </View>
   );
 }

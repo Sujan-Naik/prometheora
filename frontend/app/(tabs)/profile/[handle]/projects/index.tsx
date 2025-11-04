@@ -43,6 +43,8 @@ export default function CreatorProjects() {
         <Text className="header-title">Projects for {handle}</Text>
       </View>
       <FlatList
+          className={"basic-container"}
+          contentContainerStyle={{display: 'flex', justifyContent: 'center'}}
         data={projects}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (

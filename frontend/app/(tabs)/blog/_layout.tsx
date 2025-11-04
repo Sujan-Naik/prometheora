@@ -5,6 +5,7 @@ import { useAdmin } from '@/hooks/useAdmin';
 export default function BlogLayout() {
   const { isAdmin } = useAdmin();
 
+  console.log(isAdmin)
   return (
     <Stack
       screenOptions={{

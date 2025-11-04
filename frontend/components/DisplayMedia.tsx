@@ -1,15 +1,13 @@
 import React from 'react';
 import {View, Image, TouchableOpacity, Modal, useWindowDimensions, Platform} from 'react-native';
-import { Video, ResizeMode, Audio } from 'expo-av';
+import { Video, ResizeMode, Audio, AVPlaybackStatus } from 'expo-av';
 import { Text } from '@/components/ThemedText';
 
 import { IMedia } from '@/types/prisma';
 
 interface DisplayMediaProps {
   media: IMedia;
-  height?: number | string;
-  width?: number;
-  maxWidth?: number; // Add maxWidth prop
+  maxWidth?: number;
   aspectRatio?: number;
   showCaption?: boolean;
   resizeMode?: 'cover' | 'contain' | 'stretch';
@@ -18,9 +16,7 @@ interface DisplayMediaProps {
 
 export default function DisplayMedia({
   media,
-  height = "100%",
-  width,
-  maxWidth, // Will default to 30% of screen width if not provided
+  maxWidth,
   aspectRatio,
   showCaption = true,
   resizeMode = 'cover',
@@ -30,14 +26,7 @@ export default function DisplayMedia({
   const [expanded, setExpanded] = React.useState(false);
   const [calculatedAspectRatio, setCalculatedAspectRatio] = React.useState<number | undefined>(aspectRatio);
   const windowDimensions = useWindowDimensions();
-
-  // Default maxWidth to 30% of viewport width
-
-  let effectiveMaxWidth = maxWidth ?? windowDimensions.width * 0.1;
-
-      if (Platform.OS !== 'web') {
-        effectiveMaxWidth = maxWidth ?? windowDimensions.width;
-      }
+  const videoRef = React.useRef<Video>(null);
 
   // Calculate aspect ratio from image dimensions
   React.useEffect(() => {
@@ -45,14 +34,28 @@ export default function DisplayMedia({
       Image.getSize(
         media.url,
         (imgWidth, imgHeight) => {
-          setCalculatedAspectRatio( imgWidth / imgHeight);
+          setCalculatedAspectRatio(imgWidth / imgHeight);
         },
         () => {
-          setCalculatedAspectRatio(16 / 9); // Fallback aspect ratio
+          setCalculatedAspectRatio(16 / 9);
         }
       );
     }
   }, [media.url, media.type, aspectRatio]);
+
+  // Get video dimensions when video loads
+  const handleVideoLoad = (status: AVPlaybackStatus) => {
+    if (status.isLoaded && !aspectRatio && !calculatedAspectRatio) {
+      // Try to get natural size if available (web)
+      const statusAny = status as any;
+      if (statusAny.naturalSize?.width && statusAny.naturalSize?.height) {
+        setCalculatedAspectRatio(statusAny.naturalSize.width / statusAny.naturalSize.height);
+      } else {
+        // Fallback to 16:9 for native or if dimensions not available
+        setCalculatedAspectRatio(16 / 9);
+      }
+    }
+  };
 
   React.useEffect(() => {
     return () => {
@@ -79,18 +82,9 @@ export default function DisplayMedia({
   };
 
   const renderMedia = (isExpanded = false) => {
-    // For expanded view, use full window dimensions
     if (isExpanded) {
-      // const expandedHeight = windowDimensions.height;
-      // const expandedWidth = calculatedAspectRatio
-      //   ? expandedHeight / calculatedAspectRatio
-      //   : windowDimensions.width * 0.75;
-
       let expandedWidth = windowDimensions.width;
-      // const expandedHeight = calculatedAspectRatio ? expandedWidth / calculatedAspectRatio : windowDimensions.width * 0.75;
-      let expandedHeight = expandedWidth / calculatedAspectRatio!;
-
-
+      let expandedHeight = expandedWidth / (calculatedAspectRatio || 16/9);
 
       let displayStyle = {
         height: expandedHeight,
@@ -112,7 +106,6 @@ export default function DisplayMedia({
           return (
             <Image
               source={{ uri: media.url }}
-              // className="media-preview"
               style={displayStyle}
               resizeMode={resizeMode}
             />
@@ -120,36 +113,36 @@ export default function DisplayMedia({
         case 'video':
           return (
             <Video
+              ref={videoRef}
               source={{ uri: media.url }}
-              className="media-preview"
               style={displayStyle}
               useNativeControls
               resizeMode={ResizeMode.CONTAIN}
               isLooping
+              onLoad={handleVideoLoad}
             />
           );
       }
     }
 
-    // For normal view, use aspectRatio style prop with maxWidth constraint
-    const normalStyle: any = { height };
+    // For normal view - YouTube style: full width, auto height based on aspect ratio
+    const normalStyle: any = {
+      width: '100%',
+    };
 
-    if (width) {
-      normalStyle.width = Math.min(width, effectiveMaxWidth);
-    } else if (calculatedAspectRatio) {
+    if (calculatedAspectRatio) {
       normalStyle.aspectRatio = calculatedAspectRatio;
-      normalStyle.maxWidth = effectiveMaxWidth;
     } else {
-      normalStyle.width = Math.min(300, effectiveMaxWidth); // Fallback width
+      // Default fallback while loading
+      normalStyle.aspectRatio = 16 / 9;
     }
 
     switch (media.type) {
       case 'image':
         return (
-          <TouchableOpacity onPress={handlePress} activeOpacity={0.8} className={'flex-row justify-center'}>
+          <TouchableOpacity onPress={handlePress} activeOpacity={0.8} style={{ width: '100%' }}>
             <Image
               source={{ uri: media.url }}
-              className="media-preview"
               style={normalStyle}
               resizeMode={resizeMode}
             />
@@ -157,14 +150,15 @@ export default function DisplayMedia({
         );
       case 'video':
         return (
-          <TouchableOpacity onPress={handlePress} activeOpacity={0.8}>
+          <TouchableOpacity onPress={handlePress} activeOpacity={0.8} style={{ width: '100%' }}>
             <Video
+              ref={videoRef}
               source={{ uri: media.url }}
-              className="media-preview"
               style={normalStyle}
               useNativeControls
               resizeMode={ResizeMode.CONTAIN}
               isLooping
+              onLoad={handleVideoLoad}
             />
           </TouchableOpacity>
         );
@@ -172,7 +166,7 @@ export default function DisplayMedia({
         return (
           <TouchableOpacity
             className="audio-container"
-            style={{ height, width: 100 } as any}
+            style={{ height: 100, width: '100%' } as any}
             onPress={playAudio}
           >
             <Text className="text-4xl mb-2">🎵</Text>
@@ -181,7 +175,7 @@ export default function DisplayMedia({
         );
       default:
         return (
-          <View className="file-container" style={{ height, width: 100 } as any}>
+          <View className="file-container" style={{ height: 100, width: '100%' } as any}>
             <Text className="text-4xl mb-2">📄</Text>
             <Text className="text-sm text-gray-600 text-center">
               File: {media.url.split('/').pop()}
@@ -192,7 +186,7 @@ export default function DisplayMedia({
   };
 
   return (
-    <View className="media-container">
+    <View className="media-container" style={{ width: '100%',  }}>
       {renderMedia()}
       {showCaption && media.caption && (
         <Text className="content-text">{media.caption}</Text>

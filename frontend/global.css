@@ -60,13 +60,30 @@
   font-family: 'Open-Dyslexic', sans-serif !important;
 
 }
+[class*="css-view-"] video,
+[class*="r-position-"] video,
+video {
+  position: relative !important;
+
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  display: block !important;
+  margin: 0 auto !important;
+  object-fit: contain !important;
+  max-width: 100% !important;
+}
+
+
+@layer base {
+}
 
 @layer components {
   .page-container {
     @apply flex flex-col w-full h-screen box-border mx-auto bg-[var(--background-color)];
   }
   .basic-container {
-    @apply p-5 pb-32 w-full bg-[var(--background-color)] ;
+    @apply p-5 pb-32 w-full flex-col bg-[var(--background-color)] ;
   }
   .basic-container * {
     @apply max-w-full box-border;
