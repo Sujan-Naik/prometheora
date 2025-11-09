@@ -1,50 +1,20 @@
-# Welcome to your Expo app 👋
+# Prometheora [In Beta]
+A Cross-Platform Social Media App for Digital Creatives.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Create Projects
+- Include Media (Audio/Video/Images)
+- Share a Demo link - Itch.io embeds are playable in app - and a Repo link
 
-## Get started
+### Write Devlogs for your Projects
+- Nest your Devlogs directly under your projects for convienient access
 
-1. Install dependencies
+## Make Posts
+- Show off your project publicly by quoting it
 
-   ```bash
-   npm install
-   ```
+## Subscribe to your Favorite Creators
+- Follow a Creator for their new work to show up under your Patron tab
+- TBD Paid Subscription System (shell for it is there)
 
-2. Start the app
+![image](https://github.com/user-attachments/assets/a9df2f30-a55f-4cb3-97e4-6674768848f9)
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+![AP1GczMmsL5SolE3TTzTUAoYpVR3XKCvveI_7GuzJ7F0fEX9d1zIVRAEC-WCw894-h1986-s-no](https://github.com/user-attachments/assets/2c6e9342-2cae-4e95-afc5-027a4bc7e092)
